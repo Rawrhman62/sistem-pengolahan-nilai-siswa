@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - E-RAPOR</title>
+    <title>Kelola Data  - E-RAPOR </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,6 +24,10 @@
             --green: #118A7E;
             --orange: #E67E22;
             --blue: #1976D2;
+            --btn-gray: #E2E8F0;
+            --btn-blue: #3B82F6;
+            --btn-green: #10B981;
+            --btn-purple: #6366F1;
         }
 
         * {
@@ -181,7 +185,7 @@
         .topbar-left h2 {
             font-size: 18px;
             font-weight: 600;
-            color: var(--primary-blue);
+            color: var(--text-dark);
         }
 
         .topbar-right {
@@ -267,233 +271,142 @@
             flex: 1;
             padding: 30px;
             overflow-y: auto;
+            background-color: var(--white); /* White background like image */
         }
-
-        .welcome-banner {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-hover));
-            border-radius: 12px;
-            padding: 30px;
-            color: var(--white);
-            margin-bottom: 24px;
-            box-shadow: var(--card-shadow);
-        }
-
-        .welcome-banner h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .badges {
+        
+        /* Master Data Header */
+        .page-header {
             display: flex;
-            gap: 12px;
-        }
-
-        .badge {
-            background-color: rgba(255,255,255,0.2);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 500;
-            backdrop-filter: blur(4px);
-        }
-
-        /* Dashboard Grid */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        .card {
-            background-color: var(--white);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-        }
-
-        .card h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--primary-blue);
+            justify-content: space-between;
+            align-items: flex-end;
             margin-bottom: 20px;
-            text-align: center;
-        }
-
-        /* Pie Chart Simulation */
-        .chart-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .pie-chart {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: conic-gradient(var(--orange) 0% 47%, var(--green) 47% 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
         }
         
-        .pie-chart::after {
-            content: '';
-            position: absolute;
-            width: 152px;
-            height: 152px;
-            border-radius: 50%;
-            border: 3px solid var(--white);
-            box-sizing: border-box;
-            background: transparent;
-            clip-path: polygon(0 50%, 100% 50%, 100% 47%, 0 47%);
-        }
-
-        .legend {
-            display: flex;
-            gap: 20px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            color: var(--text-gray);
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .dot.L { background-color: var(--orange); }
-        .dot.P { background-color: var(--green); }
-
-        /* Bar Chart */
-        .col-span-2 {
-            grid-column: span 2;
-        }
-
-        .bar-chart {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 10px;
-        }
-
-        .bar-row {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .bar-row span {
-            width: 60px;
-            font-size: 14px;
-            color: var(--text-gray);
-            font-weight: 500;
-        }
-
-        .bar-track {
-            flex: 1;
-            height: 36px;
-            background-color: var(--bg-light);
-            border-radius: 6px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .bar-fill {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 12px;
-            color: var(--white);
-            font-weight: 600;
-            font-size: 14px;
-            border-radius: 6px 0 0 6px;
-            transition: width 1s ease-out;
-        }
-
-        .bar-fill.green { background-color: var(--green); }
-        .bar-fill.orange { background-color: var(--orange); }
-        .bar-fill.blue { background-color: var(--blue); }
-
-        /* Activity List */
-        .activity-card {
-            grid-column: span 3;
+        .page-title h1 {
+            font-size: 24px;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
         }
         
-        .activity-card h3 {
-            text-align: left;
+        .page-title p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .activity-list {
-            list-style: none;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .activity-list li {
-            display: flex;
-            gap: 15px;
-            padding: 15px;
-            border: 1px solid var(--border-color);
+            padding: 8px 16px;
             border-radius: 8px;
-            background-color: var(--white);
-        }
-
-        .activity-avatar {
-            width: 36px;
-            height: 36px;
-            background-color: #E3F2FD;
-            color: var(--blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
             font-size: 13px;
-            flex-shrink: 0;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--white);
+            transition: opacity 0.2s;
         }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-gray { background-color: var(--btn-gray); color: var(--text-dark); }
+        .btn-blue { background-color: var(--btn-blue); }
+        .btn-green { background-color: var(--btn-green); }
+        .btn-purple { background-color: var(--btn-purple); }
 
-        .activity-content strong {
-            display: block;
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+            gap: 30px;
+        }
+        
+        .tab-item {
+            padding: 12px 0;
             font-size: 14px;
-            color: var(--text-dark);
-            margin-bottom: 4px;
+            color: var(--text-gray);
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+        }
+        
+        .tab-item:hover {
+            color: var(--btn-purple);
+        }
+        
+        .tab-item.active {
+            color: var(--btn-purple);
+        }
+        
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--btn-purple);
         }
 
-        .activity-content p {
+        /* Form Card */
+        .form-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            background-color: var(--white);
+            max-width: 800px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
             font-size: 13px;
             color: var(--text-gray);
-            margin-bottom: 6px;
-            line-height: 1.4;
-        }
-
-        .activity-content p a {
-            color: var(--blue);
-            text-decoration: none;
             font-weight: 500;
         }
 
-        .activity-content span {
-            font-size: 11px;
-            color: var(--text-light);
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-dark);
+            background-color: #F8FAFC;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
         }
         
-        /* Icons (Simple unicode for now, ideally use FontAwesome or similar) */
+        .form-control:focus {
+            outline: none;
+            border-color: var(--btn-purple);
+            background-color: var(--white);
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn-container {
+            margin-top: 30px;
+        }
+
+        /* Icons (Simple unicode for now) */
         .icon {
             font-style: normal;
         }
@@ -513,14 +426,14 @@
             
             <ul class="sidebar-menu">
                 <li class="menu-header">MENU UTAMA</li>
-                <li class="menu-item active">
+                <li class="menu-item">
                     <a href="{{ route('admin.index') }}">
                         <i class="icon">📊</i> Dashboard
                     </a>
                 </li>
                 
                 <li class="menu-header">MASTER DATA</li>
-                <li class="menu-item">
+                <li class="menu-item active">
                     <a href="{{ route('admin.sekolah') }}">
                         <i class="icon">📁</i> Kelola Data
                     </a>
@@ -553,7 +466,7 @@
             <header class="topbar">
                 <div class="topbar-left">
                     <button class="hamburger">☰</button>
-                    <h2>Dashboard Administrator</h2>
+                    <h2>E-Rapor Digital</h2>
                 </div>
                 <div class="topbar-right">
                     <div class="academic-year">
@@ -577,84 +490,59 @@
             
             <!-- Content Wrapper -->
             <div class="content-wrapper">
-                <!-- Welcome Banner -->
-                <div class="welcome-banner">
-                    <h1>Selamat Datang, Administrator</h1>
-                    <div class="badges">
-                        <span class="badge">Kurikulum Deep Learning 2025</span>
-                        <span class="badge">DIGITAL</span>
+                
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Master Data</h1>
+                        <p>Kelola data referensi sekolah secara menyeluruh.</p>
+                    </div>
+                    <div class="action-buttons">                        
+                        <button class="btn btn-green"><i class="icon">📊</i> Import Excel</button>
+                        <button class="btn btn-purple"><i class="icon">➕</i> Tambah</button>
                     </div>
                 </div>
                 
-                <!-- Cards Row -->
-                <div class="dashboard-grid">
-                    <!-- Statistik Siswa -->
-                    <div class="card">
-                        <h3>Statistik Siswa</h3>
-                        <div class="chart-container">
-                            <div class="pie-chart">
-                                <div style="position: absolute; z-index: 2; display: flex; flex-direction: column; width: 100%; height: 100%;">
-                                    <div style="flex: 1; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; padding-top: 20px;">120</div>
-                                    <div style="flex: 1; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; padding-bottom: 20px;">135</div>
-                                </div>
-                            </div>
-                            <div class="legend">
-                                <span class="legend-item"><span class="dot L"></span> L</span>
-                                <span class="legend-item"><span class="dot P"></span> P</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Rerata Nilai -->
-                    <div class="card col-span-2">
-                        <h3>Rerata Nilai per Tingkat</h3>
-                        <div class="bar-chart">
-                            <div class="bar-row">
-                                <span>Kelas I</span>
-                                <div class="bar-track"><div class="bar-fill green" style="width: 88.5%;">88.5</div></div>
-                            </div>
-                            <div class="bar-row">
-                                <span>Kelas IV</span>
-                                <div class="bar-track"><div class="bar-fill orange" style="width: 86.2%;">86.2</div></div>
-                            </div>
-                            <div class="bar-row">
-                                <span>Kelas VI</span>
-                                <div class="bar-track"><div class="bar-fill blue" style="width: 84.8%;">84.8</div></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Aktivitas Terbaru -->
-                    <div class="card activity-card">
-                        <h3>⏱ Aktivitas Terbaru</h3>
-                        <ul class="activity-list">
-                            <li>
-                                <div class="activity-avatar">BS</div>
-                                <div class="activity-content">
-                                    <strong>Budi Santoso, S.Pd.SD</strong>
-                                    <p>Menginput nilai <a href="#">Kelas IV A</a> untuk mapel IPAS.</p>
-                                    <span>10 menit yang lalu</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="activity-avatar">BS</div>
-                                <div class="activity-content">
-                                    <strong>Budi Santoso, S.Pd.SD</strong>
-                                    <p>Menginput nilai <a href="#">Kelas IV A</a> untuk mapel IPAS.</p>
-                                    <span>10 menit yang lalu</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="activity-avatar">BS</div>
-                                <div class="activity-content">
-                                    <strong>Budi Santoso, S.Pd.SD</strong>
-                                    <p>Menginput nilai <a href="#">Kelas IV A</a> untuk mapel IPAS.</p>
-                                    <span>10 menit yang lalu</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                <!-- Tabs -->
+                <div class="tabs">
+                    <a href="{{ route('admin.sekolah') }}" class="tab-item active">Sekolah</a>
+                    <a href="{{ route('admin.siswa') }}" class="tab-item">Siswa</a>
+                    <a href="{{ route('admin.guru') }}" class="tab-item">Guru</a>
+                    <a href="{{ route('admin.mapel') }}" class="tab-item">Mapel</a>
+                    <a href="{{ route('admin.kelas') }}" class="tab-item">Kelas</a>
                 </div>
+                
+                <!-- Form Area -->
+                <div class="form-card">
+                    <form action="#" method="POST">
+                        @csrf
+                        
+                        <div class="form-group">
+                            <label for="nama_sekolah">Nama Sekolah</label>
+                            <input type="text" id="nama_sekolah" class="form-control" value="SD NEGERI DIGITAL">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="npsn">NPSN</label>
+                            <input type="text" id="npsn" class="form-control" value="12345678">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="kepala_sekolah">Kepala Sekolah</label>
+                            <input type="text" id="kepala_sekolah" class="form-control" value="Hj. Siti Rohmah, M.Pd">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="alamat_sekolah">Alamat Sekolah</label>
+                            <textarea id="alamat_sekolah" class="form-control">Jl. Raya Digital No. 1, Kota Surabaya</textarea>
+                        </div>
+                        
+                        <div class="submit-btn-container">
+                            <button type="button" class="btn btn-purple" style="padding: 10px 24px; font-size: 14px;">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+                
             </div>
         </main>
     </div>

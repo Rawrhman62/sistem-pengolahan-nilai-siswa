@@ -20,6 +20,46 @@ class AdminController extends Controller
     }
 
     /**
+     * Display the kelola data sekolah view.
+     */
+    public function sekolah()
+    {
+        return view('admin.sekolah');
+    }
+
+    /**
+     * Display the kelola data siswa view.
+     */
+    public function siswa()
+    {
+        return view('admin.siswa');
+    }
+
+    /**
+     * Display the kelola data guru view.
+     */
+    public function guru()
+    {
+        return view('admin.guru');
+    }
+
+    /**
+     * Display the kelola data mapel view.
+     */
+    public function mapel()
+    {
+        return view('admin.mapel');
+    }
+
+    /**
+     * Display the kelola data kelas view.
+     */
+    public function kelas()
+    {
+        return view('admin.kelas');
+    }
+
+    /**
      * Show the user registration form.
      */
     public function showRegisterForm()
@@ -77,5 +117,13 @@ class AdminController extends Controller
         $users = $query->orderBy('created_at', 'desc')->paginate(20);
 
         return view('admin.manage', compact('users'));
+    }
+
+    /**
+     * Display kelola tahun ajaran view.
+     */
+    public function tahunAjaran()
+    {
+        return view('admin.tahun-ajaran');
     }
 }

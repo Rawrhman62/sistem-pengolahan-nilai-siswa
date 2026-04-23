@@ -32,7 +32,13 @@ Route::get('/user/{userId}', [UserController::class, 'profile'])->name('user.pro
 // Admin routes (protected by admin middleware)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/admin/sekolah', [AdminController::class, 'sekolah'])->name('admin.sekolah');
+    Route::get('/admin/siswa', [AdminController::class, 'siswa'])->name('admin.siswa');
+    Route::get('/admin/guru', [AdminController::class, 'guru'])->name('admin.guru');
+    Route::get('/admin/mapel', [AdminController::class, 'mapel'])->name('admin.mapel');
+    Route::get('/admin/kelas', [AdminController::class, 'kelas'])->name('admin.kelas');
     Route::get('/admin/register', [AdminController::class, 'showRegisterForm'])->name('admin.register');
     Route::post('/admin/register', [AdminController::class, 'register']);
     Route::get('/admin/manage', [AdminController::class, 'manage'])->name('admin.manage');
+    Route::get('/admin/tahun-ajaran', [AdminController::class, 'tahunAjaran'])->name('admin.tahun-ajaran');
 });
