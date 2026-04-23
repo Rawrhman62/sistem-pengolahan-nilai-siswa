@@ -581,7 +581,7 @@
                 <div class="welcome-banner">
                     <h1>Selamat Datang, Administrator</h1>
                     <div class="badges">
-                        <span class="badge">Kurikulum Deep Learning 2025</span>
+                        <span class="badge">Kurikulum Deep Learning 2026</span>
                         <span class="badge">DIGITAL</span>
                     </div>
                 </div>
