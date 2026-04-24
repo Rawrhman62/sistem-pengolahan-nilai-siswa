@@ -7,7 +7,8 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f5f6fa;
+            background: url('{{ asset('images/login_wall.jpg') }}') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;

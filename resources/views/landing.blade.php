@@ -2,119 +2,143 @@
 <html>
 <head>
     <title>E-RAPOR - Electronic Report Card System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #f5f6fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
             box-sizing: border-box;
         }
 
-        .container {
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-            background: white;
-            padding: 40px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('{{ asset('images/landing_wall.jpg') }}') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        h1 {
-            font-size: 2.5em;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
 
-        .subtitle {
-            color: #777;
-            font-size: 16px;
-            margin-bottom: 30px;
-        }
-
-        .description {
-            color: #555;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 35px;
-            text-align: left;
-        }
-
-        .description ul {
-            margin: 15px 0;
-            padding-left: 20px;
-        }
-
-        .description li {
-            margin-bottom: 8px;
-        }
-
-        .login-button {
-            display: inline-block;
-            width: 100%;
-            padding: 12px;
-            background: #6c63ff;
-            border: none;
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
             color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
         }
 
-        .login-button:hover {
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #f0f0f0;
+        }
+
+        .login-btn {
+            background: #6c63ff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
             background: #574fd6;
         }
 
-        /* Responsive design */
-        @media (max-width: 480px) {
-            .container {
-                padding: 30px 20px;
-                margin: 10px;
+        /* Main Content */
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-text {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
             }
-            
-            h1 {
-                font-size: 2em;
+
+            .nav-menu {
+                gap: 20px;
             }
-            
-            .description {
-                font-size: 14px;
+
+            .main-content {
+                padding: 40px 20px;
+            }
+
+            .hero-title {
+                font-size: 36px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">E-RAPOR</div>
+        <div class="nav-menu">
+            <a href="#" class="nav-link">About Us</a>
+            <a href="#" class="nav-link">Contact Us</a>
+            <a href="/login" class="login-btn">Login</a>
+        </div>
+    </nav>
 
-<div class="container">
-    <h1>E-RAPOR</h1>
-    <p class="subtitle">Sistem Informasi Raport Elektronik</p>
-    
-    <div class="description">
-        <p>Selamat datang! E-RAPOR adalah website didesain untuk memudahkan pengelolaan nilai rapor dalam lingkungan sekolah.</p>
-        
-        <p><strong>Fitur Utama:</strong></p>
-        <ul>
-            <li>manajemen data siswa</li>
-            <li>pelacakan kemajuan akademik siswa</li>
-            <li>alat untuk guru dan administrator</li>
-            <li>akses aman untuk siswa, guru, dan administrator</li>
-        </ul>
-        
-        <p>Silakan masuk untuk mengakses akun Anda dan mulai menggunakan sistem.</p>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="hero-text">
+            <h1 class="hero-title">IT'S SCHOOL TIME!</h1>
+            <p class="hero-description">
+                Welcome to E-RAPOR, the comprehensive Electronic Report Card System. 
+                Manage student grades, track academic progress, and streamline educational 
+                administration with our modern, user-friendly platform designed for schools, 
+                teachers, and students.
+            </p>
+        </div>
     </div>
-
-    <a href="/login" class="login-button">Login to E-RAPOR</a>
-</div>
-
 </body>
 </html>
