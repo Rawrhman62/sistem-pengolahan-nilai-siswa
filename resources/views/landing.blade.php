@@ -24,7 +24,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 50px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(28, 57, 76, 0.38);
             backdrop-filter: blur(10px);
         }
 
@@ -48,7 +48,7 @@
         }
 
         .nav-link:hover {
-            color: #f0f0f0;
+            color: #5c9bffff;
         }
 
         .login-btn {
@@ -131,12 +131,12 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="hero-text">
-            <h1 class="hero-title">IT'S SCHOOL TIME!</h1>
+            <h1 class="hero-title">安巴圖卡姆!</h1>
             <p class="hero-description">
-                Welcome to E-RAPOR, the comprehensive Electronic Report Card System. 
-                Manage student grades, track academic progress, and streamline educational 
-                administration with our modern, user-friendly platform designed for schools, 
-                teachers, and students.
+                Selamat datang di E-RAPOR, sistem rapor elektronik yang lengkap. 
+                Kelola nilai siswa, pantau kemajuan akademik, dan optimalkan administrasi pendidikan 
+                dengan platform modern dan ramah pengguna kami yang dirancang khusus untuk sekolah, 
+                guru, dan siswa.
             </p>
         </div>
     </div>
