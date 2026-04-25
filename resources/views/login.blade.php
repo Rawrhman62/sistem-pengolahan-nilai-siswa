@@ -126,17 +126,17 @@
         @csrf
 
         <select name="selected_role">
-            <option value="">Select User Type</option>
-            <option value="admin">Administrator</option>
-            <option value="lectureTeacher">Lecture Teacher</option>
-            <option value="homeroomTeacher">Homeroom Teacher</option>
-            <option value="student">Student</option>
+            <option value="noentry">Masuk Sebagai</option>
+            <option value="">Administrator</option>         <!--"if its work its work" ahh code-->
+            <option value="lectureTeacher">Guru</option>
+            <option value="homeroomTeacher">Wali Kelas</option>
+            <option value="student">Siswa</option>
         </select>
 
-        <input type="text" name="user_id" placeholder="User ID" required>
-        <input type="password" name="password" placeholder="Password" required>
+        <input type="text" name="user_id" placeholder="Masukkan ID" required>
+        <input type="password" name="password" placeholder="Masukkan Password">
 
-        <button type="submit">Login</button>
+        <button type="submit">Masuk</button>
 
         @if ($errors->any())
             <div class="error">{{ $errors->first() }}</div>

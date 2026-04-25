@@ -296,7 +296,7 @@
         <div class="navbar-menu">
             <form method="POST" action="/logout" style="display: inline;">
                 @csrf
-                <button type="submit" class="btn-logout">Logout</button>
+                <button type="submit" class="btn-logout">Keluar</button>
             </form>
         </div>
     </nav>
@@ -305,23 +305,23 @@
         <!-- Hero Section -->
         <div class="hero">
             <div class="hero-content">
-                <h1>Welcome back, {{ $user->user_id }}!</h1>
-                <p>Welcome to your centralized portal. Have a great day at work.</p>
+                <h1>Selamat Datang Kembali, {{ $user->user_name }}!</h1>
+                <p>Tetap Semangat Mencerdaskan Masa Depan Bangsa!</p>
                 
                 <div class="role-badge">
-                    Current Role: {{ $role === 'lectureTeacher' ? 'Lecture Teacher' : ($role === 'homeroomTeacher' ? 'Homeroom Teacher' : ucfirst($role)) }}
+                    Anda adalah {{ $role === 'lectureTeacher' ? 'Guru Mapel' : ($role === 'homeroomTeacher' ? 'Wali Kelas' : ($role === 'administrator' ? 'Administrator' : ($role === 'student' ? 'Siswa' : ucfirst($role)))) }}
                 </div>
 
                 @if(count($allRoles) > 1)
                 <div class="switch-role-container">
                     <form method="POST" action="/switch-role" style="display: flex; align-items: center;">
                         @csrf
-                        <span style="font-size: 0.95rem; font-weight: 500; color: white;">Switch Role:</span>
+                        <span style="font-size: 0.95rem; font-weight: 500; color: white;">Masuk Sebagai:</span>
                         <select name="role" class="form-select" onchange="this.form.submit()">
                             @foreach($allRoles as $availableRole)
                                 <option value="{{ $availableRole }}" {{ $role === $availableRole ? 'selected' : '' }}>
-                                    {{ $availableRole === 'lectureTeacher' ? 'Lecture Teacher' : 
-                                       ($availableRole === 'homeroomTeacher' ? 'Homeroom Teacher' : 
+                                    {{ $availableRole === 'lectureTeacher' ? 'Guru Mapel' : 
+                                       ($availableRole === 'homeroomTeacher' ? 'Wali Kelas' : 
                                        ucfirst($availableRole)) }}
                                 </option>
                             @endforeach
@@ -338,14 +338,14 @@
             @if($isAdmin)
             <div class="card">
                 <div class="card-header">
-                    <div class="card-icon">🛡️</div>
-                    <div class="card-title">Administrator Functions</div>
+                    <div class="card-icon">🥀</div>
+                    <div class="card-title">Admin telah tiba!</div>
                 </div>
                 <div class="card-body">
-                    <p>You have full system access to manage users, roles, and school settings effectively.</p>
+                    <p></p>
                     <div class="action-list">
-                        <a href="/admin" class="action-link"><span>📊</span> Go to Admin Dashboard</a>
-                        <a href="/admin/register" class="action-link"><span>➕</span> Register New User</a>
+                        <a href="/admin" class="action-link"><span>📊</span> Pergi ke Dashboard Admin</a>
+                        <a href="/admin/register" class="action-link"><span>➕</span> Register User Baru</a>
                         <a href="/admin/manage" class="action-link"><span>👥</span> Manage Users</a>
                     </div>
                 </div>
@@ -356,19 +356,19 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon">👨‍🏫</div>
-                    <div class="card-title">Teacher Functions</div>
+                    <div class="card-title">Panel Guru</div>
                 </div>
                 <div class="card-body">
                     @if($role === 'lectureTeacher')
-                        <p>You are currently acting as a <strong>Lecture Teacher</strong>. You can manage grades for the subjects you teach.</p>
+                        <p>Anda sedang masuk sebagai <strong>Guru Mapel</strong>. </p>
                         <div class="action-list">
-                            <a href="#" class="action-link"><span>📝</span> Input Grades</a>
+                            <a href="#" class="action-link"><span>📝</span> Kelola Nilai Siswa</a>
                             <a href="#" class="action-link"><span>📚</span> View Subjects</a>
                         </div>
                     @elseif($role === 'homeroomTeacher')
-                        <p>You are currently acting as a <strong>Homeroom Teacher</strong>. You can view overall class performance and generate report cards.</p>
+                        <p>Anda sedang masuk sebagai <strong>Wali Kelas</strong>. </p>
                         <div class="action-list">
-                            <a href="#" class="action-link"><span>📋</span> Class Overview</a>
+                            <a href="#" class="action-link"><span>📋</span> Overview Kelas</a>
                             <a href="#" class="action-link"><span>📑</span> Generate Reports</a>
                         </div>
                     @else
@@ -385,10 +385,10 @@
                     <div class="card-title">Student Dashboard</div>
                 </div>
                 <div class="card-body">
-                    <p>Welcome to your student dashboard. Here you can view your grades and academic progress.</p>
+                    <p>Lihat progress kemajuan kalian sobat!</p>
                     <div class="action-list">
-                        <a href="#" class="action-link"><span>📄</span> View Report Card</a>
-                        <a href="#" class="action-link"><span>📅</span> Class Schedule</a>
+                        <a href="#" class="action-link"><span>📄</span> Lihat </a>
+                        <a href="#" class="action-link"><span>📅</span> Jadwal Kelas</a>
                     </div>
                 </div>
             </div>
@@ -397,12 +397,12 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon">⚙️</div>
-                    <div class="card-title">Account Settings</div>
+                    <div class="card-title">Pengaturan Akun</div>
                 </div>
                 <div class="card-body">
-                    <p>Manage your account security, passwords, and other personal preferences.</p>
+                    <p> </p>
                     <div class="action-list">
-                        <a href="/settings" class="action-link"><span>🔒</span> Change Password</a>
+                        <a href="/settings" class="action-link"><span>🔒</span> Ganti Password</a>
                     </div>
                 </div>
             </div>

@@ -122,9 +122,9 @@
     <nav class="navbar">
         <div class="logo">E-RAPOR</div>
         <div class="nav-menu">
-            <a href="#" class="nav-link">About Us</a>
-            <a href="#" class="nav-link">Contact Us</a>
-            <a href="/login" class="login-btn">Login</a>
+            <a href="#" class="nav-link">Tentang Kami</a>
+            <a href="#" class="nav-link">Hubungi Kami</a>
+            <a href="/login" class="login-btn">Masuk</a>
         </div>
     </nav>
 
