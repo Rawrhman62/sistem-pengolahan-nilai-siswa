@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SettingsController;
@@ -8,7 +9,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
-    return redirect('/login');
+    if (Auth::check()) {
+        return redirect('/dashboard');
+    }
+    return view('landing');
 });
 
 // Authentication routes
