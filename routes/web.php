@@ -66,4 +66,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/guru/template', [AdminController::class, 'downloadGuruTemplate'])->name('admin.guru.template');
     Route::get('/admin/mapel/template', [AdminController::class, 'downloadMapelTemplate'])->name('admin.mapel.template');
     Route::get('/admin/kelas/template', [AdminController::class, 'downloadKelasTemplate'])->name('admin.kelas.template');
+    
+    // Excel Configuration Routes
+    Route::get('/admin/excelconfig', [AdminController::class, 'excelConfig'])->name('admin.excelconfig');
+    Route::post('/admin/excelconfig', [AdminController::class, 'updateExcelConfig'])->name('admin.excelconfig.update');
 });

@@ -742,4 +742,57 @@ class AdminController extends Controller
         
         return $this->excelExportService->exportKelas($emptyData);
     }
+
+    /**
+     * Display Excel configuration page
+     */
+    public function excelConfig()
+    {
+        $templates = config('excel-templates');
+        return view('admin.excelconfig', compact('templates'));
+    }
+
+    /**
+     * Update Excel configuration
+     */
+    public function updateExcelConfig(Request $request)
+    {
+        $validated = $request->validate([
+            'template_type' => 'required|in:users,siswa,guru,mapel,kelas',
+            'config' => 'required|json',
+        ]);
+
+        try {
+            // Parse the JSON config
+            $config = json_decode($validated['config'], true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return redirect()->back()
+                    ->withErrors(['config' => 'Invalid JSON format'])
+                    ->withInput();
+            }
+
+            // Read current config file
+            $configPath = config_path('excel-templates.php');
+            $currentConfig = include $configPath;
+            
+            // Update the specific template
+            $currentConfig[$validated['template_type']] = $config;
+            
+            // Write back to file
+            $configContent = "<?php\n\nreturn " . var_export($currentConfig, true) . ";\n";
+            file_put_contents($configPath, $configContent);
+            
+            // Clear config cache
+            \Artisan::call('config:clear');
+            
+            return redirect()->back()
+                ->with('success', 'Excel template configuration updated successfully!');
+                
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withErrors(['config' => 'Error updating configuration: ' . $e->getMessage()])
+                ->withInput();
+        }
+    }
 }

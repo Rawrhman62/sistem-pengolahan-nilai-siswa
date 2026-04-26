@@ -503,6 +503,11 @@
                         <i class="icon">📅</i> Kelola Tahun Ajaran
                     </a>
                 </li>
+                <li class="menu-item">
+                    <a href="{{ route('admin.excelconfig') }}">
+                        <i class="icon">📊</i> Konfigurasi Excel
+                    </a>
+                </li>
             </ul>
 
             <div style="padding: 20px;">
