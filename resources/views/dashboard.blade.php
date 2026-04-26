@@ -345,8 +345,8 @@
                     <p></p>
                     <div class="action-list">
                         <a href="/admin" class="action-link"><span>📊</span> Pergi ke Dashboard Admin</a>
-                        <a href="/admin/register" class="action-link"><span>+</span> Register User Baru</a>
-                        <a href="/admin/manage" class="action-link"><span>👥</span> Manage Users</a>
+                        <a href="/admin/register" class="action-link"><span>+</span> Tambah Pengguna Baru</a>
+                        <a href="/admin/manage" class="action-link"><span>👥</span> Kelola Pengguna</a>
                     </div>
                 </div>
             </div>
@@ -362,14 +362,17 @@
                     @if($role === 'lectureTeacher')
                         <p>Anda sedang masuk sebagai <strong>Guru Mapel</strong>. </p>
                         <div class="action-list">
-                            <a href="#" class="action-link"><span>📝</span> Kelola Nilai Siswa</a>
-                            <a href="#" class="action-link"><span>📚</span> View Subjects</a>
+                            <a href="#" class="action-link"><span>📝</span> Pergi ke Dashboard Guru</a>
+                            <a href="#" class="action-link"><span>📚</span> Input Nilai Siswa</a>
                         </div>
                     @elseif($role === 'homeroomTeacher')
                         <p>Anda sedang masuk sebagai <strong>Wali Kelas</strong>. </p>
                         <div class="action-list">
-                            <a href="#" class="action-link"><span>📋</span> Overview Kelas</a>
-                            <a href="#" class="action-link"><span>📑</span> Generate Reports</a>
+                            <a href="#" class="action-link"><span>📋</span> Pergi ke Dashboard Wali Kelas</a>
+                            <a href="#" class="action-link"><span>📑</span> Lihat Data Siswa Kelas</a>
+                            <a href="#" class="action-link"><span>📑</span> Kelola Absensi</a>
+                            <a href="#" class="action-link"><span>📑</span> Leger Nilai</a>
+                            <a href="#" class="action-link"><span>📑</span> Cetak Raport</a>
                         </div>
                     @else
                         <p>You have teacher privileges. Select a specific teacher role to view options.</p>
@@ -387,8 +390,10 @@
                 <div class="card-body">
                     <p>Lihat progress kemajuan kalian sobat!</p>
                     <div class="action-list">
-                        <a href="#" class="action-link"><span>📄</span> Lihat </a>
-                        <a href="#" class="action-link"><span>📅</span> Jadwal Kelas</a>
+                        <a href="#" class="action-link"><span>📄</span> Pergi ke Dashboard Siswa</a>
+                        <a href="#" class="action-link"><span>📅</span> Lihat Absensi</a>
+                        <a href="#" class="action-link"><span>📅</span> Lihat Hasil Raport</a>
+                        <a href="#" class="action-link"><span>📅</span> Cetak Nilai Raport</a>
                     </div>
                 </div>
             </div>
