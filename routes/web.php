@@ -45,4 +45,25 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/register', [AdminController::class, 'register']);
     Route::get('/admin/manage', [AdminController::class, 'manage'])->name('admin.manage');
     Route::get('/admin/tahun-ajaran', [AdminController::class, 'tahunAjaran'])->name('admin.tahun-ajaran');
+    
+    // Excel Export Routes
+    Route::get('/admin/users/export', [AdminController::class, 'exportUsers'])->name('admin.users.export');
+    Route::get('/admin/siswa/export', [AdminController::class, 'exportSiswa'])->name('admin.siswa.export');
+    Route::get('/admin/guru/export', [AdminController::class, 'exportGuru'])->name('admin.guru.export');
+    Route::get('/admin/mapel/export', [AdminController::class, 'exportMapel'])->name('admin.mapel.export');
+    Route::get('/admin/kelas/export', [AdminController::class, 'exportKelas'])->name('admin.kelas.export');
+    
+    // Excel Import Routes
+    Route::post('/admin/users/import', [AdminController::class, 'importUsers'])->name('admin.users.import');
+    Route::post('/admin/siswa/import', [AdminController::class, 'importSiswa'])->name('admin.siswa.import');
+    Route::post('/admin/guru/import', [AdminController::class, 'importGuru'])->name('admin.guru.import');
+    Route::post('/admin/mapel/import', [AdminController::class, 'importMapel'])->name('admin.mapel.import');
+    Route::post('/admin/kelas/import', [AdminController::class, 'importKelas'])->name('admin.kelas.import');
+    
+    // Excel Template Download Routes
+    Route::get('/admin/users/template', [AdminController::class, 'downloadUsersTemplate'])->name('admin.users.template');
+    Route::get('/admin/siswa/template', [AdminController::class, 'downloadSiswaTemplate'])->name('admin.siswa.template');
+    Route::get('/admin/guru/template', [AdminController::class, 'downloadGuruTemplate'])->name('admin.guru.template');
+    Route::get('/admin/mapel/template', [AdminController::class, 'downloadMapelTemplate'])->name('admin.mapel.template');
+    Route::get('/admin/kelas/template', [AdminController::class, 'downloadKelasTemplate'])->name('admin.kelas.template');
 });

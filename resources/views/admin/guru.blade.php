@@ -425,6 +425,47 @@
         .icon {
             font-style: normal;
         }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.5;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+        
+        .alert-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-error .error-details {
+            margin-top: 8px;
+            padding-left: 12px;
+            border-left: 2px solid #f87171;
+            white-space: pre-line;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -510,19 +551,47 @@
             <!-- Content Wrapper -->
             <div class="content-wrapper">
                 
+                <!-- Flash Messages -->
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✓</span>
+                        <div class="alert-content">{{ session('success') }}</div>
+                    </div>
+                @endif
+                
+                @if($errors->has('import'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>Import Failed</strong>
+                            <div class="error-details">{{ $errors->first('import') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
+                @if($errors->has('file'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>File Upload Error</strong>
+                            <div class="error-details">{{ $errors->first('file') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
                 <!-- Page Header -->
                 <div class="page-header">
                     <div class="page-title">
                         <h1>Master Data</h1>
                         <p>Kelola data referensi sekolah secara menyeluruh.</p>
                     </div>
-                    <div class="action-buttons">                        
-                        <button class="btn btn-green"><i class="icon">📊</i> Import Excel</button>
-<<<<<<< HEAD
+                    <div class="action-buttons">
+                        <x-excel-buttons 
+                            export-route="admin.guru.export" 
+                            import-route="admin.guru.import" 
+                            template-route="admin.guru.template" 
+                        />
                         <button class="btn btn-purple"><i class="icon">+</i> Tambah</button>
-=======
-                        <button class="btn btn-purple"><i class="icon">➕</i> Tambah</button>
->>>>>>> a09ca05b7d7227bdeda4a916ea5618a417b7d019
                     </div>
                 </div>
                 
@@ -540,25 +609,43 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>NIP / ID</th>
-                                <th>Nama Guru</th>
-                                <th>Tugas / Mapel</th>
+                                <x-sortable-header 
+                                    column="nip" 
+                                    label="NIP / ID" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
+                                <x-sortable-header 
+                                    column="nama" 
+                                    label="Nama Guru" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
+                                <x-sortable-header 
+                                    column="mapel" 
+                                    label="Tugas / Mapel" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
                                 <th>Status</th>
                                 <th style="text-align: right;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($guru as $g)
                             <tr>
-                                <td class="editable">198501152010011005</td>
-                                <td class="editable">
+                                <td>{{ $g->nip }}</td>
+                                <td>
                                     <div style="display: flex; align-items: center; gap: 10px;">
                                         <div style="width: 28px; height: 28px; background: #E3F2FD; color: var(--btn-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px;">👤</div>
-                                        <span>Budi Santoso, S.Pd.SD</span>
+                                        <span>{{ $g->nama }}</span>
                                     </div>
                                 </td>
-                                <td class="editable">Guru Kelas IV</td>
-                                <td class="editable">
-                                    <span style="background-color: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">PNS</span>
+                                <td>-</td>
+                                <td>
+                                    <span style="background-color: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">
+                                        {{ $g->user && $g->user->hasRole('homeroomTeacher') ? 'Wali Kelas' : 'Guru' }}
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="action-cell">
@@ -566,63 +653,23 @@
                                     </div>
                                 </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td class="editable">199003202015022001</td>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #E3F2FD; color: var(--btn-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px;">👤</div>
-                                        <span>Siti Aminah, S.Pd</span>
-                                    </div>
-                                </td>
-                                <td class="editable">Guru Kelas I</td>
-                                <td class="editable">
-                                    <span style="background-color: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">PPPK</span>
-                                </td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                    Tidak ada data guru
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="editable">198807122011011002</td>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #E3F2FD; color: var(--btn-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px;">👤</div>
-                                        <span>Ust. Ahmad Dahlan</span>
-                                    </div>
-                                </td>
-                                <td class="editable">Pendidikan Agama Islam</td>
-                                <td class="editable">
-                                    <span style="background-color: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">GTT</span>
-                                </td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="editable">199211052019032008</td>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #E3F2FD; color: var(--btn-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px;">👤</div>
-                                        <span>Rina Marlina, S.Pd</span>
-                                    </div>
-                                </td>
-                                <td class="editable">PJOK</td>
-                                <td class="editable">
-                                    <span style="background-color: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">PNS</span>
-                                </td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Pagination -->
+                @if($guru->hasPages())
+                <div style="margin-top: 20px; display: flex; justify-content: center;">
+                    {{ $guru->links() }}
+                </div>
+                @endif
                 
             </div>
         </main>

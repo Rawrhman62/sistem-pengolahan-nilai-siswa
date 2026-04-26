@@ -424,6 +424,47 @@
         .icon {
             font-style: normal;
         }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.5;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+        
+        .alert-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-error .error-details {
+            margin-top: 8px;
+            padding-left: 12px;
+            border-left: 2px solid #f87171;
+            white-space: pre-line;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -505,14 +546,46 @@
             <!-- Content Wrapper -->
             <div class="content-wrapper">
                 
+                <!-- Flash Messages -->
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✓</span>
+                        <div class="alert-content">{{ session('success') }}</div>
+                    </div>
+                @endif
+                
+                @if($errors->has('import'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>Import Failed</strong>
+                            <div class="error-details">{{ $errors->first('import') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
+                @if($errors->has('file'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>File Upload Error</strong>
+                            <div class="error-details">{{ $errors->first('file') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
                 <!-- Page Header -->
                 <div class="page-header">
                     <div class="page-title">
                         <h1>Master Data</h1>
                         <p>Kelola data referensi sekolah secara menyeluruh.</p>
                     </div>
-                    <div class="action-buttons">                        
-                        <button class="btn btn-green"><i class="icon">📊</i> Import Excel</button>
+                    <div class="action-buttons">
+                        <x-excel-buttons 
+                            export-route="admin.siswa.export" 
+                            import-route="admin.siswa.import" 
+                            template-route="admin.siswa.template" 
+                        />
                         <button class="btn btn-purple"><i class="icon">+</i> Tambah</button>
                     </div>
                 </div>
@@ -532,18 +605,34 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Siswa</th>
-                                <th>NIS/NISN</th>
-                                <th>Kelas</th>
+                                <x-sortable-header 
+                                    column="nama" 
+                                    label="Nama Siswa" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
+                                <x-sortable-header 
+                                    column="nis" 
+                                    label="NIS" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
+                                <x-sortable-header 
+                                    column="kelas" 
+                                    label="Kelas" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($siswa as $index => $s)
                             <tr>
-                                <td>1</td>
-                                <td>Aditya Pratama 1</td>
-                                <td>2025001 / 3124567891</td>
-                                <td>IV A</td>
+                                <td>{{ $siswa->firstItem() + $index }}</td>
+                                <td>{{ $s->nama }}</td>
+                                <td>{{ $s->nis }}</td>
+                                <td>{{ $s->kelas }}</td>
                                 <td>
                                     <div class="action-cell">
                                         <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
@@ -551,57 +640,23 @@
                                     </div>
                                 </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td>2</td>
-                                <td>Aditya Pratama 2</td>
-                                <td>2025002 / 3124567892</td>
-                                <td>IV A</td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                        <button class="action-btn btn-delete"><i class="icon">🗑️</i></button>
-                                    </div>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                    Tidak ada data siswa
                                 </td>
                             </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Aditya Pratama 3</td>
-                                <td>2025003 / 3124567893</td>
-                                <td>IV A</td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                        <button class="action-btn btn-delete"><i class="icon">🗑️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Aditya Pratama 4</td>
-                                <td>2025004 / 3124567894</td>
-                                <td>IV A</td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                        <button class="action-btn btn-delete"><i class="icon">🗑️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Aditya Pratama 5</td>
-                                <td>2025005 / 3124567895</td>
-                                <td>IV A</td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                        <button class="action-btn btn-delete"><i class="icon">🗑️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Pagination -->
+                @if($siswa->hasPages())
+                <div style="margin-top: 20px; display: flex; justify-content: center;">
+                    {{ $siswa->links() }}
+                </div>
+                @endif
                 
             </div>
         </main>

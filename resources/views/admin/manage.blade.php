@@ -449,6 +449,47 @@
             text-align: center;
             color: var(--text-gray);
         }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.5;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+        
+        .alert-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-error .error-details {
+            margin-top: 8px;
+            padding-left: 12px;
+            border-left: 2px solid #f87171;
+            white-space: pre-line;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -523,15 +564,50 @@
             <!-- Content Wrapper -->
             <div class="content-wrapper">
                 
+                <!-- Flash Messages -->
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✓</span>
+                        <div class="alert-content">{{ session('success') }}</div>
+                    </div>
+                @endif
+                
+                @if($errors->has('import'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>Import Failed</strong>
+                            <div class="error-details">{{ $errors->first('import') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
+                @if($errors->has('file'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>File Upload Error</strong>
+                            <div class="error-details">{{ $errors->first('file') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
                 <!-- Page Header -->
                 <div class="page-header">
                     <div class="page-title">
                         <h1>Manajemen User</h1>
                         <p>Kelola daftar pengguna, peran, dan akses sistem.</p>
                     </div>
-                    <a href="{{ route('admin.register') }}" class="btn-add">
-                        <span style="font-size: 16px; margin-right: 4px;">+</span> Tambah Pengguna Baru
-                    </a>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <x-excel-buttons 
+                            export-route="admin.users.export" 
+                            import-route="admin.users.import" 
+                            template-route="admin.users.template" 
+                        />
+                        <a href="{{ route('admin.register') }}" class="btn-add">
+                            <span style="font-size: 16px; margin-right: 4px;">+</span> Tambah Pengguna Baru
+                        </a>
+                    </div>
                 </div>
                 
                 <!-- Card Container -->
@@ -552,12 +628,37 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Pengguna</th>
-                                    <th>Username</th>
-                                    <th>Kontak</th>
-                                    <th>Peran (Role)</th>
+                                    <x-sortable-header 
+                                        column="name" 
+                                        label="Pengguna" 
+                                        :current-sort="request('sort')" 
+                                        :current-direction="request('direction', 'asc')" 
+                                    />
+                                    <x-sortable-header 
+                                        column="user_name" 
+                                        label="Username" 
+                                        :current-sort="request('sort')" 
+                                        :current-direction="request('direction', 'asc')" 
+                                    />
+                                    <x-sortable-header 
+                                        column="email" 
+                                        label="Kontak" 
+                                        :current-sort="request('sort')" 
+                                        :current-direction="request('direction', 'asc')" 
+                                    />
+                                    <x-sortable-header 
+                                        column="role" 
+                                        label="Peran (Role)" 
+                                        :current-sort="request('sort')" 
+                                        :current-direction="request('direction', 'asc')" 
+                                    />
                                     <th>Status Password</th>
-                                    <th>Tanggal Dibuat</th>
+                                    <x-sortable-header 
+                                        column="created_at" 
+                                        label="Tanggal Dibuat" 
+                                        :current-sort="request('sort')" 
+                                        :current-direction="request('direction', 'asc')" 
+                                    />
                                 </tr>
                             </thead>
                             <tbody>

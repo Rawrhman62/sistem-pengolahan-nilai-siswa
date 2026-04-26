@@ -624,7 +624,7 @@
                         </div>
                     </div>
                     
-                    <!-- Aktivitas Terbaru -->
+                    <!-- Aktivitas Terbaru (example)-->
                     <div class="card activity-card">
                         <h3>⏱ Aktivitas Terbaru</h3>
                         <ul class="activity-list">

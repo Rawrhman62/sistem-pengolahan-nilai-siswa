@@ -497,10 +497,6 @@
                         <h1>Master Data</h1>
                         <p>Kelola data referensi sekolah secara menyeluruh.</p>
                     </div>
-                    <div class="action-buttons">                        
-                        <button class="btn btn-green"><i class="icon">📊</i> Import Excel</button>
-                        <button class="btn btn-purple"><i class="icon">+</i> Tambah</button>
-                    </div>
                 </div>
                 
                 <!-- Tabs -->

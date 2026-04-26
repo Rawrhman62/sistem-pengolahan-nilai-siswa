@@ -425,6 +425,47 @@
         .icon {
             font-style: normal;
         }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.5;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+        
+        .alert-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-error .error-details {
+            margin-top: 8px;
+            padding-left: 12px;
+            border-left: 2px solid #f87171;
+            white-space: pre-line;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -506,14 +547,46 @@
             <!-- Content Wrapper -->
             <div class="content-wrapper">
                 
+                <!-- Flash Messages -->
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✓</span>
+                        <div class="alert-content">{{ session('success') }}</div>
+                    </div>
+                @endif
+                
+                @if($errors->has('import'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>Import Failed</strong>
+                            <div class="error-details">{{ $errors->first('import') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
+                @if($errors->has('file'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>File Upload Error</strong>
+                            <div class="error-details">{{ $errors->first('file') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
                 <!-- Page Header -->
                 <div class="page-header">
                     <div class="page-title">
                         <h1>Master Data</h1>
                         <p>Kelola data referensi sekolah secara menyeluruh.</p>
                     </div>
-                    <div class="action-buttons">                        
-                        <button class="btn btn-green"><i class="icon">📊</i> Import Excel</button>
+                    <div class="action-buttons">
+                        <x-excel-buttons 
+                            export-route="admin.mapel.export" 
+                            import-route="admin.mapel.import" 
+                            template-route="admin.mapel.template" 
+                        />
                         <button class="btn btn-purple"><i class="icon">+</i> Tambah</button>
                     </div>
                 </div>
@@ -532,23 +605,39 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Kode</th>
-                                <th>Mata Pelajaran</th>
-                                <th>Kelompok</th>
+                                <x-sortable-header 
+                                    column="kode" 
+                                    label="Kode" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
+                                <x-sortable-header 
+                                    column="nama" 
+                                    label="Mata Pelajaran" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
+                                <x-sortable-header 
+                                    column="kelompok" 
+                                    label="Kelompok" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
                                 <th style="text-align: right;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($mapel as $m)
                             <tr>
-                                <td class="editable">MP-01</td>
-                                <td class="editable">
+                                <td>{{ $m->kode }}</td>
+                                <td>
                                     <div style="display: flex; align-items: center; gap: 10px;">
                                         <div style="width: 28px; height: 28px; background: #FFF4E5; color: var(--orange); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">📙</div>
-                                        <span>Pendidikan Agama dan Budi Pekerti</span>
+                                        <span>{{ $m->nama }}</span>
                                     </div>
                                 </td>
-                                <td class="editable">
-                                    <span style="background-color: #E3F2FD; color: var(--btn-blue); border: 1px solid #BBDEFB; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Wajib</span>
+                                <td>
+                                    <span style="background-color: #E3F2FD; color: var(--btn-blue); border: 1px solid #BBDEFB; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">{{ $m->kelompok }}</span>
                                 </td>
                                 <td>
                                     <div class="action-cell">
@@ -556,94 +645,23 @@
                                     </div>
                                 </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td class="editable">MP-02</td>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #FFF4E5; color: var(--orange); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">📙</div>
-                                        <span>Pendidikan Pancasila</span>
-                                    </div>
-                                </td>
-                                <td class="editable">
-                                    <span style="background-color: #E3F2FD; color: var(--btn-blue); border: 1px solid #BBDEFB; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Wajib</span>
-                                </td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
+                                <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                    Tidak ada data mata pelajaran
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="editable">MP-03</td>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #FFF4E5; color: var(--orange); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">📙</div>
-                                        <span>Bahasa Indonesia</span>
-                                    </div>
-                                </td>
-                                <td class="editable">
-                                    <span style="background-color: #E3F2FD; color: var(--btn-blue); border: 1px solid #BBDEFB; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Wajib</span>
-                                </td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="editable">MP-04</td>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #FFF4E5; color: var(--orange); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">📙</div>
-                                        <span>Matematika</span>
-                                    </div>
-                                </td>
-                                <td class="editable">
-                                    <span style="background-color: #E3F2FD; color: var(--btn-blue); border: 1px solid #BBDEFB; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Wajib</span>
-                                </td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="editable">MP-05</td>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #FFF4E5; color: var(--orange); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">📙</div>
-                                        <span>IPAS</span>
-                                    </div>
-                                </td>
-                                <td class="editable">
-                                    <span style="background-color: #E3F2FD; color: var(--btn-blue); border: 1px solid #BBDEFB; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Wajib</span>
-                                </td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="editable">MP-06</td>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #FFF4E5; color: var(--orange); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">📙</div>
-                                        <span>PJOK</span>
-                                    </div>
-                                </td>
-                                <td class="editable">
-                                    <span style="background-color: #E3F2FD; color: var(--btn-blue); border: 1px solid #BBDEFB; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Wajib</span>
-                                </td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Pagination -->
+                @if($mapel->hasPages())
+                <div style="margin-top: 20px; display: flex; justify-content: center;">
+                    {{ $mapel->links() }}
+                </div>
+                @endif
                 
             </div>
         </main>

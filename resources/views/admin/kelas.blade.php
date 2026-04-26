@@ -425,6 +425,47 @@
         .icon {
             font-style: normal;
         }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.5;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+        
+        .alert-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-error .error-details {
+            margin-top: 8px;
+            padding-left: 12px;
+            border-left: 2px solid #f87171;
+            white-space: pre-line;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -506,14 +547,46 @@
             <!-- Content Wrapper -->
             <div class="content-wrapper">
                 
+                <!-- Flash Messages -->
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✓</span>
+                        <div class="alert-content">{{ session('success') }}</div>
+                    </div>
+                @endif
+                
+                @if($errors->has('import'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>Import Failed</strong>
+                            <div class="error-details">{{ $errors->first('import') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
+                @if($errors->has('file'))
+                    <div class="alert alert-error">
+                        <span class="alert-icon">⚠</span>
+                        <div class="alert-content">
+                            <strong>File Upload Error</strong>
+                            <div class="error-details">{{ $errors->first('file') }}</div>
+                        </div>
+                    </div>
+                @endif
+                
                 <!-- Page Header -->
                 <div class="page-header">
                     <div class="page-title">
                         <h1>Master Data</h1>
                         <p>Kelola data referensi sekolah secara menyeluruh.</p>
                     </div>
-                    <div class="action-buttons">                        
-                        <button class="btn btn-green"><i class="icon">📊</i> Import Excel</button>
+                    <div class="action-buttons">
+                        <x-excel-buttons 
+                            export-route="admin.kelas.export" 
+                            import-route="admin.kelas.import" 
+                            template-route="admin.kelas.template" 
+                        />
                         <button class="btn btn-purple"><i class="icon">+</i> Tambah</button>
                     </div>
                 </div>
@@ -532,81 +605,63 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Nama Kelas</th>
-                                <th>Fase</th>
-                                <th>Guru Kelas</th>
+                                <x-sortable-header 
+                                    column="nama" 
+                                    label="Nama Kelas" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
+                                <x-sortable-header 
+                                    column="tingkat" 
+                                    label="Fase" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
+                                <x-sortable-header 
+                                    column="wali_kelas" 
+                                    label="Guru Kelas" 
+                                    :current-sort="request('sort')" 
+                                    :current-direction="request('direction', 'asc')" 
+                                />
                                 <th>Jumlah Siswa</th>
                                 <th style="text-align: right;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($kelas as $k)
                             <tr>
-                                <td class="editable">
+                                <td>
                                     <div style="display: flex; align-items: center; gap: 10px;">
                                         <div style="width: 28px; height: 28px; background: #F3E5F5; color: var(--btn-purple); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🏠</div>
-                                        <span>I A</span>
+                                        <span>{{ $k->nama }}</span>
                                     </div>
                                 </td>
-                                <td class="editable">Fase A</td>
-                                <td class="editable">Siti Aminah, S.Pd</td>
-                                <td class="editable">28</td>
+                                <td>Tingkat {{ $k->tingkat }}</td>
+                                <td>{{ $k->wali_kelas_nama }}</td>
+                                <td>{{ $k->jumlah_siswa ?? 0 }}</td>
                                 <td>
                                     <div class="action-cell">
                                         <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
                                     </div>
                                 </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #F3E5F5; color: var(--btn-purple); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🏠</div>
-                                        <span>I B</span>
-                                    </div>
-                                </td>
-                                <td class="editable">Fase A</td>
-                                <td class="editable">Dewi Kartika, S.Pd</td>
-                                <td class="editable">27</td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                    Tidak ada data kelas
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #F3E5F5; color: var(--btn-purple); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🏠</div>
-                                        <span>IV A</span>
-                                    </div>
-                                </td>
-                                <td class="editable">Fase B</td>
-                                <td class="editable">Budi Santoso, S.Pd.SD</td>
-                                <td class="editable">30</td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="editable">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 28px; height: 28px; background: #F3E5F5; color: var(--btn-purple); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🏠</div>
-                                        <span>VI A</span>
-                                    </div>
-                                </td>
-                                <td class="editable">Fase C</td>
-                                <td class="editable">Drs. Supriyanto</td>
-                                <td class="editable">29</td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Pagination -->
+                @if($kelas->hasPages())
+                <div style="margin-top: 20px; display: flex; justify-content: center;">
+                    {{ $kelas->links() }}
+                </div>
+                @endif
                 
             </div>
         </main>
