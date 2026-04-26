@@ -345,11 +345,7 @@
                     <p></p>
                     <div class="action-list">
                         <a href="/admin" class="action-link"><span>📊</span> Pergi ke Dashboard Admin</a>
-<<<<<<< HEAD
                         <a href="/admin/register" class="action-link"><span>+</span> Register User Baru</a>
-=======
-                        <a href="/admin/register" class="action-link"><span>➕</span> Register User Baru</a>
->>>>>>> a09ca05b7d7227bdeda4a916ea5618a417b7d019
                         <a href="/admin/manage" class="action-link"><span>👥</span> Manage Users</a>
                     </div>
                 </div>

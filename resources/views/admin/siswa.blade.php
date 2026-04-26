@@ -468,11 +468,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500; transition: background 0.2s;">
-<<<<<<< HEAD
                         <i class="icon">↪</i> Keluar
-=======
-                        <i class="icon">↪️</i> Keluar
->>>>>>> a09ca05b7d7227bdeda4a916ea5618a417b7d019
                     </button>
                 </form>
             </div>
@@ -517,11 +513,7 @@
                     </div>
                     <div class="action-buttons">                        
                         <button class="btn btn-green"><i class="icon">📊</i> Import Excel</button>
-<<<<<<< HEAD
                         <button class="btn btn-purple"><i class="icon">+</i> Tambah</button>
-=======
-                        <button class="btn btn-purple"><i class="icon">➕</i> Tambah</button>
->>>>>>> a09ca05b7d7227bdeda4a916ea5618a417b7d019
                     </div>
                 </div>
                 
