@@ -362,14 +362,14 @@
                     @if($role === 'lectureTeacher')
                         <p>Anda sedang masuk sebagai <strong>Guru Mapel</strong>. </p>
                         <div class="action-list">
-                            <a href="#" class="action-link"><span>📝</span> Pergi ke Dashboard Guru</a>
-                            <a href="#" class="action-link"><span>📚</span> Input Nilai Siswa</a>
+                            <a href="{{ route('guru.index') }}" class="action-link"><span>📝</span> Pergi ke Dashboard Guru</a>
+                            <a href="{{ route('guru.index') }}" class="action-link"><span>📚</span> Input Nilai Siswa</a>
                         </div>
                     @elseif($role === 'homeroomTeacher')
                         <p>Anda sedang masuk sebagai <strong>Wali Kelas</strong>. </p>
                         <div class="action-list">
-                            <a href="#" class="action-link"><span>📋</span> Pergi ke Dashboard Wali Kelas</a>
-                            <a href="#" class="action-link"><span>📑</span> Lihat Data Siswa Kelas</a>
+                            <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📋</span> Pergi ke Dashboard Wali Kelas</a>
+                            <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📑</span> Lihat Data Siswa Kelas</a>
                             <a href="#" class="action-link"><span>📑</span> Kelola Absensi</a>
                             <a href="#" class="action-link"><span>📑</span> Leger Nilai</a>
                             <a href="#" class="action-link"><span>📑</span> Cetak Raport</a>
@@ -390,10 +390,10 @@
                 <div class="card-body">
                     <p>Lihat progress kemajuan kalian sobat!</p>
                     <div class="action-list">
-                        <a href="#" class="action-link"><span>📄</span> Pergi ke Dashboard Siswa</a>
+                        <a href="{{ route('siswa.index') }}" class="action-link"><span>📄</span> Pergi ke Dashboard Siswa</a>
+                        <a href="{{ route('siswa.index') }}" class="action-link"><span>📅</span> Lihat Hasil Raport</a>
+                        <a href="{{ route('siswa.profile') }}" class="action-link"><span>👤</span> Lihat Profil</a>
                         <a href="#" class="action-link"><span>📅</span> Lihat Absensi</a>
-                        <a href="#" class="action-link"><span>📅</span> Lihat Hasil Raport</a>
-                        <a href="#" class="action-link"><span>📅</span> Cetak Nilai Raport</a>
                     </div>
                 </div>
             </div>

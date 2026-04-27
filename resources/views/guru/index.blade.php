@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Wali Kelas - E-RAPOR</title>
+    <title>Dashboard Guru - E-RAPOR</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,7 +18,6 @@
             --green: #10B981;
             --orange: #F59E0B;
             --blue: #3B82F6;
-            --purple: #8B5CF6;
         }
 
         * {
@@ -40,7 +39,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, var(--purple), #A78BFA);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-hover));
             color: white;
             padding: 30px;
             border-radius: 12px;
@@ -94,10 +93,6 @@
             border-left-color: var(--orange);
         }
 
-        .stat-card.purple {
-            border-left-color: var(--purple);
-        }
-
         .stat-label {
             font-size: 13px;
             color: var(--text-gray);
@@ -125,74 +120,72 @@
             margin-bottom: 20px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .class-list {
+            display: grid;
+            gap: 15px;
         }
 
-        thead {
-            background-color: var(--purple);
-            color: white;
+        .class-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
         }
 
-        th {
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
+        .class-item:hover {
+            border-color: var(--primary-blue);
+            box-shadow: 0 2px 8px rgba(10, 46, 92, 0.1);
+        }
+
+        .class-info h3 {
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .class-info p {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .class-meta {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            font-size: 11px;
+            color: var(--text-gray);
             text-transform: uppercase;
         }
 
-        td {
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        tbody tr:hover {
-            background-color: var(--bg-light);
-        }
-
-        .rank-badge {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            background: var(--purple);
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 30px;
+        .meta-value {
+            font-size: 20px;
             font-weight: 700;
-        }
-
-        .rank-badge.gold {
-            background: #F59E0B;
-        }
-
-        .rank-badge.silver {
-            background: #94A3B8;
-        }
-
-        .rank-badge.bronze {
-            background: #CD7F32;
-        }
-
-        .grade-display {
-            font-weight: 700;
-            font-size: 18px;
             color: var(--primary-blue);
         }
 
-        .btn-detail {
+        .btn-input {
             background: var(--primary-blue);
             color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 10px 20px;
+            border-radius: 8px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
+            transition: background 0.2s;
         }
 
-        .btn-detail:hover {
+        .btn-input:hover {
             background: var(--primary-blue-hover);
         }
 
@@ -207,20 +200,6 @@
         .back-link:hover {
             text-decoration: underline;
         }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #E5E7EB;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--green);
-            transition: width 0.3s;
-        }
     </style>
 </head>
 <body>
@@ -229,7 +208,7 @@
         
         <div class="header">
             <div>
-                <h1>Dashboard Wali Kelas {{ $kelasWali }}</h1>
+                <h1>Dashboard Guru</h1>
                 <p>Selamat datang, {{ auth()->user()->name }}</p>
             </div>
             <form method="POST" action="{{ route('logout') }}" style="display: inline;">
@@ -238,68 +217,54 @@
             </form>
         </div>
 
+        @if(session('success'))
+            <div style="background: #D1FAE5; color: #065F46; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <!-- Statistics -->
         <div class="stats-grid">
-            <div class="stat-card purple">
+            <div class="stat-card">
+                <div class="stat-label">Total Kelas</div>
+                <div class="stat-value">{{ $totalKelas }}</div>
+            </div>
+            <div class="stat-card green">
                 <div class="stat-label">Total Siswa</div>
                 <div class="stat-value">{{ $totalSiswa }}</div>
             </div>
-            <div class="stat-card blue">
-                <div class="stat-label">Rata-rata Kelas</div>
-                <div class="stat-value">{{ number_format($rataRataKelas, 1) }}</div>
-            </div>
             <div class="stat-card green">
-                <div class="stat-label">Nilai Lengkap</div>
-                <div class="stat-value">{{ $siswaLengkap }}</div>
+                <div class="stat-label">Nilai Diinput</div>
+                <div class="stat-value">{{ $nilaiDiinput }}</div>
             </div>
             <div class="stat-card orange">
-                <div class="stat-label">Belum Lengkap</div>
-                <div class="stat-value">{{ $siswaBelumLengkap }}</div>
+                <div class="stat-label">Belum Diinput</div>
+                <div class="stat-value">{{ $nilaiBelumDiinput }}</div>
             </div>
         </div>
 
-        <!-- Student Rankings -->
+        <!-- Class List -->
         <div class="card">
-            <h2>Peringkat Siswa Kelas {{ $kelasWali }}</h2>
+            <h2>Daftar Kelas yang Diampu</h2>
             
-            <table>
-                <thead>
-                    <tr>
-                        <th>Peringkat</th>
-                        <th>NIS</th>
-                        <th>Nama Siswa</th>
-                        <th>Jumlah Mapel</th>
-                        <th>Rata-rata Nilai</th>
-                        <th>Progress</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($siswaWithGrades as $index => $data)
-                    <tr>
-                        <td>
-                            <span class="rank-badge {{ $index == 0 ? 'gold' : ($index == 1 ? 'silver' : ($index == 2 ? 'bronze' : '')) }}">
-                                {{ $index + 1 }}
-                            </span>
-                        </td>
-                        <td>{{ $data['siswa']->user_id }}</td>
-                        <td><strong>{{ $data['siswa']->name }}</strong></td>
-                        <td>{{ $data['jumlah_mapel'] }} / 8</td>
-                        <td>
-                            <span class="grade-display">{{ $data['rata_rata'] }}</span>
-                        </td>
-                        <td>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ ($data['jumlah_mapel'] / 8) * 100 }}%"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <a href="{{ route('wali_kelas.detail', $data['siswa']->user_id) }}" class="btn-detail">Lihat Detail</a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="class-list">
+                @foreach($kelasList as $kelas)
+                <div class="class-item">
+                    <div class="class-info">
+                        <h3>Kelas {{ $kelas['nama'] }}</h3>
+                        <p>Mata Pelajaran: {{ $kelas['mapel'] }}</p>
+                    </div>
+                    
+                    <div class="class-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">Siswa</div>
+                            <div class="meta-value">{{ $kelas['jumlah_siswa'] }}</div>
+                        </div>
+                        <a href="{{ route('guru.kelas', $kelas['nama']) }}" class="btn-input">Input Nilai</a>
+                    </div>
+                </div>
+                @endforeach
+            </div>
         </div>
     </div>
 </body>

@@ -7,6 +7,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\GuruController;
+use App\Http\Controllers\WaliKelasController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -28,6 +31,25 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
+});
+
+// Siswa (Student) routes - protected by student role
+Route::middleware(['auth', 'role:student'])->group(function () {
+    Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
+    Route::get('/siswa/profile', [SiswaController::class, 'profile'])->name('siswa.profile');
+});
+
+// Guru (Teacher) routes - protected by lectureTeacher role
+Route::middleware(['auth', 'role:lectureTeacher'])->group(function () {
+    Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
+    Route::get('/guru/kelas/{kelasNama}', [GuruController::class, 'kelas'])->name('guru.kelas');
+    Route::post('/guru/simpan-nilai', [GuruController::class, 'simpanNilai'])->name('guru.simpanNilai');
+});
+
+// Wali Kelas (Homeroom Teacher) routes - protected by homeroomTeacher role
+Route::middleware(['auth', 'role:homeroomTeacher'])->group(function () {
+    Route::get('/wali-kelas', [WaliKelasController::class, 'index'])->name('wali_kelas.index');
+    Route::get('/wali-kelas/siswa/{userId}', [WaliKelasController::class, 'detailSiswa'])->name('wali_kelas.detail');
 });
 
 // Public user profile routes

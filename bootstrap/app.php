@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'password.set' => \App\Http\Middleware\EnsurePasswordSet::class,
             'throttle.login' => \App\Http\Middleware\ThrottleLogins::class,
+            'role' => \App\Http\Middleware\CheckRole::class,
         ]);
         
         // Apply password check to all authenticated routes
