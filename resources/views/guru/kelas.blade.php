@@ -175,7 +175,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($siswaList as $index => $siswa)
+                    @forelse($siswaList as $index => $siswa)
                     @php
                         $nilai = $nilaiList->get($siswa->user_id);
                     @endphp
@@ -225,7 +225,69 @@
                             @endif
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <!-- Dummy Data 1: Belum dinilai -->
+                    <tr>
+                        <td>1</td>
+                        <td>25261001</td>
+                        <td>Ahmad Budi Santoso</td>
+                        <td>
+                            <form method="POST" action="#" style="display: inline;" onsubmit="event.preventDefault(); alert('Ini hanya data dummy!');">
+                                @csrf
+                                <input type="number" name="nilai_pengetahuan" class="input-nilai" min="0" max="100" placeholder="0-100">
+                        </td>
+                        <td>
+                                <input type="number" name="nilai_keterampilan" class="input-nilai" min="0" max="100" placeholder="0-100">
+                        </td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>
+                                <button type="submit" class="btn-save">Simpan</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <!-- Dummy Data 2: Sudah dinilai -->
+                    <tr>
+                        <td>2</td>
+                        <td>25261002</td>
+                        <td>Bunga Citra Lestari</td>
+                        <td>
+                            <span class="nilai-display">85</span>
+                        </td>
+                        <td>
+                            <span class="nilai-display">88</span>
+                        </td>
+                        <td>
+                            <span class="nilai-display">86.5</span>
+                        </td>
+                        <td>
+                            <strong>A-</strong>
+                        </td>
+                        <td>
+                            <span style="color: var(--green); font-weight: 600;">✓ Tersimpan</span>
+                        </td>
+                    </tr>
+                    <!-- Dummy Data 3: Belum dinilai -->
+                    <tr>
+                        <td>3</td>
+                        <td>25261003</td>
+                        <td>Cahyo Dimas Pratama</td>
+                        <td>
+                            <form method="POST" action="#" style="display: inline;" onsubmit="event.preventDefault(); alert('Ini hanya data dummy!');">
+                                @csrf
+                                <input type="number" name="nilai_pengetahuan" class="input-nilai" min="0" max="100" placeholder="0-100">
+                        </td>
+                        <td>
+                                <input type="number" name="nilai_keterampilan" class="input-nilai" min="0" max="100" placeholder="0-100">
+                        </td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>
+                                <button type="submit" class="btn-save">Simpan</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

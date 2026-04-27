@@ -242,19 +242,19 @@
         <div class="stats-grid">
             <div class="stat-card purple">
                 <div class="stat-label">Total Siswa</div>
-                <div class="stat-value">{{ $totalSiswa }}</div>
+                <div class="stat-value">{{ $totalSiswa > 0 ? $totalSiswa : '3' }}</div>
             </div>
             <div class="stat-card blue">
                 <div class="stat-label">Rata-rata Kelas</div>
-                <div class="stat-value">{{ number_format($rataRataKelas, 1) }}</div>
+                <div class="stat-value">{{ $totalSiswa > 0 ? number_format($rataRataKelas, 1) : '86.5' }}</div>
             </div>
             <div class="stat-card green">
                 <div class="stat-label">Nilai Lengkap</div>
-                <div class="stat-value">{{ $siswaLengkap }}</div>
+                <div class="stat-value">{{ $totalSiswa > 0 ? $siswaLengkap : '2' }}</div>
             </div>
             <div class="stat-card orange">
                 <div class="stat-label">Belum Lengkap</div>
-                <div class="stat-value">{{ $siswaBelumLengkap }}</div>
+                <div class="stat-value">{{ $totalSiswa > 0 ? $siswaBelumLengkap : '1' }}</div>
             </div>
         </div>
 
@@ -275,7 +275,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($siswaWithGrades as $index => $data)
+                    @forelse($siswaWithGrades as $index => $data)
                     <tr>
                         <td>
                             <span class="rank-badge {{ $index == 0 ? 'gold' : ($index == 1 ? 'silver' : ($index == 2 ? 'bronze' : '')) }}">
@@ -297,7 +297,50 @@
                             <a href="{{ route('wali_kelas.detail', $data['siswa']->user_id) }}" class="btn-detail">Lihat Detail</a>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <!-- Dummy Student 1 -->
+                    <tr>
+                        <td><span class="rank-badge gold">1</span></td>
+                        <td>25261001</td>
+                        <td><strong>Ahmad Budi Santoso</strong></td>
+                        <td>8 / 8</td>
+                        <td><span class="grade-display">88.5</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </td>
+                        <td><a href="#" class="btn-detail" onclick="event.preventDefault(); alert('Ini hanya data dummy!');">Lihat Detail</a></td>
+                    </tr>
+                    <!-- Dummy Student 2 -->
+                    <tr>
+                        <td><span class="rank-badge silver">2</span></td>
+                        <td>25261002</td>
+                        <td><strong>Bunga Citra Lestari</strong></td>
+                        <td>8 / 8</td>
+                        <td><span class="grade-display">87.2</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </td>
+                        <td><a href="#" class="btn-detail" onclick="event.preventDefault(); alert('Ini hanya data dummy!');">Lihat Detail</a></td>
+                    </tr>
+                    <!-- Dummy Student 3 -->
+                    <tr>
+                        <td><span class="rank-badge bronze">3</span></td>
+                        <td>25261003</td>
+                        <td><strong>Cahyo Dimas Pratama</strong></td>
+                        <td>6 / 8</td>
+                        <td><span class="grade-display">84.0</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                        </td>
+                        <td><a href="#" class="btn-detail" onclick="event.preventDefault(); alert('Ini hanya data dummy!');">Lihat Detail</a></td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

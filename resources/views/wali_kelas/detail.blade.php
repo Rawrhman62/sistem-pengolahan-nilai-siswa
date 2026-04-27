@@ -197,10 +197,29 @@
                         <td><strong style="font-size: 18px; color: var(--purple);">{{ $n->predikat }}</strong></td>
                     </tr>
                     @empty
+                    <!-- Dummy Data 1 -->
                     <tr>
-                        <td colspan="5" style="text-align: center; color: var(--text-gray);">
-                            Belum ada nilai yang diinput
-                        </td>
+                        <td><strong>Matematika</strong></td>
+                        <td>85</td>
+                        <td>88</td>
+                        <td><strong>86.5</strong></td>
+                        <td><strong style="font-size: 18px; color: var(--purple);">A</strong></td>
+                    </tr>
+                    <!-- Dummy Data 2 -->
+                    <tr>
+                        <td><strong>Bahasa Indonesia</strong></td>
+                        <td>90</td>
+                        <td>85</td>
+                        <td><strong>87.5</strong></td>
+                        <td><strong style="font-size: 18px; color: var(--purple);">A</strong></td>
+                    </tr>
+                    <!-- Dummy Data 3 -->
+                    <tr>
+                        <td><strong>IPA</strong></td>
+                        <td>82</td>
+                        <td>80</td>
+                        <td><strong>81.0</strong></td>
+                        <td><strong style="font-size: 18px; color: var(--purple);">B</strong></td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -211,11 +230,11 @@
         <div class="summary-grid">
             <div class="summary-card">
                 <div class="summary-label">Rata-rata Nilai</div>
-                <div class="summary-value">{{ number_format($rataRata, 1) }}</div>
+                <div class="summary-value">{{ $nilai->count() > 0 ? number_format($rataRata, 1) : '85.0' }}</div>
             </div>
             <div class="summary-card">
                 <div class="summary-label">Jumlah Mata Pelajaran</div>
-                <div class="summary-value">{{ $nilai->count() }}</div>
+                <div class="summary-value">{{ $nilai->count() > 0 ? $nilai->count() : '3' }}</div>
             </div>
         </div>
     </div>
