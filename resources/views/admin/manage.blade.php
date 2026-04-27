@@ -280,6 +280,7 @@
             gap: 8px;
             text-decoration: none;
             transition: background 0.2s;
+            white-space: nowrap;
         }
         
         .btn-add:hover {
@@ -433,15 +434,96 @@
             margin-top: 2px;
         }
 
-        /* Pagination */
+        /* Pagination Styling */
         .pagination-container {
             padding: 20px 24px;
             border-top: 1px solid var(--border-color);
         }
 
-        /* Simple overrides for Laravel paginator */
-        nav .relative.z-0.inline-flex {
-            box-shadow: none;
+        /* Hide the simple mobile pagination */
+        .pagination-container nav > div:first-child {
+            display: none !important;
+        }
+
+        /* Show the detailed pagination */
+        .pagination-container nav > div:last-child {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .pagination-container p {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin: 0;
+        }
+        
+        .pagination-container p .font-medium {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* The page links wrapper */
+        .pagination-container .relative.z-0.inline-flex {
+            display: flex;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            background: white;
+            align-items: stretch;
+        }
+
+        /* Target all clickable items and states */
+        .pagination-container .relative.z-0.inline-flex a,
+        .pagination-container .relative.z-0.inline-flex span[aria-disabled="true"] > span,
+        .pagination-container .relative.z-0.inline-flex span[aria-current="page"] > span,
+        .pagination-container .relative.z-0.inline-flex span[aria-disabled="true"][aria-label] {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 38px;
+            height: 38px;
+            padding: 0 12px;
+            background-color: white;
+            color: var(--text-gray);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            border-right: 1px solid var(--border-color);
+            transition: all 0.2s;
+            margin: 0;
+        }
+
+        /* Remove right border on the last element */
+        .pagination-container .relative.z-0.inline-flex > :last-child,
+        .pagination-container .relative.z-0.inline-flex > :last-child > span {
+            border-right: none;
+        }
+
+        .pagination-container .relative.z-0.inline-flex a:hover {
+            background-color: #F8FAFC;
+            color: var(--primary-blue);
+        }
+
+        /* Active page */
+        .pagination-container .relative.z-0.inline-flex span[aria-current="page"] > span {
+            background-color: var(--btn-purple);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* Disabled state (prev/next arrows) */
+        .pagination-container .relative.z-0.inline-flex span[aria-disabled="true"] > span {
+            color: var(--text-light);
+            background-color: #F8FAFC;
+            cursor: not-allowed;
+        }
+
+        .pagination-container svg {
+            width: 18px;
+            height: 18px;
         }
         
         .empty-state {
