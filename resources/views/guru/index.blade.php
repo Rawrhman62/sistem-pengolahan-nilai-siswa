@@ -208,7 +208,7 @@
         
         <div class="header">
             <div>
-                <h1>Dashboard Guru</h1>
+                <h1>Guru Mapel</h1>
                 <p>Selamat datang, {{ auth()->user()->name }}</p>
             </div>
             <form method="POST" action="{{ route('logout') }}" style="display: inline;">

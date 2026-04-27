@@ -389,8 +389,7 @@
                 </div>
                 <div class="card-body">
                     <p>Lihat progress kemajuan kalian sobat!</p>
-                    <div class="action-list">
-                        <a href="{{ route('siswa.index') }}" class="action-link"><span>📄</span> Pergi ke Dashboard Siswa</a>
+                    <div class="action-list">                       
                         <a href="{{ route('siswa.index') }}" class="action-link"><span>📅</span> Lihat Hasil Raport</a>
                         <a href="{{ route('siswa.profile') }}" class="action-link"><span>👤</span> Lihat Profil</a>
                         <a href="#" class="action-link"><span>📅</span> Lihat Absensi</a>
