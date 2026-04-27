@@ -356,20 +356,18 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon">👨‍🏫</div>
-                    <div class="card-title">Panel Guru</div>
+                    <div class="card-title">Dashboard</div>
                 </div>
                 <div class="card-body">
                     @if($role === 'lectureTeacher')
                         <p>Anda sedang masuk sebagai <strong>Guru Mapel</strong>. </p>
-                        <div class="action-list">
-                            <a href="{{ route('guru.index') }}" class="action-link"><span>📝</span> Pergi ke Dashboard Guru</a>
+                        <div class="action-list">                            
                             <a href="{{ route('guru.index') }}" class="action-link"><span>📚</span> Input Nilai Siswa</a>
                         </div>
                     @elseif($role === 'homeroomTeacher')
                         <p>Anda sedang masuk sebagai <strong>Wali Kelas</strong>. </p>
-                        <div class="action-list">
-                            <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📋</span> Pergi ke Dashboard Wali Kelas</a>
-                            <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📑</span> Lihat Data Siswa Kelas</a>                            
+                        <div class="action-list">                            
+                            <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📋</span> Lihat Data Siswa Kelas</a>                            
                             <a href="#" class="action-link"><span>📑</span> Leger Nilai</a>
                             <a href="#" class="action-link"><span>📑</span> Cetak Raport</a>
                         </div>
