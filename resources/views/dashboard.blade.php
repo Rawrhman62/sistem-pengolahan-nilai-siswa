@@ -369,8 +369,7 @@
                         <p>Anda sedang masuk sebagai <strong>Wali Kelas</strong>. </p>
                         <div class="action-list">
                             <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📋</span> Pergi ke Dashboard Wali Kelas</a>
-                            <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📑</span> Lihat Data Siswa Kelas</a>
-                            <a href="#" class="action-link"><span>📑</span> Kelola Absensi</a>
+                            <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📑</span> Lihat Data Siswa Kelas</a>                            
                             <a href="#" class="action-link"><span>📑</span> Leger Nilai</a>
                             <a href="#" class="action-link"><span>📑</span> Cetak Raport</a>
                         </div>
@@ -391,8 +390,7 @@
                     <p>Lihat progress kemajuan kalian sobat!</p>
                     <div class="action-list">                       
                         <a href="{{ route('siswa.index') }}" class="action-link"><span>📅</span> Lihat Hasil Raport</a>
-                        <a href="{{ route('siswa.profile') }}" class="action-link"><span>👤</span> Lihat Profil</a>
-                        <a href="#" class="action-link"><span>📅</span> Lihat Absensi</a>
+                        <a href="{{ route('siswa.profile') }}" class="action-link"><span>👤</span> Lihat Profil</a>                    
                     </div>
                 </div>
             </div>
