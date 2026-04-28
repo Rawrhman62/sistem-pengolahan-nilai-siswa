@@ -282,7 +282,7 @@
             <div class="team-card">
                 <div class="photo-placeholder">👤</div>
                 <div class="team-name">Ahmad Rafi' Sa'id</div>
-                <div class="team-role">Front End, Backend</div>
+                <div class="team-role">Front End, Back End</div>
             </div>
         </div>
     </div>
