@@ -367,8 +367,7 @@
                     @elseif($role === 'homeroomTeacher')
                         <p>Anda sedang masuk sebagai <strong>Wali Kelas</strong>. </p>
                         <div class="action-list">                            
-                            <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📋</span> Lihat Data Siswa Kelas</a>                            
-                            <a href="#" class="action-link"><span>📑</span> Leger Nilai</a>
+                            <a href="{{ route('wali_kelas.index') }}" class="action-link"><span>📋</span> Lihat Leger Nilai</a>                                                        
                             <a href="#" class="action-link"><span>📑</span> Cetak Raport</a>
                         </div>
                     @else

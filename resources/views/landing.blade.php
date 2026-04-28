@@ -12,7 +12,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: url('{{ asset('images/landing_wall.jpg') }}') no-repeat center center fixed;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/landing_wall.jpg') }}') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
             overflow-x: hidden;
@@ -131,12 +131,13 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="hero-text">
-            <h1 class="hero-title">安巴圖卡姆!</h1>
+            <h1 class="hero-title">Selamat Datang!</h1>
+
             <p class="hero-description">
-                Selamat datang di E-RAPOR, sistem rapor elektronik yang lengkap. 
-                Kelola nilai siswa, pantau kemajuan akademik, dan optimalkan administrasi pendidikan 
+                E-RAPOR, adalah sistem rapor elektronik yang dibuat untuk  
+                Mengelola nilai siswa, pantau kemajuan akademik, dan optimalkan administrasi pendidikan 
                 dengan platform modern dan ramah pengguna kami yang dirancang khusus untuk sekolah, 
-                guru, dan siswa.
+                guru, wali kelas, dan siswa.
             </p>
         </div>
     </div>

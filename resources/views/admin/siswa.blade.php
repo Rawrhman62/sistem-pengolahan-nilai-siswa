@@ -299,28 +299,61 @@
         }
         
         .btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
             border: none;
             cursor: pointer;
             text-decoration: none;
             color: var(--white);
-            transition: opacity 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            white-space: nowrap;
         }
         
         .btn:hover {
-            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            opacity: 0.95;
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
         
-        .btn-gray { background-color: var(--btn-gray); color: var(--text-dark); }
-        .btn-blue { background-color: var(--btn-blue); }
-        .btn-green { background-color: var(--btn-green); }
-        .btn-purple { background-color: var(--btn-purple); }
+        .btn-gray { 
+            background-color: var(--btn-gray); 
+            color: var(--text-dark); 
+        }
+        .btn-gray:hover {
+            background-color: #cbd5e1;
+        }
+        
+        .btn-blue { 
+            background-color: var(--btn-blue); 
+        }
+        .btn-blue:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn-green { 
+            background-color: var(--btn-green); 
+        }
+        .btn-green:hover {
+            background-color: #059669;
+        }
+        
+        .btn-purple { 
+            background-color: var(--btn-purple); 
+        }
+        .btn-purple:hover {
+            background-color: #4f46e5;
+        }
 
         /* Tabs */
         .tabs {
@@ -401,15 +434,31 @@
         }
 
         .action-btn {
-            background: none;
+            background: #F1F5F9;
             border: none;
             cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 14px;
-            transition: opacity 0.2s;
+            transition: all 0.2s ease;
         }
 
         .action-btn:hover {
-            opacity: 0.7;
+            transform: scale(1.1);
+        }
+
+        .btn-edit:hover {
+            background-color: #DBEAFE;
+            color: #1D4ED8;
+        }
+
+        .btn-delete:hover {
+            background-color: #FEE2E2;
+            color: #B91C1C;
         }
 
         .btn-edit {
@@ -458,12 +507,95 @@
             flex: 1;
         }
 
-        .alert-error .error-details {
-            margin-top: 8px;
-            padding-left: 12px;
-            border-left: 2px solid #f87171;
-            white-space: pre-line;
-            font-size: 13px;
+        .pagination-container {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Hide the simple mobile pagination */
+        .pagination-container nav > div:first-child {
+            display: none !important;
+        }
+
+        /* Show the detailed pagination */
+        .pagination-container nav > div:last-child {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .pagination-container p {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin: 0;
+        }
+        
+        .pagination-container p .font-medium {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* The page links wrapper */
+        .pagination-container .relative.z-0.inline-flex {
+            display: flex;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            background: white;
+            align-items: stretch;
+        }
+
+        /* Target all clickable items and states */
+        .pagination-container .relative.z-0.inline-flex a,
+        .pagination-container .relative.z-0.inline-flex span[aria-disabled="true"] > span,
+        .pagination-container .relative.z-0.inline-flex span[aria-current="page"] > span,
+        .pagination-container .relative.z-0.inline-flex span[aria-disabled="true"][aria-label] {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 38px;
+            height: 38px;
+            padding: 0 12px;
+            background-color: white;
+            color: var(--text-gray);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            border-right: 1px solid var(--border-color);
+            transition: all 0.2s;
+            margin: 0;
+        }
+
+        /* Remove right border on the last element */
+        .pagination-container .relative.z-0.inline-flex > :last-child,
+        .pagination-container .relative.z-0.inline-flex > :last-child > span {
+            border-right: none;
+        }
+
+        .pagination-container .relative.z-0.inline-flex a:hover {
+            background-color: #F8FAFC;
+            color: var(--primary-blue);
+        }
+
+        /* Active page */
+        .pagination-container .relative.z-0.inline-flex span[aria-current="page"] > span {
+            background-color: var(--btn-purple);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* Disabled state (prev/next arrows) */
+        .pagination-container .relative.z-0.inline-flex span[aria-disabled="true"] > span {
+            color: var(--text-light);
+            background-color: #F8FAFC;
+            cursor: not-allowed;
+        }
+
+        .pagination-container svg {
+            width: 18px;
+            height: 18px;
         }
     </style>
 </head>
@@ -585,13 +717,16 @@
                         <h1>Master Data</h1>
                         <p>Kelola data referensi sekolah secara menyeluruh.</p>
                     </div>
-                    <div class="action-buttons">
+                    <div class="action-buttons" style="display: flex; align-items: center; gap: 12px;">
                         <x-excel-buttons 
                             export-route="admin.siswa.export" 
                             import-route="admin.siswa.import" 
                             template-route="admin.siswa.template" 
                         />
-                        <button class="btn btn-purple"><i class="icon">+</i> Tambah</button>
+                        <button class="btn btn-purple">
+                            <span style="font-size: 18px; line-height: 1;">+</span>
+                            <span>Tambah Siswa</span>
+                        </button>
                     </div>
                 </div>
                 
@@ -654,14 +789,12 @@
                             @endforelse
                         </tbody>
                     </table>
+                    @if($siswa->hasPages())
+                        <div class="pagination-container">
+                            {{ $siswa->links() }}
+                        </div>
+                    @endif
                 </div>
-                
-                <!-- Pagination -->
-                @if($siswa->hasPages())
-                <div style="margin-top: 20px; display: flex; justify-content: center;">
-                    {{ $siswa->links() }}
-                </div>
-                @endif
                 
             </div>
         </main>
