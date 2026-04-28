@@ -147,15 +147,17 @@
         }
         
         .role-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(4px);
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-top: 1rem;
-            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            padding: 0 1.25rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.2);
+            height: 46px;
+            color: white;
         }
 
         /* Dashboard Grid */
@@ -225,12 +227,13 @@
         /* Form elements */
         .switch-role-container {
             background: rgba(255,255,255,0.1);
-            padding: 1rem 1.25rem;
+            padding: 0 1.25rem;
             border-radius: 12px;
-            margin-top: 1.5rem;
-            display: inline-block;
+            display: flex;
+            align-items: center;
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.2);
+            height: 46px;
         }
 
         select.form-select {
@@ -308,27 +311,29 @@
                 <h1>Selamat Datang Kembali, {{ $user->user_name }}!</h1>
                 <p>Tetap Semangat Mencerdaskan Masa Depan Bangsa!</p>
                 
-                <div class="role-badge">
-                    Anda adalah {{ $role === 'lectureTeacher' ? 'Guru Mapel' : ($role === 'homeroomTeacher' ? 'Wali Kelas' : ($role === 'administrator' ? 'Administrator' : ($role === 'student' ? 'Siswa' : ucfirst($role)))) }}
-                </div>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                    <div class="role-badge">
+                        Anda adalah {{ $role === 'lectureTeacher' ? 'Guru Mapel' : ($role === 'homeroomTeacher' ? 'Wali Kelas' : ($role === 'administrator' ? 'Administrator' : ($role === 'student' ? 'Siswa' : ucfirst($role)))) }}
+                    </div>
 
-                @if(count($allRoles) > 1)
-                <div class="switch-role-container">
-                    <form method="POST" action="/switch-role" style="display: flex; align-items: center;">
-                        @csrf
-                        <span style="font-size: 0.95rem; font-weight: 500; color: white;">Masuk Sebagai:</span>
-                        <select name="role" class="form-select" onchange="this.form.submit()">
-                            @foreach($allRoles as $availableRole)
-                                <option value="{{ $availableRole }}" {{ $role === $availableRole ? 'selected' : '' }}>
-                                    {{ $availableRole === 'lectureTeacher' ? 'Guru Mapel' : 
-                                       ($availableRole === 'homeroomTeacher' ? 'Wali Kelas' : 
-                                       ucfirst($availableRole)) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </form>
+                    @if(count($allRoles) > 1)
+                    <div class="switch-role-container">
+                        <form method="POST" action="/switch-role" style="display: flex; align-items: center;">
+                            @csrf
+                            <span style="font-size: 0.95rem; font-weight: 500; color: white;">Masuk Sebagai:</span>
+                            <select name="role" class="form-select" onchange="this.form.submit()">
+                                @foreach($allRoles as $availableRole)
+                                    <option value="{{ $availableRole }}" {{ $role === $availableRole ? 'selected' : '' }}>
+                                        {{ $availableRole === 'lectureTeacher' ? 'Guru Mapel' : 
+                                           ($availableRole === 'homeroomTeacher' ? 'Wali Kelas' : 
+                                           ucfirst($availableRole)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
+                    </div>
+                    @endif
                 </div>
-                @endif
             </div>
         </div>
 
