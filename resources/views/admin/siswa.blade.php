@@ -665,9 +665,6 @@
                         <span>Tahun Pelajaran</span>
                         <strong>2025/2026 (Genap)</strong>
                     </div>
-                    <div class="notification">
-                        <i class="icon">🔔</i>
-                    </div>
                     <div class="user-profile">
                         <div class="user-info">
                             <strong>{{ auth()->user()->user_id ?? 'Admin Sekolah' }}</strong>
