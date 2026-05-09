@@ -275,7 +275,7 @@
             <div class="team-card">
                 <div class="photo-placeholder">👤</div>
                 <div class="team-name">Muradika Laksamana</div>
-                <div class="team-role">Writer</div>
+                <div class="team-role">Writer✍️🔥</div>
             </div>
 
             <!-- Member 3 -->
