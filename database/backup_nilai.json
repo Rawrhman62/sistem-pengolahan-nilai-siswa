@@ -1,0 +1,98 @@
+[
+    {
+        "id": 1,
+        "user_id": "3312501038",
+        "mapel": "Matematika",
+        "nilai_pengetahuan": 85,
+        "nilai_keterampilan": 88,
+        "nilai_akhir": "86.50",
+        "predikat": "B",
+        "semester": "Ganjil (1)",
+        "created_at": "2026-04-26 07:15:05",
+        "updated_at": "2026-04-26 07:15:05"
+    },
+    {
+        "id": 2,
+        "user_id": "3312501038",
+        "mapel": "Bahasa Indonesia",
+        "nilai_pengetahuan": 80,
+        "nilai_keterampilan": 82,
+        "nilai_akhir": "81.00",
+        "predikat": "B",
+        "semester": "Ganjil (1)",
+        "created_at": "2026-04-26 07:15:05",
+        "updated_at": "2026-04-26 07:15:05"
+    },
+    {
+        "id": 3,
+        "user_id": "3312501038",
+        "mapel": "Bahasa Inggris",
+        "nilai_pengetahuan": 90,
+        "nilai_keterampilan": 92,
+        "nilai_akhir": "91.00",
+        "predikat": "A",
+        "semester": "Ganjil (1)",
+        "created_at": "2026-04-26 07:15:05",
+        "updated_at": "2026-04-26 07:15:05"
+    },
+    {
+        "id": 4,
+        "user_id": "3312501038",
+        "mapel": "Fisika",
+        "nilai_pengetahuan": 88,
+        "nilai_keterampilan": 85,
+        "nilai_akhir": "86.50",
+        "predikat": "B",
+        "semester": "Ganjil (1)",
+        "created_at": "2026-04-26 07:15:05",
+        "updated_at": "2026-04-26 07:15:05"
+    },
+    {
+        "id": 5,
+        "user_id": "3312501038",
+        "mapel": "Kimia",
+        "nilai_pengetahuan": 92,
+        "nilai_keterampilan": 90,
+        "nilai_akhir": "91.00",
+        "predikat": "A",
+        "semester": "Ganjil (1)",
+        "created_at": "2026-04-26 07:15:05",
+        "updated_at": "2026-04-26 07:15:05"
+    },
+    {
+        "id": 6,
+        "user_id": "3312501038",
+        "mapel": "Biologi",
+        "nilai_pengetahuan": 87,
+        "nilai_keterampilan": 89,
+        "nilai_akhir": "88.00",
+        "predikat": "B",
+        "semester": "Ganjil (1)",
+        "created_at": "2026-04-26 07:15:05",
+        "updated_at": "2026-04-26 07:15:05"
+    },
+    {
+        "id": 7,
+        "user_id": "3312501038",
+        "mapel": "Sejarah",
+        "nilai_pengetahuan": 75,
+        "nilai_keterampilan": 78,
+        "nilai_akhir": "76.50",
+        "predikat": "C",
+        "semester": "Ganjil (1)",
+        "created_at": "2026-04-26 07:15:05",
+        "updated_at": "2026-04-26 07:15:05"
+    },
+    {
+        "id": 8,
+        "user_id": "3312501038",
+        "mapel": "Geografi",
+        "nilai_pengetahuan": 82,
+        "nilai_keterampilan": 84,
+        "nilai_akhir": "83.00",
+        "predikat": "B",
+        "semester": "Ganjil (1)",
+        "created_at": "2026-04-26 07:15:05",
+        "updated_at": "2026-04-26 07:15:05"
+    }
+]

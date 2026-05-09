@@ -24,3 +24,10 @@ Homestead.yaml
 Thumbs.db
 /.kiro
 
+# SQLite database - UNCOMMENT to commit database to Git for team collaboration
+# /database/*.sqlite
+
+# MySQL backup files - keep these for migration
+!/database/backup_*.json
+!/database/export_mysql_data.php
+!/database/import_sqlite_data.php

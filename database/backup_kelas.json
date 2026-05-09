@@ -1,0 +1,80 @@
+[
+    {
+        "id": 1,
+        "nama": "10A",
+        "tingkat": "10",
+        "wali_kelas_id": 290,
+        "kapasitas": 40,
+        "jumlah_siswa": 0,
+        "ruangan": null,
+        "tahun_ajaran": null,
+        "wali_kelas": "Dr. Agus Salim",
+        "created_at": "2026-04-26 04:35:13",
+        "updated_at": "2026-04-26 04:35:13"
+    },
+    {
+        "id": 2,
+        "nama": "10B",
+        "tingkat": "10",
+        "wali_kelas_id": 291,
+        "kapasitas": 40,
+        "jumlah_siswa": 0,
+        "ruangan": null,
+        "tahun_ajaran": null,
+        "wali_kelas": "Dra. Budi Rahayu",
+        "created_at": "2026-04-26 04:35:13",
+        "updated_at": "2026-04-26 04:35:13"
+    },
+    {
+        "id": 3,
+        "nama": "11A",
+        "tingkat": "11",
+        "wali_kelas_id": 292,
+        "kapasitas": 40,
+        "jumlah_siswa": 0,
+        "ruangan": null,
+        "tahun_ajaran": null,
+        "wali_kelas": "M.Pd. Citra Dewi",
+        "created_at": "2026-04-26 04:35:13",
+        "updated_at": "2026-04-26 04:35:13"
+    },
+    {
+        "id": 4,
+        "nama": "11B",
+        "tingkat": "11",
+        "wali_kelas_id": 293,
+        "kapasitas": 40,
+        "jumlah_siswa": 0,
+        "ruangan": null,
+        "tahun_ajaran": null,
+        "wali_kelas": "S.Pd. Dedi Kurniawan",
+        "created_at": "2026-04-26 04:35:13",
+        "updated_at": "2026-04-26 04:35:13"
+    },
+    {
+        "id": 5,
+        "nama": "12A",
+        "tingkat": "12",
+        "wali_kelas_id": 294,
+        "kapasitas": 40,
+        "jumlah_siswa": 0,
+        "ruangan": null,
+        "tahun_ajaran": null,
+        "wali_kelas": "S.Si. Eka Putri",
+        "created_at": "2026-04-26 04:35:13",
+        "updated_at": "2026-04-26 04:35:13"
+    },
+    {
+        "id": 6,
+        "nama": "12B",
+        "tingkat": "12",
+        "wali_kelas_id": 295,
+        "kapasitas": 40,
+        "jumlah_siswa": 0,
+        "ruangan": null,
+        "tahun_ajaran": null,
+        "wali_kelas": "S.Pd. Fajar Ramadhan",
+        "created_at": "2026-04-26 04:35:13",
+        "updated_at": "2026-04-26 04:35:13"
+    }
+]
