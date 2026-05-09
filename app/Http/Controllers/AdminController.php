@@ -58,6 +58,16 @@ class AdminController extends Controller
             });
         }
 
+        // Filter by kelas
+        if ($request->filled('kelas')) {
+            $query->where('kelas', $request->input('kelas'));
+        }
+
+        // Filter by tahun ajaran
+        if ($request->filled('tahun_ajaran')) {
+            $query->where('tahun_ajaran', $request->input('tahun_ajaran'));
+        }
+
         // Sorting functionality
         $sortColumn = $request->input('sort');
         $sortDirection = $request->input('direction', 'asc');
@@ -78,11 +88,17 @@ class AdminController extends Controller
 
         $siswa = $query->paginate(20)->appends([
             'search' => $request->input('search'),
+            'kelas' => $request->input('kelas'),
+            'tahun_ajaran' => $request->input('tahun_ajaran'),
             'sort' => $sortColumn,
             'direction' => $sortDirection,
         ]);
 
-        return view('admin.siswa', compact('siswa'));
+        // Get filter options
+        $kelasList = Siswa::select('kelas')->distinct()->orderBy('kelas')->pluck('kelas');
+        $tahunAjaranList = Siswa::select('tahun_ajaran')->distinct()->whereNotNull('tahun_ajaran')->orderBy('tahun_ajaran', 'desc')->pluck('tahun_ajaran');
+
+        return view('admin.siswa', compact('siswa', 'kelasList', 'tahunAjaranList'));
     }
 
     /**
@@ -101,6 +117,11 @@ class AdminController extends Controller
                       $userQuery->where('name', 'like', "%{$search}%");
                   });
             });
+        }
+
+        // Filter by mapel
+        if ($request->filled('mapel')) {
+            $query->where('mapel_diampu', 'like', '%' . $request->input('mapel') . '%');
         }
 
         // Sorting functionality
@@ -123,11 +144,15 @@ class AdminController extends Controller
 
         $guru = $query->paginate(20)->appends([
             'search' => $request->input('search'),
+            'mapel' => $request->input('mapel'),
             'sort' => $sortColumn,
             'direction' => $sortDirection,
         ]);
 
-        return view('admin.guru', compact('guru'));
+        // Get filter options
+        $mapelList = Mapel::orderBy('nama')->pluck('nama', 'nama');
+
+        return view('admin.guru', compact('guru', 'mapelList'));
     }
 
     /**
@@ -147,6 +172,11 @@ class AdminController extends Controller
             });
         }
 
+        // Filter by kelompok
+        if ($request->filled('kelompok')) {
+            $query->where('kelompok', $request->input('kelompok'));
+        }
+
         // Sorting functionality
         $sortColumn = $request->input('sort');
         $sortDirection = $request->input('direction', 'asc');
@@ -161,11 +191,15 @@ class AdminController extends Controller
 
         $mapel = $query->paginate(20)->appends([
             'search' => $request->input('search'),
+            'kelompok' => $request->input('kelompok'),
             'sort' => $sortColumn,
             'direction' => $sortDirection,
         ]);
 
-        return view('admin.mapel', compact('mapel'));
+        // Get filter options
+        $kelompokList = Mapel::select('kelompok')->distinct()->whereNotNull('kelompok')->orderBy('kelompok')->pluck('kelompok');
+
+        return view('admin.mapel', compact('mapel', 'kelompokList'));
     }
 
     /**
@@ -188,6 +222,11 @@ class AdminController extends Controller
             });
         }
 
+        // Filter by tingkat
+        if ($request->filled('tingkat')) {
+            $query->where('tingkat', $request->input('tingkat'));
+        }
+
         // Sorting functionality
         $sortColumn = $request->input('sort');
         $sortDirection = $request->input('direction', 'asc');
@@ -208,11 +247,15 @@ class AdminController extends Controller
 
         $kelas = $query->paginate(20)->appends([
             'search' => $request->input('search'),
+            'tingkat' => $request->input('tingkat'),
             'sort' => $sortColumn,
             'direction' => $sortDirection,
         ]);
 
-        return view('admin.kelas', compact('kelas'));
+        // Get filter options
+        $tingkatList = Kelas::select('tingkat')->distinct()->whereNotNull('tingkat')->orderBy('tingkat')->pluck('tingkat');
+
+        return view('admin.kelas', compact('kelas', 'tingkatList'));
     }
 
     /**

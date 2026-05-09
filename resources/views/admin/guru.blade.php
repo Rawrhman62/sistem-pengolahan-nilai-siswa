@@ -605,6 +605,49 @@
                     <a href="{{ route('admin.kelas') }}" class="tab-item">Kelas</a>
                 </div>
                 
+                <!-- Search and Filter Section -->
+                <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                    <form method="GET" action="{{ route('admin.guru') }}" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 10px; flex: 1; min-width: 300px;">
+                            <input type="text" 
+                                   name="search" 
+                                   placeholder="Cari nama atau NIP..." 
+                                   value="{{ request('search') }}"
+                                   style="flex: 1; padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; outline: none;">
+                            <button type="submit" style="background: #0A2E5C; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <span>🔍</span> Cari
+                            </button>
+                        </div>
+                        
+                        @if(isset($mapelList) && $mapelList->count() > 0)
+                        <select name="mapel" style="padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer; min-width: 180px;" onchange="this.form.submit()">
+                            <option value="">Semua Mata Pelajaran</option>
+                            @foreach($mapelList as $m)
+                                <option value="{{ $m }}" {{ request('mapel') == $m ? 'selected' : '' }}>{{ $m }}</option>
+                            @endforeach
+                        </select>
+                        @endif
+                        
+                        @if(request('search') || request('mapel'))
+                        <a href="{{ route('admin.guru') }}" style="padding: 10px 20px; background: #F3F4F6; color: #6B7280; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
+                            Reset
+                        </a>
+                        @endif
+                    </form>
+                    
+                    @if(request('search') || request('mapel'))
+                    <div style="margin-top: 15px; color: #6B7280; font-size: 14px;">
+                        Menampilkan {{ $guru->total() }} hasil
+                        @if(request('search'))
+                            untuk pencarian "<strong>{{ request('search') }}</strong>"
+                        @endif
+                        @if(request('mapel'))
+                            mapel "<strong>{{ request('mapel') }}</strong>"
+                        @endif
+                    </div>
+                    @endif
+                </div>
+                
                 <!-- Table Area -->
                 <div class="table-card">
                     <table class="data-table">

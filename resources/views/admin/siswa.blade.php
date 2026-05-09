@@ -739,6 +739,66 @@
                     <a href="{{ route('admin.kelas') }}" class="tab-item">Kelas</a>
                 </div>
                 
+                <!-- Search and Filter Section -->
+                <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                    <form method="GET" action="{{ route('admin.siswa') }}" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <!-- Search Box -->
+                        <div style="display: flex; gap: 10px; flex: 1; min-width: 300px;">
+                            <input type="text" 
+                                   name="search" 
+                                   placeholder="Cari nama atau NIS..." 
+                                   value="{{ request('search') }}"
+                                   style="flex: 1; padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; outline: none;">
+                            <button type="submit" style="background: #0A2E5C; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <span>🔍</span> Cari
+                            </button>
+                        </div>
+                        
+                        <!-- Filter: Kelas -->
+                        @if(isset($kelasList) && $kelasList->count() > 0)
+                        <select name="kelas" style="padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer; min-width: 150px;" onchange="this.form.submit()">
+                            <option value="">Semua Kelas</option>
+                            @foreach($kelasList as $k)
+                                <option value="{{ $k }}" {{ request('kelas') == $k ? 'selected' : '' }}>{{ $k }}</option>
+                            @endforeach
+                        </select>
+                        @endif
+                        
+                        <!-- Filter: Tahun Ajaran -->
+                        @if(isset($tahunAjaranList) && $tahunAjaranList->count() > 0)
+                        <select name="tahun_ajaran" style="padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer; min-width: 150px;" onchange="this.form.submit()">
+                            <option value="">Semua Tahun Ajaran</option>
+                            @foreach($tahunAjaranList as $ta)
+                                <option value="{{ $ta }}" {{ request('tahun_ajaran') == $ta ? 'selected' : '' }}>{{ $ta }}</option>
+                            @endforeach
+                        </select>
+                        @endif
+                        
+                        <!-- Reset Button -->
+                        @if(request('search') || request('kelas') || request('tahun_ajaran'))
+                        <a href="{{ route('admin.siswa') }}" style="padding: 10px 20px; background: #F3F4F6; color: #6B7280; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
+                            Reset
+                        </a>
+                        @endif
+                    </form>
+                    
+                    <!-- Results Info -->
+                    @if(request('search') || request('kelas') || request('tahun_ajaran'))
+                    <div style="margin-top: 15px; color: #6B7280; font-size: 14px;">
+                        Menampilkan {{ $siswa->total() }} hasil
+                        @if(request('search'))
+                            untuk pencarian "<strong>{{ request('search') }}</strong>"
+                        @endif
+                        @if(request('kelas'))
+                            di kelas "<strong>{{ request('kelas') }}</strong>"
+                        @endif
+                        @if(request('tahun_ajaran'))
+                            tahun ajaran "<strong>{{ request('tahun_ajaran') }}</strong>"
+                        @endif
+                    </div>
+                    @endif
+                </div>
+                
                 <!-- Table Area -->
                 <div class="table-card">
                     <table class="data-table">
