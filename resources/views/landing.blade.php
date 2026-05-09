@@ -168,7 +168,7 @@
             width: 150px;
             height: 150px;
             background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             margin-bottom: 20px;
             display: flex;
@@ -176,6 +176,13 @@
             justify-content: center;
             color: rgba(255, 255, 255, 0.5);
             font-size: 40px;
+            overflow: hidden;
+        }
+
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .team-name {
@@ -264,24 +271,27 @@
         <p class="subtitle">Dibangun oleh:</p>
 
         <div class="team-grid">
-            <!-- Member 1 -->
             <div class="team-card">
-                <div class="photo-placeholder">👤</div>
-                <div class="team-name">Fazri Rahman</div>
-                <div class="team-role">Front End, Back End</div>
-            </div>
-
-            <!-- Member 2 -->
-            <div class="team-card">
-                <div class="photo-placeholder">👤</div>
+                <div class="photo-placeholder">
+                    <img src="{{ asset('images/sigma_1.jpeg') }}" alt="Muradika Laksamana">
+                </div>
                 <div class="team-name">Muradika Laksamana</div>
                 <div class="team-role">Writer✍️🔥</div>
             </div>
 
-            <!-- Member 3 -->
             <div class="team-card">
-                <div class="photo-placeholder">👤</div>
+                <div class="photo-placeholder">
+                    <img src="{{ asset('images/sigma_2.jpeg') }}" alt="Ahmad Rafi' Sa'id">
+                </div>
                 <div class="team-name">Ahmad Rafi' Sa'id</div>
+                <div class="team-role">Front End, Back End</div>
+            </div>
+            
+            <div class="team-card">
+                <div class="photo-placeholder">
+                    <img src="{{ asset('images/sigma_3.jpeg') }}" alt="Fazri Rahman">
+                </div>
+                <div class="team-name">Fazri Rahman</div>
                 <div class="team-role">Front End, Back End</div>
             </div>
         </div>
