@@ -276,7 +276,7 @@
                     <img src="{{ asset('images/sigma_1.jpeg') }}" alt="Muradika Laksamana">
                 </div>
                 <div class="team-name">Muradika Laksamana</div>
-                <div class="team-role">Writer✍️🔥</div>
+                <div class="team-role">front end aj buat</div>
             </div>
 
             <div class="team-card">
@@ -291,8 +291,8 @@
                 <div class="photo-placeholder">
                     <img src="{{ asset('images/sigma_3.jpeg') }}" alt="Fazri Rahman">
                 </div>
-                <div class="team-name">Fazri Rahman</div>
-                <div class="team-role">Front End, Back End</div>
+                <div class="team-name">uɐɯɥɐꓤ ᴉɹzɐꓞ</div>
+                <div class="team-role">puƎ ʞɔɐꓭ `puƎ ʇuoɹꓞ</div>
             </div>
         </div>
     </div>
