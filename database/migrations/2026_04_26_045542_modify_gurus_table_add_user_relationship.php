@@ -15,6 +15,10 @@ return new class extends Migration
             // Add foreign key to users table
             $table->foreignId('user_id')->nullable()->after('id')->constrained('users')->onDelete('cascade');
             
+            // Drop indexes before dropping columns (SQLite requirement)
+            $table->dropIndex(['nama']);
+            $table->dropIndex(['mapel']);
+            
             // Remove nama field (will use users.name instead)
             $table->dropColumn('nama');
             
@@ -54,6 +58,10 @@ return new class extends Migration
             // Add back nama and mapel fields
             $table->string('nama')->after('id');
             $table->string('mapel')->after('nip');
+            
+            // Add back indexes
+            $table->index('nama');
+            $table->index('mapel');
             
             // Drop foreign key
             $table->dropForeign(['user_id']);

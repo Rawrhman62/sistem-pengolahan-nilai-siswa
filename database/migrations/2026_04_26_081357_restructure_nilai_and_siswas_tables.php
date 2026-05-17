@@ -19,6 +19,8 @@ return new class extends Migration
 
         // Remove tahun_ajaran and kelas from nilai table
         Schema::table('nilai', function (Blueprint $table) {
+            // Drop index before dropping columns (SQLite requirement)
+            $table->dropIndex(['user_id', 'semester', 'tahun_ajaran']);
             $table->dropColumn(['tahun_ajaran', 'kelas']);
         });
     }
@@ -32,10 +34,13 @@ return new class extends Migration
         Schema::table('nilai', function (Blueprint $table) {
             $table->string('tahun_ajaran', 20)->after('predikat');
             $table->string('kelas', 10)->nullable()->after('tahun_ajaran');
+            // Add back the index
+            $table->index(['user_id', 'semester', 'tahun_ajaran']);
         });
 
         // Remove tahun_ajaran from siswas table
         Schema::table('siswas', function (Blueprint $table) {
+            $table->dropIndex(['tahun_ajaran']);
             $table->dropColumn('tahun_ajaran');
         });
     }
