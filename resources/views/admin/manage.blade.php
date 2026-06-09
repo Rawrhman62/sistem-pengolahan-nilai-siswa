@@ -638,11 +638,11 @@
                 <div class="topbar-right">
                     <div class="user-profile">
                         <div class="user-info">
-                            <strong>{{ auth()->user()->user_id ?? 'Admin Sekolah' }}</strong>
+                            <strong>{{ auth()->user()->id_user ?? 'Admin Sekolah' }}</strong>
                             <span>ADMINISTRATOR</span>
                         </div>
                         <div class="avatar">
-                            {{ substr(auth()->user()->user_id ?? 'AS', 0, 2) }}
+                            {{ substr(auth()->user()->id_user ?? 'AS', 0, 2) }}
                         </div>
                     </div>
                 </div>
@@ -754,10 +754,10 @@
                                         <td>
                                             <div class="user-meta">
                                                 <span class="user-name">{{ $user->name }}</span>
-                                                <span class="user-id">ID: {{ $user->user_id }}</span>
+                                                <span class="user-id">ID: {{ $user->id_user }}</span>
                                             </div>
                                         </td>
-                                        <td><strong>{{ $user->user_name }}</strong></td>
+                                        <td><strong>{{ $user->id_user }}</strong></td>
                                         <td>
                                             <div class="user-meta">
                                                 <span>{{ $user->email }}</span>
@@ -767,7 +767,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge badge-role">{{ ucfirst($user->role) }}</span>
+                                            <span class="badge badge-role">{{ ucfirst($user->getCurrentRole()) }}</span>
                                         </td>
                                         <td>
                                             @if($user->password_set)

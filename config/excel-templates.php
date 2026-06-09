@@ -5,29 +5,24 @@ return array (
   array (
     'columns' => 
     array (
+      'id_user' => 'ID User',
       'name' => 'Nama Lengkap',
-      'user_name' => 'Username',
-      'user_id' => 'NIS',
       'email' => 'Email',
       'phone_number' => 'No. Telepon',
-      'role' => 'Sebagai',
+      'gender' => 'Jenis Kelamin',
     ),
     'required' => 
     array (
-      0 => 'name',
-      1 => 'user_name',
-      2 => 'user_id',
-      3 => 'email',
-      4 => 'role',
+      0 => 'id_user',
+      1 => 'name',
     ),
     'validation' => 
     array (
+      'id_user' => 'required|string|max:255|unique:tb_users,id_user',
       'name' => 'required|string|max:255',
-      'user_name' => 'required|string|max:255|unique:users,user_name',
-      'user_id' => 'required|string|max:255|unique:users,user_id',
-      'email' => 'required|email|max:255|unique:users,email',
+      'email' => 'nullable|email|max:255|unique:tb_users,email',
       'phone_number' => 'nullable|string|max:20',
-      'role' => 'required|in:admin,lectureTeacher,homeroomTeacher',
+      'gender' => 'nullable|in:M,F',
     ),
     'header_style' => 
     array (
@@ -40,25 +35,24 @@ return array (
   array (
     'columns' => 
     array (
-      'nama' => 'Nama Siswa',
+      'id_user' => 'ID User',
       'nis' => 'NIS',
-      'kelas' => 'Kelas',
-      'jenis_kelamin' => 'Jenis Kelamin',
-      'tanggal_lahir' => 'Tanggal Lahir',
+      'nisn' => 'NISN',
+      'entry_year' => 'Tahun Masuk',
+      'id_class' => 'ID Kelas',
     ),
     'required' => 
     array (
-      0 => 'nama',
+      0 => 'id_user',
       1 => 'nis',
-      2 => 'kelas',
     ),
     'validation' => 
     array (
-      'nama' => 'required|string|max:255',
-      'nis' => 'required|numeric|digits:10|unique:siswa,nis',
-      'kelas' => 'required|string|max:50',
-      'jenis_kelamin' => 'nullable|in:L,P',
-      'tanggal_lahir' => 'nullable|date',
+      'id_user' => 'required|string|max:255|unique:tb_students,id_user',
+      'nis' => 'required|string|max:20|unique:tb_students,nis',
+      'nisn' => 'nullable|string|max:20',
+      'entry_year' => 'nullable|integer',
+      'id_class' => 'nullable|integer',
     ),
     'header_style' => 
     array (
@@ -71,24 +65,24 @@ return array (
   array (
     'columns' => 
     array (
-      'nama' => 'Nama Guru',
-      'nip' => 'NIP',
-      'mapel' => 'Mata Pelajaran',
-      'email' => 'Email',
-      'phone_number' => 'No. Telepon',
+      'id_user' => 'ID User',
+      'nomor_induk' => 'Nomor Induk',
+      'date_of_employment' => 'Tahun Masuk',
+      'teacher_status' => 'Status Guru',
+      'type' => 'Tipe',
     ),
     'required' => 
     array (
-      0 => 'nama',
-      1 => 'nip',
+      0 => 'id_user',
+      1 => 'nomor_induk',
     ),
     'validation' => 
     array (
-      'nama' => 'required|string|max:255',
-      'nip' => 'required|string|max:50|unique:guru,nip',
-      'mapel' => 'nullable|string|max:255',
-      'email' => 'nullable|email|max:255',
-      'phone_number' => 'nullable|string|max:20',
+      'id_user' => 'required|string|max:255|unique:tb_teachers,id_user',
+      'nomor_induk' => 'required|string|max:50|unique:tb_teachers,nomor_induk',
+      'date_of_employment' => 'nullable|integer',
+      'teacher_status' => 'nullable|string|max:255',
+      'type' => 'nullable|string|max:255',
     ),
     'header_style' => 
     array (
@@ -101,23 +95,26 @@ return array (
   array (
     'columns' => 
     array (
-      'kode' => 'Kode Mapel',
-      'nama' => 'Nama Mata Pelajaran',
-      'kelompok' => 'Kelompok',
-      'kkm' => 'KKM',
+      'id_subjects' => 'ID Mapel',
+      'code' => 'Kode Mapel',
+      'name' => 'Nama Mata Pelajaran',
+      'grade' => 'Tingkat',
+      'curriculum' => 'Kurikulum',
+      'group' => 'Kelompok',
     ),
     'required' => 
     array (
-      0 => 'kode',
-      1 => 'nama',
-      2 => 'kelompok',
+      0 => 'id_subjects',
+      1 => 'name',
     ),
     'validation' => 
     array (
-      'kode' => 'required|string|max:20|unique:mapel,kode',
-      'nama' => 'required|string|max:255',
-      'kelompok' => 'required|string|max:100',
-      'kkm' => 'nullable|numeric|min:0|max:100',
+      'id_subjects' => 'required|string|max:255|unique:tb_subjects,id_subjects',
+      'code' => 'nullable|string|max:20',
+      'name' => 'required|string|max:255',
+      'grade' => 'nullable|integer',
+      'curriculum' => 'nullable|string|max:100',
+      'group' => 'nullable|string|max:100',
     ),
     'header_style' => 
     array (
@@ -130,24 +127,20 @@ return array (
   array (
     'columns' => 
     array (
-      'nama' => 'Nama Kelas',
-      'tingkat' => 'Tingkat',
-      'wali_kelas' => 'Wali Kelas',
-      'jurusan' => 'Jurusan',
-      'tahun_ajaran' => 'Tahun Ajaran',
+      'id_class' => 'ID Kelas',
+      'name' => 'Nama Kelas',
+      'grade' => 'Tingkat',
     ),
     'required' => 
     array (
-      0 => 'nama',
-      1 => 'tingkat',
+      0 => 'id_class',
+      1 => 'name',
     ),
     'validation' => 
     array (
-      'nama' => 'required|string|max:50|unique:kelas,nama',
-      'tingkat' => 'required|integer|min:1|max:12',
-      'wali_kelas' => 'nullable|string|max:255',
-      'jurusan' => 'nullable|string|max:100',
-      'tahun_ajaran' => 'nullable|string|max:20',
+      'id_class' => 'required|integer|unique:tb_classes,id_class',
+      'name' => 'required|string|max:50',
+      'grade' => 'nullable|integer|min:1|max:12',
     ),
     'header_style' => 
     array (

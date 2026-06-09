@@ -19,38 +19,17 @@ class LoginController extends Controller
     }
 
     /**
-     * Check if user has multiple roles for role selection.
+     * Handle login request with role-based authentication.
      */
-    public function checkUserRoles(Request $request)
+    public function login(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|string'
+        $credentials = $request->validate([
+            'login_id' => 'required|string',
+            'password' => 'nullable|string',
+            'selected_role' => 'required|string|in:administrator,lectureTeacher,homeroomTeacher,student'
         ]);
-
-        $user = \App\Models\User::where('user_id', $request->user_id)->first();
         
-        if (!$user) {
-            return response()->json([
-                'has_multiple_roles' => false,
-                'roles' => []
-            ]);
-        }
-
-        $roles = $user->getRoles();
-        $hasMultipleRoles = count($roles) > 1;
-
-        return response()->json([
-            'has_multiple_roles' => $hasMultipleRoles,
-            'roles' => $hasMultipleRoles ? $roles : []
-        ]);
-    }
-
-    /*** Handle login request with userId-based authentication.*/
-    
-    public function login(LoginRequest $request)
-    {
-        $credentials = $request->validated();
-        $throttleKey = 'login_attempts:' . $request->ip() . ':' . strtolower($credentials['user_id']);
+        $throttleKey = 'login_attempts:' . $request->ip() . ':' . strtolower($credentials['login_id']);
         $maxAttempts = config('security.login_rate_limit.max_attempts', 5);
 
         // Check rate limiting
@@ -58,57 +37,74 @@ class LoginController extends Controller
             $seconds = RateLimiter::availableIn($throttleKey);
             
             throw ValidationException::withMessages([
-                'user_id' => ['Too many login attempts. Please try again in ' . $seconds . ' seconds.'],
+                'login_id' => ['Too many login attempts. Please try again in ' . $seconds . ' seconds.'],
             ]);
         }
 
-        // For users without password set, allow blank password
-        $user = \App\Models\User::where('user_id', $credentials['user_id'])->first();
+        // Role-based credential lookup
+        $user = null;
+        $selectedRole = $credentials['selected_role'];
+        
+        switch ($selectedRole) {
+            case 'administrator':
+            case 'lectureTeacher':
+            case 'homeroomTeacher':
+                // Lookup in tb_teachers using nomor_induk
+                $teacher = \App\Models\Teacher::findByNomorInduk($credentials['login_id']);
+                if ($teacher) {
+                    $user = $teacher->user;
+                }
+                break;
+                
+            case 'student':
+                // Lookup in tb_students using nis
+                $student = \App\Models\Student::findByNis($credentials['login_id']);
+                if ($student) {
+                    $user = $student->user;
+                }
+                break;
+        }
         
         if (!$user) {
             $decayMinutes = config('security.login_rate_limit.decay_minutes', 5);
             RateLimiter::hit($throttleKey, $decayMinutes * 60);
             throw ValidationException::withMessages([
-                'user_id' => ['The provided credentials are invalid.'],
+                'login_id' => ['The provided credentials are invalid.'],
             ]);
         }
 
-        // Check if user has multiple roles and selected_role is provided
-        $selectedRole = $credentials['selected_role'] ?? null;
-        if (count($user->getRoles()) > 1 && !$selectedRole) {
+        // Verify role membership
+        if (!$user->hasRole($selectedRole)) {
+            $decayMinutes = config('security.login_rate_limit.decay_minutes', 5);
+            RateLimiter::hit($throttleKey, $decayMinutes * 60);
             throw ValidationException::withMessages([
-                'selected_role' => ['Please select a role to login as.'],
+                'selected_role' => ['You do not have permission for this role.'],
             ]);
         }
 
         // If user hasn't set password and password is blank, allow login
-        if (!$user->password_set && empty($credentials['password'])) {
+        // Check the raw database value to avoid issues with model casting
+        $userPasswordFromDb = \DB::table('tb_users')->where('id_user', $user->id_user)->value('password');
+        
+        if (is_null($userPasswordFromDb) && empty($credentials['password'])) {
             RateLimiter::clear($throttleKey);
             Auth::login($user);
             
-            // Store selected role in session if provided
-            if ($selectedRole) {
-                $request->session()->put('selected_role', $selectedRole);
-            } else {
-                // For single role users, store their role
-                $request->session()->put('selected_role', $user->getRoles()[0]);
-            }
+            // Store selected role and id_user in session
+            $request->session()->put('selected_role', $selectedRole);
+            $request->session()->put('id_user', $user->id_user);
             
             return redirect()->intended('/settings');
         }
 
         // Standard authentication for users with passwords
-        if (Auth::attempt(['user_id' => $credentials['user_id'], 'password' => $credentials['password']])) {
+        if (Auth::attempt(['id_user' => $user->id_user, 'password' => $credentials['password']])) {
             RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
             
-            // Store selected role in session if provided
-            if ($selectedRole) {
-                $request->session()->put('selected_role', $selectedRole);
-            } else {
-                // For single role users, store their role
-                $request->session()->put('selected_role', $user->getRoles()[0]);
-            }
+            // Store selected role and id_user in session
+            $request->session()->put('selected_role', $selectedRole);
+            $request->session()->put('id_user', $user->id_user);
             
             return redirect()->intended('/dashboard');
         }
@@ -116,7 +112,7 @@ class LoginController extends Controller
         $decayMinutes = config('security.login_rate_limit.decay_minutes', 5);
         RateLimiter::hit($throttleKey, $decayMinutes * 60);
         throw ValidationException::withMessages([
-            'user_id' => ['The provided credentials are invalid.'],
+            'login_id' => ['The provided credentials are invalid.'],
         ]);
     }
 

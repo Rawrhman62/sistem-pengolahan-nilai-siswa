@@ -6,9 +6,9 @@
 <body>
     <h1>User Profile</h1>
     
-    <p><strong>User ID:</strong> {{ $user->user_id }}</p>
+    <p><strong>User ID:</strong> {{ $user->id_user }}</p>
     <p><strong>Email:</strong> {{ $user->email }}</p>
-    <p><strong>Role:</strong> {{ $user->role }}</p>
+    <p><strong>Role:</strong> {{ $user->getCurrentRole() }}</p>
     
     @if($user->phone_number)
         <p><strong>Phone:</strong> {{ $user->phone_number }}</p>

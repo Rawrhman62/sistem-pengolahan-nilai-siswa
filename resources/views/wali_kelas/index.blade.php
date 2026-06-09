@@ -282,7 +282,7 @@
                                 {{ $index + 1 }}
                             </span>
                         </td>
-                        <td>{{ $data['siswa']->user_id }}</td>
+                        <td>{{ $data['siswa']->id_user }}</td>
                         <td><strong>{{ $data['siswa']->name }}</strong></td>
                         <td>{{ $data['jumlah_mapel'] }} / 8</td>
                         <td>
@@ -294,7 +294,7 @@
                             </div>
                         </td>
                         <td>
-                            <a href="{{ route('wali_kelas.detail', $data['siswa']->user_id) }}" class="btn-detail">Lihat Detail</a>
+                            <a href="{{ route('wali_kelas.detail', $data['siswa']->id_user) }}" class="btn-detail">Lihat Detail</a>
                         </td>
                     </tr>
                     @empty

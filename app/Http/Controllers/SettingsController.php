@@ -34,7 +34,6 @@ class SettingsController extends Controller
         
         // Update password
         $user->password = Hash::make($validated['password']);
-        $user->password_set = true;
         $user->save();
         
         return redirect()->route('settings')->with('success', 'Password updated successfully.');

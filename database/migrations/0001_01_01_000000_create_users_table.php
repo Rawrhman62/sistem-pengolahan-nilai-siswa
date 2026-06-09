@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
+        Schema::create('tb_users', function (Blueprint $table) {
+            $table->bigInteger('id_user')->primary();
             $table->string('name');
-            $table->string('user_name');
-            $table->string('user_id')->unique();
+            $table->enum('gender', ['M', 'F'])->nullable();
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
-            $table->string('role');
-            $table->boolean('password_set')->default(false);
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->string('profile_picture')->nullable()->default('/public/images/');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -47,7 +44,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tb_users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Http\Requests\UserSearchRequest;
 use App\Models\User;
-use App\Models\Siswa;
-use App\Models\Guru;
-use App\Models\Mapel;
-use App\Models\Kelas;
+use App\Models\Student;
+use App\Models\Teacher;
+use App\Models\Subject;
+use App\Models\ClassRoom;
 use App\Services\ExcelExportService;
 use App\Services\ExcelImportService;
 use Illuminate\Http\Request;
@@ -44,7 +44,7 @@ class AdminController extends Controller
      */
     public function siswa(Request $request)
     {
-        $query = Siswa::with('user'); // Eager load user relationship
+        $query = Student::with('user'); // Eager load user relationship
 
         // Search functionality
         if ($request->filled('search')) {
@@ -79,8 +79,8 @@ class AdminController extends Controller
 
         // Apply sorting (handle user.name separately)
         if ($sortColumn === 'nama') {
-            $query->join('users', 'siswas.user_id', '=', 'users.id')
-                  ->orderBy('users.name', $sortDirection)
+            $query->join('users', 'tb_students.id_user', '=', 'tb_users.id_user')
+                  ->orderBy('tb_users.name', $sortDirection)
                   ->select('siswas.*');
         } else {
             $query->sortBy($sortColumn, $sortDirection);
@@ -95,8 +95,8 @@ class AdminController extends Controller
         ]);
 
         // Get filter options
-        $kelasList = Siswa::select('kelas')->distinct()->orderBy('kelas')->pluck('kelas');
-        $tahunAjaranList = Siswa::select('tahun_ajaran')->distinct()->whereNotNull('tahun_ajaran')->orderBy('tahun_ajaran', 'desc')->pluck('tahun_ajaran');
+        $kelasList = Student::select('kelas')->distinct()->orderBy('kelas')->pluck('kelas');
+        $tahunAjaranList = Student::select('tahun_ajaran')->distinct()->whereNotNull('tahun_ajaran')->orderBy('tahun_ajaran', 'desc')->pluck('tahun_ajaran');
 
         return view('admin.siswa', compact('siswa', 'kelasList', 'tahunAjaranList'));
     }
@@ -106,7 +106,7 @@ class AdminController extends Controller
      */
     public function guru(Request $request)
     {
-        $query = Guru::with('user'); // Eager load user relationship
+        $query = Teacher::with('user'); // Eager load user relationship
 
         // Search functionality
         if ($request->filled('search')) {
@@ -135,8 +135,8 @@ class AdminController extends Controller
 
         // Apply sorting (handle user.name separately)
         if ($sortColumn === 'nama') {
-            $query->join('users', 'gurus.user_id', '=', 'users.id')
-                  ->orderBy('users.name', $sortDirection)
+            $query->join('users', 'tb_teachers.id_user', '=', 'tb_users.id_user')
+                  ->orderBy('tb_users.name', $sortDirection)
                   ->select('gurus.*');
         } else {
             $query->sortBy($sortColumn, $sortDirection);
@@ -150,7 +150,7 @@ class AdminController extends Controller
         ]);
 
         // Get filter options
-        $mapelList = Mapel::orderBy('nama')->pluck('nama', 'nama');
+        $mapelList = Subject::orderBy('nama')->pluck('nama', 'nama');
 
         return view('admin.guru', compact('guru', 'mapelList'));
     }
@@ -160,7 +160,7 @@ class AdminController extends Controller
      */
     public function mapel(Request $request)
     {
-        $query = Mapel::query();
+        $query = Subject::query();
 
         // Search functionality
         if ($request->filled('search')) {
@@ -197,7 +197,7 @@ class AdminController extends Controller
         ]);
 
         // Get filter options
-        $kelompokList = Mapel::select('kelompok')->distinct()->whereNotNull('kelompok')->orderBy('kelompok')->pluck('kelompok');
+        $kelompokList = Subject::select('kelompok')->distinct()->whereNotNull('kelompok')->orderBy('kelompok')->pluck('kelompok');
 
         return view('admin.mapel', compact('mapel', 'kelompokList'));
     }
@@ -207,7 +207,7 @@ class AdminController extends Controller
      */
     public function kelas(Request $request)
     {
-        $query = Kelas::with('waliKelas'); // Eager load wali kelas relationship
+        $query = ClassRoom::with('waliKelas'); // Eager load wali kelas relationship
 
         // Search functionality
         if ($request->filled('search')) {
@@ -238,8 +238,8 @@ class AdminController extends Controller
 
         // Apply sorting (handle wali_kelas separately)
         if ($sortColumn === 'wali_kelas') {
-            $query->join('users', 'kelas.wali_kelas_id', '=', 'users.id')
-                  ->orderBy('users.name', $sortDirection)
+            $query->join('users', 'tb_classes.wali_kelas_id', '=', 'tb_users.id_user')
+                  ->orderBy('tb_users.name', $sortDirection)
                   ->select('kelas.*');
         } else {
             $query->sortBy($sortColumn, $sortDirection);
@@ -253,7 +253,7 @@ class AdminController extends Controller
         ]);
 
         // Get filter options
-        $tingkatList = Kelas::select('tingkat')->distinct()->whereNotNull('tingkat')->orderBy('tingkat')->pluck('tingkat');
+        $tingkatList = ClassRoom::select('tingkat')->distinct()->whereNotNull('tingkat')->orderBy('tingkat')->pluck('tingkat');
 
         return view('admin.kelas', compact('kelas', 'tingkatList'));
     }
@@ -279,16 +279,30 @@ class AdminController extends Controller
             $role = 'lectureTeacher,homeroomTeacher';
         }
 
-        User::create([
+        $user = User::create([
             'name' => $validated['name'],
-            'user_name' => $validated['user_name'],
-            'user_id' => $validated['user_id'],
+            'id_user' => $validated['user_id'],
             'email' => $validated['email'],
             'phone_number' => $validated['phone_number'],
-            'role' => $role,
-            'password_set' => false,
             'password' => null,
         ]);
+
+        if (str_contains($role, 'administrator')) {
+            \App\Models\Admin::create(['id_user' => $user->id_user]);
+        }
+        if (str_contains($role, 'lectureTeacher')) {
+            \App\Models\Lecturer::create(['id_user' => $user->id_user]);
+            \App\Models\Teacher::create(['id_user' => $user->id_user]);
+        }
+        if (str_contains($role, 'homeroomTeacher')) {
+            \App\Models\Homeroom::create(['id_user' => $user->id_user]);
+            if (!str_contains($role, 'lectureTeacher')) {
+                \App\Models\Teacher::create(['id_user' => $user->id_user]);
+            }
+        }
+        if (str_contains($role, 'student')) {
+            \App\Models\Student::create(['id_user' => $user->id_user]);
+        }
 
         return redirect()->route('admin.register')
             ->with('success', 'User registered successfully. They can login with their userId and will be prompted to set a password.');
@@ -305,8 +319,8 @@ class AdminController extends Controller
         if ($request->filled('search')) {
             $search = $request->validated()['search'];
             $query->where(function ($q) use ($search) {
-                $q->where('user_id', 'like', "%{$search}%")
-                  ->orWhere('user_name', 'like', "%{$search}%")
+                $q->where('id_user', 'like', "%{$search}%")
+                  ->orWhere('id_user', 'like', "%{$search}%")
                   ->orWhere('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
                   ->orWhere('role', 'like', "%{$search}%");
@@ -357,8 +371,8 @@ class AdminController extends Controller
         if ($request->filled('search')) {
             $search = $request->validated()['search'];
             $query->where(function ($q) use ($search) {
-                $q->where('user_id', 'like', "%{$search}%")
-                  ->orWhere('user_name', 'like', "%{$search}%")
+                $q->where('id_user', 'like', "%{$search}%")
+                  ->orWhere('id_user', 'like', "%{$search}%")
                   ->orWhere('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
                   ->orWhere('role', 'like', "%{$search}%");
@@ -375,7 +389,7 @@ class AdminController extends Controller
      */
     public function exportSiswa(Request $request): BinaryFileResponse
     {
-        $query = Siswa::with('user');
+        $query = Student::with('user');
 
         // Apply current search filters if any
         if ($request->filled('search')) {
@@ -399,7 +413,7 @@ class AdminController extends Controller
      */
     public function exportGuru(Request $request): BinaryFileResponse
     {
-        $query = Guru::with('user');
+        $query = Teacher::with('user');
 
         // Apply current search filters if any
         if ($request->filled('search')) {
@@ -422,7 +436,7 @@ class AdminController extends Controller
      */
     public function exportMapel(Request $request): BinaryFileResponse
     {
-        $query = Mapel::query();
+        $query = Subject::query();
 
         // Apply current search filters if any
         if ($request->filled('search')) {
@@ -444,7 +458,7 @@ class AdminController extends Controller
      */
     public function exportKelas(Request $request): BinaryFileResponse
     {
-        $query = Kelas::query();
+        $query = ClassRoom::query();
 
         // Apply current search filters if any
         if ($request->filled('search')) {
@@ -541,23 +555,17 @@ class AdminController extends Controller
 
             // Save imported data to database
             foreach ($result->data as $siswaData) {
-                // Create user account for student
                 $user = User::create([
                     'name' => $siswaData['nama'],
-                    'user_name' => 'student_' . $siswaData['nis'],
-                    'user_id' => $siswaData['nis'],
+                    'id_user' => $siswaData['nis'],
                     'email' => 'student' . $siswaData['nis'] . '@school.id',
                     'phone_number' => null,
-                    'role' => 'student',
-                    'password_set' => false,
                     'password' => null,
                 ]);
 
-                // Create siswa record linked to user
-                Siswa::create([
-                    'user_id' => $user->id,
+                \App\Models\Student::create([
+                    'id_user' => $user->id_user,
                     'nis' => $siswaData['nis'],
-                    'kelas' => $siswaData['kelas'],
                 ]);
             }
 
@@ -602,22 +610,18 @@ class AdminController extends Controller
 
             // Save imported data to database
             foreach ($result->data as $guruData) {
-                // Create user account for teacher
                 $user = User::create([
                     'name' => $guruData['nama'],
-                    'user_name' => 'teacher_' . $guruData['nip'],
-                    'user_id' => $guruData['nip'],
+                    'id_user' => $guruData['nip'],
                     'email' => 'teacher' . str_replace(' ', '', $guruData['nip']) . '@school.id',
                     'phone_number' => null,
-                    'role' => 'lectureTeacher',
-                    'password_set' => false,
                     'password' => null,
                 ]);
 
-                // Create guru record linked to user
-                Guru::create([
-                    'user_id' => $user->id,
-                    'nip' => $guruData['nip'],
+                \App\Models\Lecturer::create(['id_user' => $user->id_user]);
+                Teacher::create([
+                    'id_user' => $user->id_user,
+                    'nomor_induk' => $guruData['nip'],
                 ]);
             }
 
@@ -662,7 +666,7 @@ class AdminController extends Controller
 
             // Save imported data to database
             foreach ($result->data as $mapelData) {
-                Mapel::create([
+                Subject::create([
                     'kode' => $mapelData['kode'],
                     'nama' => $mapelData['nama'],
                     'kelompok' => $mapelData['kelompok'],
@@ -710,7 +714,7 @@ class AdminController extends Controller
 
             // Save imported data to database
             foreach ($result->data as $kelasData) {
-                Kelas::create([
+                ClassRoom::create([
                     'nama' => $kelasData['nama'],
                     'tingkat' => $kelasData['tingkat'],
                     'wali_kelas' => $kelasData['wali_kelas'],

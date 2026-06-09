@@ -1,0 +1,165 @@
+﻿
+,"tbUsers : (formerly users, its laravel default. please change it to use tbUsers instead of users)"
+,ROWID,name,"id_user(formerly user_id, make this primary key)",gender,email,phone_number,password,profile_picture,remember_token,created_at,updated at
+,1,Takanashi Hoshino,1001,F,Same as before,Same as before,Admin123,demo/profile_1001.png,,Same as before,Same as before
+,2,Fazri Rahman,1002,M,fazrirahman62@gmail.com,+62 852 6431 2600,Fazri123,profile_3312501038.png,,Same as before,Same as before
+,3,Sorasaki Hina,1003,F,Same as before,Same as before,Admin123,demo/profile_1002.png,,Same as before,Same as before
+,4,Ahmad Rafi Sa'id F.,1004,M,Same as before,Same as before,Rafi123,profile_3312501051.png,,Same as before,Same as before
+,5,Kuchinashi Yume,1005,F,yumesenpai47@bmail.com,+62 867 6767 6767,null,demo/profile_1003.png,,,
+,6,Muradika Laksamana Putri,1006,M,Same as before,Same as before,null,profile_3312501059.png,,Same as before,Same as before
+,and so on,and so on,and so on,and so on,Same as before,Same as before,and so on,and so on,,Same as before,Same as before
+,Note:,"because role is removed, adjust the code to know the user role by looking into tbAdmin, tbLecturer,tbHomeroom, and tbStudent instead. Also, the profile picture PATH is ""/public/images/""",,,,,,,,,
+,,,,,,,,,,,
+,tbAdmin :,,,,,,,,,,
+,ROWID,id_user,,,,,,,,,
+,1,1001,,,,,,,,,
+,2,1004,,,,,,,,,
+
+,tbStudent : (formerly siswas),,,,,,,,,,
+,ROWID,id_user,nis,nisn,entry_year,id_class,,,,,
+,1,1002,240001,3312501038,2024,105,,,,,
+
+
+
+
+
+
+,tbTeacher : (formerly gurus),,,,,,,,,,
+,ROWID,id_user,nomor_induk,date_of_employment,teacher_status,type,,,,,
+,,,,,employeed (example),honorer (example),,,,,
+,,,,,resigned(example),pns(example),,,,,
+,1,1003,1.99510152020012e+017,2018,employeed,pns,,,,,
+,2,1005,1.9990725000000198e+017,2020,employeed,honorer,,,,,
+,3,1001,1.9850725200610202e+017,2017,employeed,pns,,,,,
+,4,1004,1.9790811200004099e+017,2017,employeed,pns,,,,,
+,5,1006,200306070000001000,2022,employeed,honorer,,,,,,
+,2,1005,1.9990725000000198e+017,2020,employeed,honorer,,,,,
+,3,1001,1.9850725200610202e+017,2017,employeed,pns,,,,,
+,4,1004,1.9790811200004099e+017,2017,employeed,pns,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,tbLecturer :,,,,,,,,,,
+,ROWID,id_user,,,,,,,,,
+,1,1003,,,,,,,,,
+,2,1005,,,,,,,,,
+
+,tbHomeroom :,,,,,,,,,,
+,ROWID,id_user,id_class,,,,,,,,
+,1,1003,105,,,,,,,,
+,2,1006,109,,,,,,,,
+
+,tbClass : (formerly kelas),,,,,,,,,,
+,ROWID,id_class,grade,name,,,,,,,
+,1,101,10,X IPA 1,,,,,,,
+,2,102,10,X IPA 2,,,,,,,
+,3,103,10,X IPS 1,,,,,,,
+,4,104,11,XI IPA 1,,,,,,,
+,5,105,11,XI IPA 2,,,,,,,
+,6,106,11,XI IPS 1,,,,,,,
+,7,107,12,XII IPA 1,,,,,,,
+,8,108,12,XII IPA 2,,,,,,,
+,9,109,12,XII IPS 1,,,,,,,
+
+,tbSubjects : (formerly mapels),,,,,,,,,,
+,ROWID,id_subjects,code,name,grade,curriculum,group,,,,
+,1,S001,MTKW,Matematika Wajib Kelas X K13,10,Kurikulum 2013,Wajib,,,,
+,2,S002,MTKW,Matematika Wajib Kelas XI K13,11,Kurikulum 2013,Wajib,,,,
+,3,S003,MTKW,Matematika Wajib Kelas XII K13,12,Kurikulum 2013,Wajib,,,,
+,4,S004,MTKP,Matematika Peminatan Kelas 10 K13,10,Kurikulum 2013,IPA,,,,
+,5,S005,MTKP,Matematika Peminatan Kelas 11 K13,11,Kurikulum 2013,IPA,,,,
+,6,S006,MTKP,Matematika Peminatan Kelas 12 K13,12,Kurikulum 2013,IPA,,,,
+,7,S007,BIND,Bahasa Indonesia Kelas 10 K13,10,Kurikulum 2013,Wajib,,,,
+,8,S008,BING,Bahasa Inggris Kelas 10 K13,10,Kurikulum 2013,Wajib,,,,
+,9,S009,FISK,Fisika Kelas 10 K13,10,Kurikulum 2013,IPA,,,,
+,10,S010,KMIA,Kimia Kelas 10 K13,10,Kurikulum 2013,IPA,,,,
+,11,S011,BIO,Biologi Kelas 10 K13,10,Kurikulum 2013,IPA,,,,
+,12,S012,GEO,Geografi Kelas 10 K13,10,Kurikulum 2013,IPS,,,,
+,13,S013,EKOM,Ekonomi Kelas 10 K13,10,Kurikulum 2013,IPS,,,,
+,14,S014,EKOP,Ekonomi Peminatan Kelas 10 K13,10,Kurikulum 2013,IPA,,,,
+,15,S015,SOSI,Sosiologi Kelas 10 K13,10,Kurikulum 2013,IPS,,,,
+,16,S016,SJRH,Sejarah Kelas 10 K13,10,Kurikulum 2013,IPS,,,,
+,17,S017,PAI,Pendidikan Agama Islam Kelas 10 K13,10,Kurikulum 2013,Wajib,,,,
+,18,S018,PPKN,Pendidikan Pancasila dan Kewarganegaraan Kelas 10 K13,10,Kurikulum 2013,Wajib,,,,
+,19,S019,SENI,Seni Budaya Kelas 10 K13,10,Kurikulum 2013,Wajib,,,,
+,20,S020,PJOK,Pendjdikan Jasmani  Olahraga dan Kesehatan Kelas 10 K13,10,Kurikulum 2013,Wajib,,,,
+,21,S021,PAK,Pendidikan Agama Kristen Kelas 10 K13,10,Kurikulum 2013,Wajib,,,,
+
+,tbTeachedSubjects :,,,,,,,,,,
+,ROWID,id_user,id_subjects,teached_class (id_class),,,,,,,
+,1,1003,S001,101,,,,,,,
+,2,1003,S002,105,,,,,,,
+,3,1003,S005,105,,,,,,,
+
+,tbSubjectsCode :,,,,,,,,,,
+,ROWID,code,name,,,,,,,,
+,1,MTKW,Matematika Wajib,,,,,,,,
+,2,MTKP,Matematika Peminatan,,,,,,,,
+,3,BIND,Bahasa Indonesia,,,,,,,,
+,4,BING,Bahasa Inggris,,,,,,,,
+,5,FISK,Fisika,,,,,,,,
+,6,KMIA,Kimia,,,,,,,,
+,7,BIO,Biologi,,,,,,,,
+,8,GEO,Geologi,,,,,,,,
+,9,SOSI,Sosiologi,,,,,,,,
+,10,EKOM,Ekonomi,,,,,,,,
+,11,EKOP,Ekonomi Peminatan,,,,,,,,
+,12,PAI,Pendidikan Agama Islam,,,,,,,,
+,13,PAK,Pendidikan Agama Kristen,,,,,,,,
+,14,SENI,Seni Budaya,,,,,,,,
+,15,PPKN,Pendidikan Pancasila dan Kewarganegaraan,,,,,,,,
+,16,SJRH,Sejarah,,,,,,,,
+,17,PJOK,Pendidikan Jasmani Olahraga dan Kesehatan,,,,,,,,
+
+,tbNilai : (formerly nilai),,,,,,,,,,
+,ROWID,id_user,id_nilai,id_nilai_harian,id_nilai_keterampilan,id_nilai_ulangan,id_nilai_ujian,id_subjects,semester,,
+,1,1002,1000001,1000000001,1000001,1000001,1000001,S001,2/24,,
+,2,1002,1000002,1000000002,1000002,1000001,1000001,S001,3/24,,
+,3,1002,1000002,1000000003,1000002,1000001,1000001,S001,4/24,,
+,4,1002,1000003,1000000004,1000003,1000002,1000001,S002,1/25,,,,,
+,(example),(example),(example),(example),(example),"no(avaible or not is edited by admin, usually depends on curriculum and/or the school)",(example),(example),(example),,,,,
+,,,,,,,,,,,,,,
+,tbNilaiHarian :,,,,,,,,,,,,,
+,ROWID,id_nilai_harian,minggu_1,minggu_2,minggu_3,minggu_4,minggu_5,minggu_6,minggu_7,minggu_8,minggu_9,minggu_10,minggu_11,minggu_12
+,1,1000000001,82,90,84,83,76,78,77,79,95,100,88,95
+,2,1000000002,100,100,none,day_off,80,90,82,88,84,86,85,99
+,3,1000000003,100,100,100,100,100,100,day_off,100,100,100,100,100
+,4,1000000004,none,83,84,92,day_off,93,94,95,96,97,98,99
+,Note :,"(day_off) is when there's like national day or holiday or something like that, when usually school is off. (none) is when there is no assignment given by the lecture teacher purposedly",,,,,,,,,,,,
+
+,tbNilaiUlangan : ,,,,,,,,,,,,,
+,ROWID,id_nilai_ulangan,ulangan_1,ulangan_2,ulangan_3,ulangan_4,ulangan_5,ulangan_6,ulangan_7,ulangan_8,,,,
+,1,1000001,79,81,88,84,85,90,none,none,,,,
+,2,1000002,83,87,100,,,,,,,,,
+,Note : ,"(none) is when there is no ulangan because there's no need for it. Normally, how many ulangan that will happen is based on the lesson book, usually around 6 ulangan (can be more or less)",,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,tbNilaiUjian :,,,,,,,,,,,,,
+,ROWID,id_nilai_ujian,awal_ganjil,akhir_ganjil,awal_genap,akhir_genap,year,,,,,,,
+,1,1000001,82,83,84,85,2024,,,,,,,
+,2,1000002,86,87,,,2025,,,,,,,
+,,,,,,,,,,,,,,
+,tbNilaiKeterampilan : ,,,,,,,,,,,,,
+,ROWID,id_nilai_keterampilan,nilai,,,,,,,,,,,
+,1,1000001,84,,,,,,,,,,,
+,2,1000002,86,,,,,,,,,,,
+,3,1000003,89,,,,,,,,,,,
+
+,tbKkm : ,,,,,,,,,,,,,
+,ROWID,grade,kkm,,,,,,,,,,,
+,1,10,78,,,,,,,,,,,
+,2,11,80,,,,,,,,,,,
+,3,12,82,,,,,,,,,,,
+
+,tbRasioBobotNilai : ,,,,,,,,,,,,,
+,ROWID,nilai_harian,nilai_keterampilan,nilai_ulangan,nilai_ujian (nilai rata rata ujian tengah semester dan akhir semester),void,,,,,,,,
+,1,25,25,25,25,0,,,,,,,,
+,note :,all number must be totalled 100. Void is when the school or curriculum decided that there is no 100% scores which sounds stupid but could be happen. However leave it 0 and dont do anything to it yet,,,,,,,,,,,,
+
+,tbPredikat : ,,,,,,,,,,,,,
+,ROWID,grade,A,B,C,D,,,,,,,,
+,1,10,100-93,92-83,83-78,>78,,,,,,,,
+,2,11,100-93,92-83,83-80,>80,,,,,,,,
+,3,12,100-93,92-83,83-82,>82,,,,,,,,
+
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,

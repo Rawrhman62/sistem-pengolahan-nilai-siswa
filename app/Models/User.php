@@ -13,6 +13,8 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $table = 'tb_users';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,13 +22,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'user_name',
-        'user_id',
+        'id_user',
+        'gender',
         'email',
         'phone_number',
-        'role',
-        'password_set',
         'password',
+        'profile_picture',
     ];
 
     /**
@@ -46,9 +47,8 @@ class User extends Authenticatable
      */
     protected $sortableColumns = [
         'name',
-        'user_name',
+        'id_user',
         'email',
-        'role',
         'created_at',
     ];
 
@@ -60,9 +60,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'password_set' => 'boolean',
         ];
     }
 
@@ -73,55 +71,107 @@ class User extends Authenticatable
      */
     public function getAuthIdentifierName()
     {
-        return 'user_id';
+        return 'id_user';
     }
 
-    /**
-     * Check if user has a specific role.
-     *
-     * @param string $role
-     * @return bool
-     */
-    public function hasRole(string $role): bool
+    // Role relationships
+    public function admin()
     {
-        $roles = explode(',', $this->role);
-        return in_array($role, array_map('trim', $roles));
+        return $this->hasOne(Admin::class, 'id_user', 'id_user');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'id_user', 'id_user');
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class, 'id_user', 'id_user');
+    }
+
+    public function lecturer()
+    {
+        return $this->hasOne(Lecturer::class, 'id_user', 'id_user');
+    }
+
+    public function homerooms()
+    {
+        return $this->hasMany(Homeroom::class, 'id_user', 'id_user');
     }
 
     /**
-     * Check if user is a teacher (either lecture or homeroom).
-     *
-     * @return bool
+     * Check if user is a student.
+     */
+    public function isStudent(): bool
+    {
+        return $this->student()->exists();
+    }
+
+    /**
+     * Check if user is a teacher.
      */
     public function isTeacher(): bool
     {
-        return $this->hasRole('lectureTeacher') || $this->hasRole('homeroomTeacher');
+        return $this->teacher()->exists();
+    }
+
+    /**
+     * Check if user is a lecturer.
+     */
+    public function isLecturer(): bool
+    {
+        return $this->lecturer()->exists();
+    }
+
+    /**
+     * Check if user is a homeroom teacher.
+     */
+    public function isHomeroomTeacher(): bool
+    {
+        return $this->homerooms()->exists();
     }
 
     /**
      * Check if user is an administrator.
-     *
-     * @return bool
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole('administrator');
+        return $this->admin()->exists();
     }
 
     /**
      * Get all roles as an array.
-     *
-     * @return array
      */
     public function getRoles(): array
     {
-        return array_map('trim', explode(',', $this->role));
+        $roles = [];
+        if ($this->isAdmin()) {
+            $roles[] = 'administrator';
+        }
+        if ($this->isLecturer()) {
+            $roles[] = 'lectureTeacher';
+        }
+        if ($this->isHomeroomTeacher()) {
+            $roles[] = 'homeroomTeacher';
+        }
+        if ($this->isStudent()) {
+            $roles[] = 'student';
+        }
+        
+        return $roles;
+    }
+
+    /**
+     * Check if user has a specific role.
+     */
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->getRoles());
     }
 
     /**
      * Get the currently selected role from session.
-     *
-     * @return string
      */
     public function getCurrentRole(): string
     {
@@ -129,7 +179,8 @@ class User extends Authenticatable
         
         // If no role in session or invalid role, return first role
         if (!$selectedRole || !$this->hasRole($selectedRole)) {
-            return $this->getRoles()[0];
+            $roles = $this->getRoles();
+            return !empty($roles) ? $roles[0] : '';
         }
         
         return $selectedRole;
@@ -137,8 +188,6 @@ class User extends Authenticatable
 
     /**
      * Check if user is currently acting as admin.
-     *
-     * @return bool
      */
     public function isCurrentlyAdmin(): bool
     {
@@ -147,8 +196,6 @@ class User extends Authenticatable
 
     /**
      * Check if user is currently acting as a teacher.
-     *
-     * @return bool
      */
     public function isCurrentlyTeacher(): bool
     {
@@ -157,46 +204,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the siswa record for this user (if they are a student).
-     */
-    public function siswa()
-    {
-        return $this->hasOne(Siswa::class);
-    }
-
-    /**
-     * Get the guru record for this user (if they are a teacher).
-     */
-    public function guru()
-    {
-        return $this->hasOne(Guru::class);
-    }
-
-    /**
-     * Get the classes where this user is the homeroom teacher.
-     */
-    public function kelasAsWali()
-    {
-        return $this->hasMany(Kelas::class, 'wali_kelas_id');
-    }
-
-    /**
-     * Check if user is a student.
-     *
-     * @return bool
-     */
-    public function isStudent(): bool
-    {
-        return $this->hasRole('student');
-    }
-
-    /**
      * Scope a query to sort by a given column.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|null $column
-     * @param string $direction
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSortBy($query, ?string $column, string $direction = 'asc')
     {

@@ -193,13 +193,13 @@
             </div>
             
             <div class="form-group">
-                <label for="user_name">Username</label>
-                <input type="text" id="user_name" name="user_name" class="form-control" value="{{ old('user_name') }}" required>
+                <label for="id_user">Username</label>
+                <input type="text" id="user_name" name="id_user" class="form-control" value="{{ old('id_user') }}" required>
             </div>
             
             <div class="form-group">
-                <label for="user_id">User ID</label>
-                <input type="text" id="user_id" name="user_id" class="form-control" value="{{ old('user_id') }}" required>
+                <label for="id_user">User ID</label>
+                <input type="text" id="user_id" name="id_user" class="form-control" value="{{ old('id_user') }}" required>
             </div>
             
             <div class="form-group">

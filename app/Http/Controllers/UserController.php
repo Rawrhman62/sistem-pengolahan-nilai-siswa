@@ -12,7 +12,7 @@ class UserController extends Controller
      */
     public function profile($userId)
     {
-        $user = User::where('user_id', $userId)->firstOrFail();
+        $user = User::where('id_user', $userId)->firstOrFail();
         
         return view('user.profile', compact('user'));
     }

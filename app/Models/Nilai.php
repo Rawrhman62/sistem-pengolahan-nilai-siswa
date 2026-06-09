@@ -9,23 +9,46 @@ class Nilai extends Model
 {
     use HasFactory;
 
-    protected $table = 'nilai';
+    protected $table = 'tb_nilai';
 
     protected $fillable = [
-        'user_id',
-        'mapel',
-        'nilai_pengetahuan',
-        'nilai_keterampilan',
-        'nilai_akhir',
-        'predikat',
+        'id_user',
+        'id_nilai',
+        'id_nilai_harian',
+        'id_nilai_keterampilan',
+        'id_nilai_ulangan',
+        'id_nilai_ujian',
+        'id_subjects',
         'semester',
     ];
 
-    /**
-     * Get the user that owns the nilai.
-     */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class, 'id_subjects', 'id_subjects');
+    }
+
+    public function nilaiHarian()
+    {
+        return $this->belongsTo(NilaiHarian::class, 'id_nilai_harian', 'id_nilai_harian');
+    }
+
+    public function nilaiKeterampilan()
+    {
+        return $this->belongsTo(NilaiKeterampilan::class, 'id_nilai_keterampilan', 'id_nilai_keterampilan');
+    }
+
+    public function nilaiUlangan()
+    {
+        return $this->belongsTo(NilaiUlangan::class, 'id_nilai_ulangan', 'id_nilai_ulangan');
+    }
+
+    public function nilaiUjian()
+    {
+        return $this->belongsTo(NilaiUjian::class, 'id_nilai_ujian', 'id_nilai_ujian');
     }
 }

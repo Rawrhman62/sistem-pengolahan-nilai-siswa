@@ -70,48 +70,32 @@
             font-size: 13px;
             margin-top: 5px;
         }
+
+        .hint-text {
+            color: #666;
+            font-size: 12px;
+            margin-top: -8px;
+            margin-bottom: 8px;
+            text-align: left;
+        }
     </style>
 
     <script>
-        function checkUserRoles() {
-            const userId = document.getElementById('user_id').value;
-            const roleSelection = document.getElementById('role_selection');
+        function updateLoginField() {
+            const role = document.getElementById('role_selector').value;
+            const loginField = document.getElementById('login_id');
+            const loginHint = document.getElementById('login_hint');
             
-            if (userId.trim() === '') {
-                roleSelection.style.display = 'none';
-                return;
+            if (role === 'student') {
+                loginField.placeholder = 'Masukkan NIS';
+                loginHint.textContent = 'Gunakan Nomor Induk Siswa (NIS) Anda';
+            } else if (role && role !== '' && role !== 'noentry') {
+                loginField.placeholder = 'Masukkan Nomor Induk';
+                loginHint.textContent = 'Gunakan Nomor Induk Guru Anda';
+            } else {
+                loginField.placeholder = 'Masukkan ID';
+                loginHint.textContent = '';
             }
-            
-            // Make AJAX request to check if user has multiple roles
-            fetch('/check-user-roles', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ user_id: userId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.has_multiple_roles) {
-                    roleSelection.style.display = 'block';
-                    const roleSelect = document.getElementById('selected_role');
-                    roleSelect.innerHTML = '<option value="">Select Role</option>';
-                    data.roles.forEach(role => {
-                        const option = document.createElement('option');
-                        option.value = role;
-                        option.textContent = role === 'lectureTeacher' ? 'Lecture Teacher' : 
-                                           role === 'homeroomTeacher' ? 'Homeroom Teacher' : role;
-                        roleSelect.appendChild(option);
-                    });
-                } else {
-                    roleSelection.style.display = 'none';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                roleSelection.style.display = 'none';
-            });
         }
     </script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -125,21 +109,31 @@
     <form method="POST" action="/login">
         @csrf
 
-        <select name="selected_role">
+        <select name="selected_role" id="role_selector" onchange="updateLoginField()" required>
             <option value="noentry">Masuk Sebagai</option>
-            <option value="">Administrator</option>         <!--"if its work its work" ahh code-->
+            <option value="administrator">Administrator</option>
             <option value="lectureTeacher">Guru</option>
             <option value="homeroomTeacher">Wali Kelas</option>
             <option value="student">Siswa</option>
         </select>
 
-        <input type="text" name="user_id" placeholder="Masukkan ID" required>
+        <input type="text" name="login_id" id="login_id" placeholder="Masukkan ID" required>
+        <small id="login_hint" class="hint-text"></small>
+        
         <input type="password" name="password" placeholder="Masukkan Password">
 
         <button type="submit">Masuk</button>
 
         @if ($errors->any())
-            <div class="error">{{ $errors->first() }}</div>
+            <div class="error">
+                @if ($errors->has('login_id'))
+                    {{ $errors->first('login_id') }}
+                @elseif ($errors->has('selected_role'))
+                    {{ $errors->first('selected_role') }}
+                @else
+                    {{ $errors->first() }}
+                @endif
+            </div>
         @endif
     </form>
 </div>

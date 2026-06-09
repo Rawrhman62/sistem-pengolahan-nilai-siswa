@@ -177,19 +177,19 @@
                 <tbody>
                     @forelse($siswaList as $index => $siswa)
                     @php
-                        $nilai = $nilaiList->get($siswa->user_id);
+                        $nilai = $nilaiList->get($siswa->id_user);
                     @endphp
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $siswa->user_id }}</td>
+                        <td>{{ $siswa->id_user }}</td>
                         <td>{{ $siswa->name }}</td>
                         <td>
                             @if($nilai)
                                 <span class="nilai-display">{{ $nilai->nilai_pengetahuan }}</span>
                             @else
-                                <form method="POST" action="{{ route('guru.simpanNilai') }}" style="display: inline;" id="form-{{ $siswa->user_id }}">
+                                <form method="POST" action="{{ route('guru.simpanNilai') }}" style="display: inline;" id="form-{{ $siswa->id_user }}">
                                     @csrf
-                                    <input type="hidden" name="user_id" value="{{ $siswa->user_id }}">
+                                    <input type="hidden" name="id_user" value="{{ $siswa->id_user }}">
                                     <input type="hidden" name="mapel" value="Matematika">
                                     <input type="hidden" name="semester" value="Ganjil (1)">
                                     <input type="number" name="nilai_pengetahuan" class="input-nilai" min="0" max="100" placeholder="0-100">

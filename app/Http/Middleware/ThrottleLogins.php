@@ -46,6 +46,6 @@ class ThrottleLogins
      */
     protected function throttleKey(Request $request): string
     {
-        return 'login_attempts:' . $request->ip() . ':' . strtolower($request->input('user_id', ''));
+        return 'login_attempts:' . $request->ip() . ':' . strtolower($request->input('login_id', ''));
     }
 }
