@@ -14,6 +14,8 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'tb_users';
+    protected $primaryKey = 'id_user';
+    public $incrementing = true;
 
     /**
      * The attributes that are mass assignable.
@@ -72,6 +74,39 @@ class User extends Authenticatable
     public function getAuthIdentifierName()
     {
         return 'id_user';
+    }
+
+    /**
+     * Get the unique identifier for the user.
+     *
+     * @return mixed
+     */
+    public function getAuthIdentifier()
+    {
+        return $this->id_user;
+    }
+
+    /**
+     * Get the password for the user.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Check if user has set a password.
+     * This checks the raw database value to determine if password exists.
+     *
+     * @return bool
+     */
+    public function getPasswordSetAttribute()
+    {
+        // Check if password exists in database (not NULL)
+        $password = \DB::table('tb_users')->where('id_user', $this->id_user)->value('password');
+        return !is_null($password);
     }
 
     // Role relationships
