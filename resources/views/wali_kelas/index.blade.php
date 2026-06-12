@@ -282,7 +282,7 @@
                                 {{ $index + 1 }}
                             </span>
                         </td>
-                        <td>{{ $data['siswa']->id_user }}</td>
+                        <td>{{ $data['siswa']->student->nis ?? 'N/A' }}</td>
                         <td><strong>{{ $data['siswa']->name }}</strong></td>
                         <td>{{ $data['jumlah_mapel'] }} / 8</td>
                         <td>

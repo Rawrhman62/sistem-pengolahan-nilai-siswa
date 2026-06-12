@@ -51,21 +51,20 @@ class AdminController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('nis', 'like', "%{$search}%")
-                  ->orWhere('kelas', 'like', "%{$search}%")
                   ->orWhereHas('user', function ($userQuery) use ($search) {
                       $userQuery->where('name', 'like', "%{$search}%");
                   });
             });
         }
 
-        // Filter by kelas
-        if ($request->filled('kelas')) {
-            $query->where('kelas', $request->input('kelas'));
+        // Filter by id_class
+        if ($request->filled('id_class')) {
+            $query->where('id_class', $request->input('id_class'));
         }
 
-        // Filter by tahun ajaran
-        if ($request->filled('tahun_ajaran')) {
-            $query->where('tahun_ajaran', $request->input('tahun_ajaran'));
+        // Filter by entry_year
+        if ($request->filled('entry_year')) {
+            $query->where('entry_year', $request->input('entry_year'));
         }
 
         // Sorting functionality
@@ -79,26 +78,26 @@ class AdminController extends Controller
 
         // Apply sorting (handle user.name separately)
         if ($sortColumn === 'nama') {
-            $query->join('users', 'tb_students.id_user', '=', 'tb_users.id_user')
+            $query->join('tb_users', 'tb_students.id_user', '=', 'tb_users.id_user')
                   ->orderBy('tb_users.name', $sortDirection)
-                  ->select('siswas.*');
+                  ->select('tb_students.*');
         } else {
-            $query->sortBy($sortColumn, $sortDirection);
+            $query->orderBy($sortColumn ?? 'id_user', $sortDirection);
         }
 
         $siswa = $query->paginate(20)->appends([
             'search' => $request->input('search'),
-            'kelas' => $request->input('kelas'),
-            'tahun_ajaran' => $request->input('tahun_ajaran'),
+            'id_class' => $request->input('id_class'),
+            'entry_year' => $request->input('entry_year'),
             'sort' => $sortColumn,
             'direction' => $sortDirection,
         ]);
 
         // Get filter options
-        $kelasList = Student::select('kelas')->distinct()->orderBy('kelas')->pluck('kelas');
-        $tahunAjaranList = Student::select('tahun_ajaran')->distinct()->whereNotNull('tahun_ajaran')->orderBy('tahun_ajaran', 'desc')->pluck('tahun_ajaran');
+        $kelasList = \App\Models\ClassRoom::orderBy('name')->pluck('name', 'id_class');
+        $entryYearList = Student::select('entry_year')->distinct()->whereNotNull('entry_year')->orderBy('entry_year', 'desc')->pluck('entry_year');
 
-        return view('admin.siswa', compact('siswa', 'kelasList', 'tahunAjaranList'));
+        return view('admin.siswa', compact('siswa', 'kelasList', 'entryYearList'));
     }
 
     /**
@@ -112,16 +111,11 @@ class AdminController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('nip', 'like', "%{$search}%")
+                $q->where('nomor_induk', 'like', "%{$search}%")
                   ->orWhereHas('user', function ($userQuery) use ($search) {
                       $userQuery->where('name', 'like', "%{$search}%");
                   });
             });
-        }
-
-        // Filter by mapel
-        if ($request->filled('mapel')) {
-            $query->where('mapel_diampu', 'like', '%' . $request->input('mapel') . '%');
         }
 
         // Sorting functionality
@@ -135,24 +129,20 @@ class AdminController extends Controller
 
         // Apply sorting (handle user.name separately)
         if ($sortColumn === 'nama') {
-            $query->join('users', 'tb_teachers.id_user', '=', 'tb_users.id_user')
+            $query->join('tb_users', 'tb_teachers.id_user', '=', 'tb_users.id_user')
                   ->orderBy('tb_users.name', $sortDirection)
-                  ->select('gurus.*');
+                  ->select('tb_teachers.*');
         } else {
-            $query->sortBy($sortColumn, $sortDirection);
+            $query->orderBy($sortColumn ?? 'id_user', $sortDirection);
         }
 
         $guru = $query->paginate(20)->appends([
             'search' => $request->input('search'),
-            'mapel' => $request->input('mapel'),
             'sort' => $sortColumn,
             'direction' => $sortDirection,
         ]);
 
-        // Get filter options
-        $mapelList = Subject::orderBy('nama')->pluck('nama', 'nama');
-
-        return view('admin.guru', compact('guru', 'mapelList'));
+        return view('admin.guru', compact('guru'));
     }
 
     /**
@@ -166,15 +156,15 @@ class AdminController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('kode', 'like', "%{$search}%")
-                  ->orWhere('nama', 'like', "%{$search}%")
-                  ->orWhere('kelompok', 'like', "%{$search}%");
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('group', 'like', "%{$search}%");
             });
         }
 
-        // Filter by kelompok
-        if ($request->filled('kelompok')) {
-            $query->where('kelompok', $request->input('kelompok'));
+        // Filter by group
+        if ($request->filled('group')) {
+            $query->where('group', $request->input('group'));
         }
 
         // Sorting functionality
@@ -187,19 +177,19 @@ class AdminController extends Controller
         }
 
         // Apply sorting
-        $query->sortBy($sortColumn, $sortDirection);
+        $query->orderBy($sortColumn ?? 'id_subjects', $sortDirection);
 
         $mapel = $query->paginate(20)->appends([
             'search' => $request->input('search'),
-            'kelompok' => $request->input('kelompok'),
+            'group' => $request->input('group'),
             'sort' => $sortColumn,
             'direction' => $sortDirection,
         ]);
 
         // Get filter options
-        $kelompokList = Subject::select('kelompok')->distinct()->whereNotNull('kelompok')->orderBy('kelompok')->pluck('kelompok');
+        $groupList = Subject::select('group')->distinct()->whereNotNull('group')->orderBy('group')->pluck('group');
 
-        return view('admin.mapel', compact('mapel', 'kelompokList'));
+        return view('admin.mapel', compact('mapel', 'groupList'));
     }
 
     /**
@@ -207,24 +197,20 @@ class AdminController extends Controller
      */
     public function kelas(Request $request)
     {
-        $query = ClassRoom::with('waliKelas'); // Eager load wali kelas relationship
+        $query = ClassRoom::query();
 
         // Search functionality
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('tingkat', 'like', "%{$search}%")
-                  ->orWhere('wali_kelas', 'like', "%{$search}%")
-                  ->orWhereHas('waliKelas', function ($userQuery) use ($search) {
-                      $userQuery->where('name', 'like', "%{$search}%");
-                  });
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('grade', 'like', "%{$search}%");
             });
         }
 
-        // Filter by tingkat
-        if ($request->filled('tingkat')) {
-            $query->where('tingkat', $request->input('tingkat'));
+        // Filter by grade
+        if ($request->filled('grade')) {
+            $query->where('grade', $request->input('grade'));
         }
 
         // Sorting functionality
@@ -236,26 +222,20 @@ class AdminController extends Controller
             $sortDirection = 'asc';
         }
 
-        // Apply sorting (handle wali_kelas separately)
-        if ($sortColumn === 'wali_kelas') {
-            $query->join('users', 'tb_classes.wali_kelas_id', '=', 'tb_users.id_user')
-                  ->orderBy('tb_users.name', $sortDirection)
-                  ->select('kelas.*');
-        } else {
-            $query->sortBy($sortColumn, $sortDirection);
-        }
+        // Apply sorting
+        $query->orderBy($sortColumn ?? 'id_class', $sortDirection);
 
         $kelas = $query->paginate(20)->appends([
             'search' => $request->input('search'),
-            'tingkat' => $request->input('tingkat'),
+            'grade' => $request->input('grade'),
             'sort' => $sortColumn,
             'direction' => $sortDirection,
         ]);
 
         // Get filter options
-        $tingkatList = ClassRoom::select('tingkat')->distinct()->whereNotNull('tingkat')->orderBy('tingkat')->pluck('tingkat');
+        $gradeList = ClassRoom::select('grade')->distinct()->whereNotNull('grade')->orderBy('grade')->pluck('grade');
 
-        return view('admin.kelas', compact('kelas', 'tingkatList'));
+        return view('admin.kelas', compact('kelas', 'gradeList'));
     }
 
     /**
@@ -283,29 +263,57 @@ class AdminController extends Controller
             'name' => $validated['name'],
             'id_user' => $validated['user_id'],
             'email' => $validated['email'],
-            'phone_number' => $validated['phone_number'],
+            'phone_number' => $validated['phone_number'] ?? null,
+            'gender' => $validated['gender'] ?? null,
             'password' => null,
         ]);
 
+        // Create role records
         if (str_contains($role, 'administrator')) {
             \App\Models\Admin::create(['id_user' => $user->id_user]);
         }
         if (str_contains($role, 'lectureTeacher')) {
+            // Create teacher record if not exists
+            if (!$user->teacher()->exists()) {
+                \App\Models\Teacher::create([
+                    'id_user' => $user->id_user,
+                    'nomor_induk' => $validated['nomor_induk'] ?? $user->id_user,
+                    'date_of_employment' => now()->year,
+                    'teacher_status' => 'employed',
+                    'type' => 'honorer'
+                ]);
+            }
             \App\Models\Lecturer::create(['id_user' => $user->id_user]);
-            \App\Models\Teacher::create(['id_user' => $user->id_user]);
         }
         if (str_contains($role, 'homeroomTeacher')) {
-            \App\Models\Homeroom::create(['id_user' => $user->id_user]);
-            if (!str_contains($role, 'lectureTeacher')) {
-                \App\Models\Teacher::create(['id_user' => $user->id_user]);
+            // Create teacher record if not exists
+            if (!$user->teacher()->exists()) {
+                \App\Models\Teacher::create([
+                    'id_user' => $user->id_user,
+                    'nomor_induk' => $validated['nomor_induk'] ?? $user->id_user,
+                    'date_of_employment' => now()->year,
+                    'teacher_status' => 'employed',
+                    'type' => 'honorer'
+                ]);
             }
+            \App\Models\Homeroom::create([
+                'id_user' => $user->id_user,
+                'id_class' => $validated['id_class'] ?? null,
+                'school_year' => now()->year . '/' . (now()->year + 1)
+            ]);
         }
         if (str_contains($role, 'student')) {
-            \App\Models\Student::create(['id_user' => $user->id_user]);
+            \App\Models\Student::create([
+                'id_user' => $user->id_user,
+                'nis' => $validated['nis'] ?? $user->id_user,
+                'nisn' => $validated['nisn'] ?? null,
+                'entry_year' => now()->year,
+                'id_class' => $validated['id_class'] ?? null,
+            ]);
         }
 
         return redirect()->route('admin.register')
-            ->with('success', 'User registered successfully. They can login with their userId and will be prompted to set a password.');
+            ->with('success', 'User registered successfully. They can login with their credentials and will be prompted to set a password.');
     }
 
     /**
@@ -396,7 +404,6 @@ class AdminController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('nis', 'like', "%{$search}%")
-                  ->orWhere('kelas', 'like', "%{$search}%")
                   ->orWhereHas('user', function ($userQuery) use ($search) {
                       $userQuery->where('name', 'like', "%{$search}%");
                   });
@@ -419,7 +426,7 @@ class AdminController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('nip', 'like', "%{$search}%")
+                $q->where('nomor_induk', 'like', "%{$search}%")
                   ->orWhereHas('user', function ($userQuery) use ($search) {
                       $userQuery->where('name', 'like', "%{$search}%");
                   });
@@ -442,9 +449,9 @@ class AdminController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('kode', 'like', "%{$search}%")
-                  ->orWhere('nama', 'like', "%{$search}%")
-                  ->orWhere('kelompok', 'like', "%{$search}%");
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('group', 'like', "%{$search}%");
             });
         }
 
@@ -464,9 +471,8 @@ class AdminController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('tingkat', 'like', "%{$search}%")
-                  ->orWhere('wali_kelas', 'like', "%{$search}%");
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('grade', 'like', "%{$search}%");
             });
         }
 
@@ -504,12 +510,9 @@ class AdminController extends Controller
             foreach ($result->data as $userData) {
                 User::create([
                     'name' => $userData['name'],
-                    'user_name' => $userData['user_name'],
-                    'user_id' => $userData['user_id'],
+                    'id_user' => $userData['id_user'],
                     'email' => $userData['email'],
                     'phone_number' => $userData['phone_number'] ?? null,
-                    'role' => $userData['role'],
-                    'password_set' => false,
                     'password' => null,
                 ]);
             }
@@ -715,9 +718,9 @@ class AdminController extends Controller
             // Save imported data to database
             foreach ($result->data as $kelasData) {
                 ClassRoom::create([
-                    'nama' => $kelasData['nama'],
-                    'tingkat' => $kelasData['tingkat'],
-                    'wali_kelas' => $kelasData['wali_kelas'],
+                    'name' => $kelasData['name'],
+                    'grade' => $kelasData['grade'],
+                    'id_class' => $kelasData['id_class'] ?? null,
                 ]);
             }
 

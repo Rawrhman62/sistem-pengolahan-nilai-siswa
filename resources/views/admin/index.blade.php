@@ -570,11 +570,11 @@
                     </div>
                     <div class="user-profile">
                         <div class="user-info">
-                            <strong>{{ auth()->user()->id_user ?? 'Admin Sekolah' }}</strong>
+                            <strong>{{ auth()->user()->name ?? 'Admin Sekolah' }}</strong>
                             <span>ADMINISTRATOR</span>
                         </div>
                         <div class="avatar">
-                            {{ substr(auth()->user()->id_user ?? 'AS', 0, 2) }}
+                            {{ substr(auth()->user()->name ?? 'AS', 0, 2) }}
                         </div>
                     </div>
                 </div>

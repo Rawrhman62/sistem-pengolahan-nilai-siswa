@@ -308,7 +308,7 @@
         <!-- Hero Section -->
         <div class="hero">
             <div class="hero-content">
-                <h1>Selamat Datang Kembali, {{ $user->id_user }}!</h1>
+                <h1>Selamat Datang Kembali, {{ $user->name }}!</h1>
                 <p>Tetap Semangat Mencerdaskan Masa Depan Bangsa!</p>
                 
                 <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">

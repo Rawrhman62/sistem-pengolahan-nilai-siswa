@@ -638,11 +638,11 @@
                 <div class="topbar-right">
                     <div class="user-profile">
                         <div class="user-info">
-                            <strong>{{ auth()->user()->id_user ?? 'Admin Sekolah' }}</strong>
+                            <strong>{{ auth()->user()->name ?? 'Admin Sekolah' }}</strong>
                             <span>ADMINISTRATOR</span>
                         </div>
                         <div class="avatar">
-                            {{ substr(auth()->user()->id_user ?? 'AS', 0, 2) }}
+                            {{ substr(auth()->user()->name ?? 'AS', 0, 2) }}
                         </div>
                     </div>
                 </div>
@@ -776,7 +776,7 @@
                                                 <span class="badge badge-warning">Belum Diset</span>
                                             @endif
                                         </td>
-                                        <td>{{ $user->created_at->format('d M Y, H:i') }}</td>
+                                        <td>{{ $user->created_at ? $user->created_at->format('d M Y, H:i') : 'N/A' }}</td>
                                     </tr>
                                 @empty
                                     <tr>

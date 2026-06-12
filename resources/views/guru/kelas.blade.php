@@ -181,7 +181,7 @@
                     @endphp
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $siswa->id_user }}</td>
+                        <td>{{ $siswa->student->nis ?? 'N/A' }}</td>
                         <td>{{ $siswa->name }}</td>
                         <td>
                             @if($nilai)

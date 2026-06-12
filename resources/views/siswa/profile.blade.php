@@ -355,7 +355,7 @@
                     <div class="user-profile">
                         <div class="user-info">
                             <strong>{{ $user->name }}</strong>
-                            <span>NIS: {{ $user->id_user }}</span>
+                            <span>NIS: {{ $user->student->nis ?? 'N/A' }}</span>
                         </div>
                         <div class="avatar">
                             {{ substr($user->name, 0, 2) }}
@@ -385,7 +385,7 @@
                             
                             <div class="detail-item">
                                 <span class="detail-label">NIS (Nomor Induk Siswa)</span>
-                                <span class="detail-value">{{ $user->id_user }}</span>
+                                <span class="detail-value">{{ $user->student->nis ?? 'N/A' }}</span>
                             </div>
                             
                             <div class="detail-item">

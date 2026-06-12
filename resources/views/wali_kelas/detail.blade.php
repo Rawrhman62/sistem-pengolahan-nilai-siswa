@@ -164,7 +164,7 @@
                 </div>
                 <div class="info-item">
                     <span class="info-label">NIS</span>
-                    <span class="info-value">{{ $siswa->id_user }}</span>
+                    <span class="info-value">{{ $siswa->student->nis ?? 'N/A' }}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Rata-rata</span>
