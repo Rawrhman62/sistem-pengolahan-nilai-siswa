@@ -25,7 +25,7 @@ Thumbs.db
 /.kiro
 
 # SQLite database - UNCOMMENT to commit database to Git for team collaboration
-# /database/*.sqlite
+/database/*.sqlite
 
 # MySQL backup files - keep these for migration
 !/database/backup_*.json
