@@ -587,13 +587,6 @@
             </div>
             
             <ul class="sidebar-menu">
-                <li class="menu-header">MENU UTAMA</li>
-                <li class="menu-item">
-                    <a href="{{ route('admin.index') }}">
-                        <i class="icon">📊</i> Dashboard
-                    </a>
-                </li>
-                
                 <li class="menu-header">MASTER DATA</li>
                 <li class="menu-item">
                     <a href="{{ route('admin.sekolah') }}">
