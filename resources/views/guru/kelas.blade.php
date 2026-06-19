@@ -293,7 +293,7 @@
 </head>
 <body>
     <div class="container">
-        <a href="{{ route('guru.dashboard') }}" class="back-link">← Kembali ke Daftar Kelas</a>
+        <a href="{{ route('guru.index') }}" class="back-link">← Kembali ke Daftar Kelas</a>
         
         <div class="header">
             <h1>Input Nilai Kelas {{ $kelasNama }}</h1>
@@ -419,7 +419,7 @@
                                             <p>Tidak ada data siswa ditemukan yang sesuai dengan kriteria pencarian Anda.</p>
                                         </div>
                                     </td>
-                                endtr>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
