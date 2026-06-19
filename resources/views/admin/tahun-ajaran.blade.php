@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Tahun Ajaran - E-RAPOR</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -52,7 +53,7 @@
             height: 100vh;
         }
 
-        /* Sidebar Styles (Reused from previous views) */
+        /* Sidebar Styles */
         .sidebar {
             width: 260px;
             background-color: var(--sidebar-bg);
@@ -284,46 +285,7 @@
             background-color: var(--btn-purple-hover);
         }
 
-        /* Tabs */
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 24px;
-            gap: 30px;
-        }
-        
-        .tab-item {
-            padding: 12px 0;
-            font-size: 14px;
-            color: var(--text-gray);
-            font-weight: 500;
-            cursor: pointer;
-            position: relative;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .tab-item:hover {
-            color: var(--btn-purple);
-        }
-        
-        .tab-item.active {
-            color: var(--btn-purple);
-        }
-        
-        .tab-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: var(--btn-purple);
-        }
-
-        /* Card Container */
+        /* Settings Card */
         .settings-card {
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -335,16 +297,13 @@
 
         /* Active Banner */
         .active-banner {
-            background-color: #1a2942;
+            background: linear-gradient(135deg, #1a2942 0%, #2a3f5f 100%);
             border-radius: 12px;
-            padding: 24px 30px;
+            padding: 30px;
             color: white;
             position: relative;
             overflow: hidden;
-            margin-bottom: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-bottom: 30px;
         }
 
         .banner-content {
@@ -353,13 +312,13 @@
         }
 
         .banner-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: inline-block;
+            background-color: rgba(99, 102, 241, 0.3);
+            padding: 6px 12px;
+            border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
             letter-spacing: 0.5px;
-            color: rgba(255,255,255,0.8);
             margin-bottom: 12px;
         }
 
@@ -371,34 +330,68 @@
         }
 
         .banner-title h2 {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 700;
             margin: 0;
         }
 
         .semester-badge {
             background-color: var(--btn-purple);
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
         }
 
         .banner-desc {
             font-size: 14px;
-            color: rgba(255,255,255,0.7);
-            max-width: 500px;
-            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+            max-width: 600px;
+            line-height: 1.6;
         }
 
         .banner-icon {
-            font-size: 120px;
-            opacity: 0.05;
+            font-size: 140px;
+            opacity: 0.06;
             position: absolute;
-            right: 40px;
+            right: 30px;
             top: 50%;
             transform: translateY(-50%);
             line-height: 1;
+        }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: var(--green-light);
+            color: var(--green-text);
+            border: 1px solid #34d399;
+        }
+
+        .info-box {
+            background-color: #EFF6FF;
+            border-left: 4px solid #3B82F6;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .info-box h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            font-size: 13px;
+            color: #1E3A8A;
+            line-height: 1.6;
         }
 
         /* Table */
@@ -414,15 +407,15 @@
         }
 
         .data-table th {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-gray);
             font-size: 13px;
             background-color: #fafbfc;
+            text-transform: uppercase;
         }
 
         .data-table td {
             font-size: 14px;
-            font-weight: 500;
             color: var(--text-dark);
             vertical-align: middle;
         }
@@ -431,7 +424,7 @@
         .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
@@ -443,20 +436,18 @@
             color: var(--green-text);
         }
 
+        .status-upcoming {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
         .status-arsip {
             background-color: var(--gray-light);
             color: var(--gray-text);
         }
 
         /* Actions */
-        .action-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            justify-content: flex-end;
-        }
-
-        .btn-aktifkan {
+        .btn-edit {
             background-color: var(--btn-purple);
             color: white;
             border: none;
@@ -468,25 +459,100 @@
             transition: background 0.2s;
         }
 
-        .btn-aktifkan:hover {
+        .btn-edit:hover {
             background-color: var(--btn-purple-hover);
         }
 
-        .btn-edit {
-            color: var(--text-gray);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            transition: color 0.2s;
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal.active {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 4px;
         }
 
-        .btn-edit:hover {
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 700;
             color: var(--primary-blue);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--btn-purple);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-cancel {
+            padding: 10px 20px;
+            background-color: var(--gray-light);
+            color: var(--text-dark);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            padding: 10px 20px;
+            background-color: var(--btn-purple);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-save:hover {
+            background-color: var(--btn-purple-hover);
         }
     </style>
 </head>
@@ -563,52 +629,104 @@
                 <!-- Page Header -->
                 <div class="page-header">
                     <div class="page-title">
-                        <h1>Pengaturan Umum</h1>
-                        <p>Kelola Tahun Pelajaran.</p>
+                        <h1>Kelola Tahun Ajaran</h1>
+                        <p>Sistem otomatis menentukan tahun ajaran aktif berdasarkan tanggal saat ini.</p>
                     </div>
-                    <button class="btn-add">
-                        <span style="font-size: 16px; margin-right: 4px;">+</span> Tambah Data
+                    <button class="btn-add" onclick="openAddModal()">
+                        <span style="font-size: 16px; margin-right: 4px;">+</span> Tambah Tahun Ajaran
                     </button>
                 </div>
-                
-                <!-- Tabs -->
-                <div class="tabs">
-                    <a href="#" class="tab-item active">
-                        <span style="font-size: 16px;"></span> Tahun & Semester
-                    </a>                    
+
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        ✓ {{ session('success') }}
+                    </div>
+                @endif
+
+                <!-- Info Box -->
+                <div class="info-box">
+                    <h3>ℹ️ Sistem Otomatis</h3>
+                    <p>Tahun ajaran aktif ditentukan secara otomatis berdasarkan tanggal hari ini. Sistem akan beralih ke tahun ajaran berikutnya setelah tanggal selesai terlewati. Anda dapat mengatur tanggal selesai untuk setiap tahun ajaran.</p>
                 </div>
                 
                 <!-- Content Area -->
                 <div class="settings-card">
-                    <!-- Dynamic Banner -->
-                    <div class="active-banner" id="activeBanner">
-                        <div class="banner-content">
-                            <div class="banner-header">
-                                <span style="font-size: 14px;"></span>PERIODE SISTEM AKTIF
+                    <!-- Active Banner -->
+                    @if($currentTahunAjaran)
+                        <div class="active-banner">
+                            <div class="banner-content">
+                                <div class="banner-header">
+                                    📍 TAHUN AJARAN AKTIF SAAT INI
+                                </div>
+                                <div class="banner-title">
+                                    <h2>{{ $currentTahunAjaran->tahun_ajaran }}</h2>
+                                    <span class="semester-badge">
+                                        Semester {{ $currentSemester == 1 ? 'Ganjil' : 'Genap' }}
+                                    </span>
+                                </div>
+                                <div class="banner-desc">
+                                    Periode: {{ $currentTahunAjaran->tanggal_mulai->format('d F Y') }} - {{ $currentTahunAjaran->tanggal_selesai->format('d F Y') }}<br>
+                                    Seluruh data rapor, leger, dan input nilai saat ini tersimpan pada periode ini.
+                                </div>
                             </div>
-                            <div class="banner-title">
-                                <h2 id="bannerTahun">2025/2026</h2>
-                                <span class="semester-badge" id="bannerSemester">Semester Genap</span>
-                            </div>
-                            <div class="banner-desc">
-                                Seluruh data rapor, leger, dan input nilai yang dilakukan guru saat ini akan tersimpan pada periode ini.
-                            </div>
+                            <div class="banner-icon">📅</div>
                         </div>
-                        <div class="banner-icon">📅</div>
-                    </div>
+                    @else
+                        <div class="alert alert-warning">
+                            ⚠️ Tidak ada tahun ajaran aktif saat ini. Silakan tambahkan tahun ajaran baru.
+                        </div>
+                    @endif
 
                     <!-- Table -->
                     <table class="data-table">
                         <thead>
                             <tr>
                                 <th>Tahun Pelajaran</th>
-                                <th>Semester</th>
+                                <th>Tanggal Mulai</th>
+                                <th>Tanggal Selesai</th>
                                 <th>Status</th>
                                 <th style="text-align: right;">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody">
-                            <!-- Rows will be rendered by JS -->
+                        <tbody>
+                            @forelse($tahunAjaranList as $tahun)
+                                @php
+                                    $today = \Carbon\Carbon::today();
+                                    $isActive = $today->between($tahun->tanggal_mulai, $tahun->tanggal_selesai);
+                                    $isPast = $today->greaterThan($tahun->tanggal_selesai);
+                                    $isFuture = $today->lessThan($tahun->tanggal_mulai);
+                                @endphp
+                                <tr>
+                                    <td><strong>{{ $tahun->tahun_ajaran }}</strong></td>
+                                    <td>{{ $tahun->tanggal_mulai->format('d M Y') }}</td>
+                                    <td>{{ $tahun->tanggal_selesai->format('d M Y') }}</td>
+                                    <td>
+                                        @if($isActive)
+                                            <span class="status-badge status-aktif">
+                                                <span style="font-size: 10px;">●</span> AKTIF
+                                            </span>
+                                        @elseif($isFuture)
+                                            <span class="status-badge status-upcoming">
+                                                Akan Datang
+                                            </span>
+                                        @else
+                                            <span class="status-badge status-arsip">Arsip</span>
+                                        @endif
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <button class="btn-edit" onclick="openEditModal({{ $tahun->id }}, '{{ $tahun->tahun_ajaran }}', '{{ $tahun->tanggal_mulai->format('Y-m-d') }}', '{{ $tahun->tanggal_selesai->format('Y-m-d') }}')">
+                                            ✎ Edit Tanggal
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                        <div style="font-size: 40px; margin-bottom: 10px;">📅</div>
+                                        <p>Belum ada data tahun ajaran. Silakan tambahkan tahun ajaran baru.</p>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -616,78 +734,99 @@
         </main>
     </div>
 
-    <!-- JavaScript to handle interactivity -->
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <h2 class="modal-header">Edit Tanggal Tahun Ajaran</h2>
+            <form method="POST" action="{{ route('admin.tahun-ajaran.update') }}">
+                @csrf
+                <input type="hidden" name="id" id="edit_id">
+                
+                <div class="form-group">
+                    <label>Tahun Ajaran</label>
+                    <input type="text" id="edit_tahun" readonly style="background-color: var(--gray-light);">
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Mulai</label>
+                    <input type="date" id="edit_tanggal_mulai" name="tanggal_mulai" readonly style="background-color: var(--gray-light);">
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Selesai</label>
+                    <input type="date" name="tanggal_selesai" id="edit_tanggal_selesai" required>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeEditModal()">Batal</button>
+                    <button type="submit" class="btn-save">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Modal -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <h2 class="modal-header">Tambah Tahun Ajaran Baru</h2>
+            <form method="POST" action="{{ route('admin.tahun-ajaran.store') }}">
+                @csrf
+                
+                <div class="form-group">
+                    <label>Tahun Ajaran (contoh: 2026/2027)</label>
+                    <input type="text" name="tahun_ajaran" placeholder="2026/2027" required pattern="[0-9]{4}/[0-9]{4}">
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Mulai</label>
+                    <input type="date" name="tanggal_mulai" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Selesai</label>
+                    <input type="date" name="tanggal_selesai" required>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeAddModal()">Batal</button>
+                    <button type="submit" class="btn-save">Tambah Tahun Ajaran</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Initial state
-        let periods = [
-            { id: 1, tahun: '2025/2026', semester: 'Genap', status: 'Aktif' },
-            { id: 2, tahun: '2025/2026', semester: 'Ganjil', status: 'Arsip' },
-            { id: 3, tahun: '2024/2025', semester: 'Genap', status: 'Arsip' },
-            { id: 4, tahun: '2024/2025', semester: 'Ganjil', status: 'Arsip' }
-        ];
-
-        const tableBody = document.getElementById('tableBody');
-        const bannerTahun = document.getElementById('bannerTahun');
-        const bannerSemester = document.getElementById('bannerSemester');
-
-        // Render table
-        function renderTable() {
-            tableBody.innerHTML = '';
-            
-            periods.forEach(period => {
-                const tr = document.createElement('tr');
-                
-                // Status HTML
-                let statusHtml = '';
-                let actionHtml = '';
-                
-                if (period.status === 'Aktif') {
-                    statusHtml = `<span class="status-badge status-aktif">
-                                    <span style="font-size: 10px;">✔</span> AKTIF
-                                  </span>`;
-                    actionHtml = ``; // No action if already active
-                } else {
-                    statusHtml = `<span class="status-badge status-arsip">Arsip</span>`;
-                    actionHtml = `<button class="btn-aktifkan" onclick="activatePeriod(${period.id})">Aktifkan</button>
-                                  <button class="btn-edit" title="Edit">✎</button>`;
-                }
-
-                tr.innerHTML = `
-                    <td><strong>${period.tahun}</strong></td>
-                    <td>${period.semester}</td>
-                    <td>${statusHtml}</td>
-                    <td class="action-cell">${actionHtml}</td>
-                `;
-                
-                tableBody.appendChild(tr);
-            });
-            
-            updateBanner();
+        function openEditModal(id, tahun, tanggalMulai, tanggalSelesai) {
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_tahun').value = tahun;
+            document.getElementById('edit_tanggal_mulai').value = tanggalMulai;
+            document.getElementById('edit_tanggal_selesai').value = tanggalSelesai;
+            document.getElementById('editModal').classList.add('active');
         }
 
-        // Update top banner based on active period
-        function updateBanner() {
-            const activePeriod = periods.find(p => p.status === 'Aktif');
-            if (activePeriod) {
-                bannerTahun.textContent = activePeriod.tahun;
-                bannerSemester.textContent = 'Semester ' + activePeriod.semester;
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('active');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('active');
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const editModal = document.getElementById('editModal');
+            const addModal = document.getElementById('addModal');
+            if (event.target == editModal) {
+                closeEditModal();
+            }
+            if (event.target == addModal) {
+                closeAddModal();
             }
         }
-
-        // Activate a specific period
-        window.activatePeriod = function(id) {
-            periods = periods.map(p => {
-                if (p.id === id) {
-                    return { ...p, status: 'Aktif' };
-                } else {
-                    return { ...p, status: 'Arsip' };
-                }
-            });
-            renderTable();
-        }
-
-        // Initial render
-        renderTable();
     </script>
 </body>
 </html>

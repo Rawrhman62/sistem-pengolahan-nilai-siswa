@@ -43,6 +43,7 @@ Route::middleware(['auth', 'role:lectureTeacher'])->group(function () {
     Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
     Route::get('/guru/kelas/{id_class}', [GuruController::class, 'kelas'])->name('guru.kelas');
     Route::post('/guru/simpan-nilai', [GuruController::class, 'simpanNilai'])->name('guru.simpanNilai');
+    Route::post('/guru/toggle-column', [GuruController::class, 'toggleColumn'])->name('guru.toggleColumn');
 });
 
 // Wali Kelas (Homeroom Teacher) routes - protected by homeroomTeacher role
@@ -66,6 +67,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/register', [AdminController::class, 'register']);
     Route::get('/admin/manage', [AdminController::class, 'manage'])->name('admin.manage');
     Route::get('/admin/tahun-ajaran', [AdminController::class, 'tahunAjaran'])->name('admin.tahun-ajaran');
+    Route::post('/admin/tahun-ajaran', [AdminController::class, 'storeTahunAjaran'])->name('admin.tahun-ajaran.store');
+    Route::post('/admin/tahun-ajaran/update', [AdminController::class, 'updateTahunAjaran'])->name('admin.tahun-ajaran.update');
     
     // Excel Export Routes
     Route::get('/admin/users/export', [AdminController::class, 'exportUsers'])->name('admin.users.export');

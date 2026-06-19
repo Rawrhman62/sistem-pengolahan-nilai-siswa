@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Nilai - Kelas {{ $kelasNama }} - E-RAPOR</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,6 +20,7 @@
             --green-light: #D1FAE5;
             --green-text: #065F46;
             --orange: #F59E0B;
+            --red: #EF4444;
         }
 
         * {
@@ -34,7 +36,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 30px;
         }
@@ -89,6 +91,7 @@
             position: relative;
             flex: 1;
             min-width: 300px;
+            max-width: 400px;
         }
 
         .search-input {
@@ -105,69 +108,61 @@
             border-color: var(--primary-blue);
         }
 
-        .filter-group {
+        .controls-group {
             display: flex;
             align-items: center;
-            gap: 16px;
-            background: var(--bg-light);
-            padding: 10px 18px;
-            border-radius: 8px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .select-control {
+            padding: 10px 14px;
             border: 1px solid var(--border-color);
-        }
-
-        .filter-label-text {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-gray);
-            text-transform: uppercase;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            border-radius: 8px;
             font-size: 14px;
-            color: var(--text-dark);
+            background: var(--white);
             cursor: pointer;
+            outline: none;
         }
 
-        .radio-option input {
-            cursor: pointer;
-            accent-color: var(--primary-blue);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
+        .select-control:focus {
+            border-color: var(--primary-blue);
         }
 
         .btn-action {
-            padding: 12px 20px;
+            padding: 10px 20px;
             border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             border: none;
             transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .btn-submit-all {
+        .btn-primary {
             background-color: var(--primary-blue);
             color: white;
         }
 
-        .btn-submit-all:hover {
+        .btn-primary:hover {
             background-color: var(--primary-blue-hover);
+        }
+
+        .btn-secondary {
+            background-color: #6B7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4B5563;
         }
 
         .btn-reset {
             background-color: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-dark);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .btn-reset:hover {
@@ -189,10 +184,11 @@
         .data-table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 1200px;
         }
 
         .data-table th, .data-table td {
-            padding: 16px 24px;
+            padding: 12px 16px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
@@ -200,27 +196,13 @@
         .data-table th {
             font-weight: 600;
             color: var(--text-gray);
-            font-size: 13px;
+            font-size: 12px;
             background-color: #fafbfc;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .sortable-header {
-            color: var(--text-gray);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .sortable-header:hover {
-            color: var(--primary-blue);
-        }
-
-        .sort-icon {
-            font-size: 11px;
-            opacity: 0.7;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .data-table td {
@@ -234,11 +216,11 @@
         }
 
         .input-nilai {
-            width: 85px;
-            padding: 8px 12px;
+            width: 70px;
+            padding: 6px 10px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13px;
             text-align: center;
             outline: none;
             transition: border-color 0.2s;
@@ -248,22 +230,22 @@
             border-color: var(--primary-blue);
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
+        .input-nilai:disabled {
+            background-color: #F3F4F6;
+            cursor: not-allowed;
         }
 
-        .status-badge.saved {
-            background-color: var(--green-light);
-            color: var(--green-text);
+        .column-toggle {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--text-gray);
+            cursor: pointer;
         }
 
-        .status-badge.pending {
-            background-color: #FEF3C7;
-            color: #92400E;
+        .column-toggle input[type="checkbox"] {
+            cursor: pointer;
         }
 
         .alert {
@@ -289,6 +271,46 @@
             padding: 20px 24px;
             border-top: 1px solid var(--border-color);
         }
+
+        .grade-type-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-gray);
+            transition: all 0.2s;
+            margin-bottom: -2px;
+        }
+
+        .tab-button:hover {
+            color: var(--primary-blue);
+        }
+
+        .tab-button.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        .info-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #EFF6FF;
+            color: #1E40AF;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -297,7 +319,7 @@
         
         <div class="header">
             <h1>Input Nilai Kelas {{ $kelasNama }}</h1>
-            <p>Menampilkan data siswa aktif. Gunakan panel filter untuk mempercepat pencarian data.</p>
+            <p>Kelola semua jenis nilai siswa untuk semester aktif. Pilih jenis nilai yang ingin diinput.</p>
         </div>
 
         @if(session('success'))
@@ -306,6 +328,7 @@
             </div>
         @endif
 
+        <!-- Toolbar with Search, Semester, and Grade Type Selection -->
         <form method="GET" action="{{ url()->current() }}" id="filterForm">
             <input type="hidden" name="sort" value="{{ request('sort', 'name') }}">
             <input type="hidden" name="direction" value="{{ request('direction', 'asc') }}">
@@ -316,104 +339,176 @@
                         <input type="text" name="search" class="search-input" value="{{ request('search') }}" placeholder="Cari nama atau NIS siswa...">
                     </div>
                     
-                    <div class="filter-group">
-                        <span class="filter-label-text">Filter Nilai:</span>
-                        <label class="radio-option">
-                            <input type="radio" name="filter_status" value="all" {{ request('filter_status', 'all') == 'all' ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit();"> Semua
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="filter_status" value="sudah" {{ request('filter_status') == 'sudah' ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit();"> Sudah Dinilai
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="filter_status" value="belum" {{ request('filter_status') == 'belum' ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit();"> Belum Dinilai
-                        </label>
-                    </div>
+                    <div class="controls-group">
+                        <select name="semester" class="select-control" onchange="this.form.submit()">
+                            <option value="1/{{ substr(date('Y'), -2) }}" {{ $semester == '1/' . substr(date('Y'), -2) ? 'selected' : '' }}>Semester 1/{{ substr(date('Y'), -2) }}</option>
+                            <option value="2/{{ substr(date('Y'), -2) }}" {{ $semester == '2/' . substr(date('Y'), -2) ? 'selected' : '' }}>Semester 2/{{ substr(date('Y'), -2) }}</option>
+                            <option value="1/{{ substr(date('Y')+1, -2) }}" {{ $semester == '1/' . substr(date('Y')+1, -2) ? 'selected' : '' }}>Semester 1/{{ substr(date('Y')+1, -2) }}</option>
+                            <option value="2/{{ substr(date('Y')+1, -2) }}" {{ $semester == '2/' . substr(date('Y')+1, -2) ? 'selected' : '' }}>Semester 2/{{ substr(date('Y')+1, -2) }}</option>
+                        </select>
 
-                    <div class="action-buttons">
-                        <button type="submit" class="btn-action btn-submit-all" style="background-color: #4B5563;">Terapkan</button>
-                        @if(request('search') || (request('filter_status') && request('filter_status') != 'all'))
-                            <a href="{{ url()->current() }}" class="btn-action btn-reset">Reset</a>
+                        <select name="grade_type" class="select-control" onchange="this.form.submit()">
+                            <option value="harian" {{ $gradeType == 'harian' ? 'selected' : '' }}>Nilai Harian</option>
+                            <option value="keterampilan" {{ $gradeType == 'keterampilan' ? 'selected' : '' }}>Nilai Keterampilan</option>
+                            <option value="ulangan" {{ $gradeType == 'ulangan' ? 'selected' : '' }}>Nilai Ulangan</option>
+                            <option value="ujian" {{ $gradeType == 'ujian' ? 'selected' : '' }}>Nilai Ujian</option>
+                        </select>
+
+                        <button type="submit" class="btn-action btn-secondary">Terapkan</button>
+                        @if(request('search'))
+                            <a href="{{ url()->current() }}?semester={{ $semester }}&grade_type={{ $gradeType }}" class="btn-action btn-reset">Reset</a>
                         @endif
                     </div>
                 </div>
             </div>
         </form>
 
+        <!-- Table Card -->
         <div class="table-card">
-            <form method="POST" action="{{ route('guru.simpanNilai') }}">
+            <form method="POST" action="{{ route('guru.simpanNilai') }}" id="nilaiForm">
                 @csrf
                 <input type="hidden" name="id_class" value="{{ $id_class }}">
+                <input type="hidden" name="semester" value="{{ $semester }}">
+                <input type="hidden" name="grade_type" value="{{ $gradeType }}">
 
                 <div class="table-responsive">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th style="width: 60px;">No</th>
-                                <th>
-                                    <a href="{{ url()->current() }}?{{ http_build_query(array_merge(request()->all(), ['sort' => 'nis', 'direction' => (request('sort') == 'nis' && request('direction') == 'asc') ? 'desc' : 'asc'])) }}" class="sortable-header">
-                                        NIS 
-                                        <span class="sort-icon">{{ request('sort') == 'nis' ? (request('direction') == 'asc' ? '▲' : '▼') : '↕' }}</span>
-                                    </a>
-                                </th>
-                                <th>
-                                    <a href="{{ url()->current() }}?{{ http_build_query(array_merge(request()->all(), ['sort' => 'name', 'direction' => (request('sort', 'name') == 'name' && request('direction') == 'asc') ? 'desc' : 'asc'])) }}" class="sortable-header">
-                                        Nama Siswa 
-                                        <span class="sort-icon">{{ request('sort', 'name') == 'name' ? (request('direction') == 'asc' ? '▲' : '▼') : '↕' }}</span>
-                                    </a>
-                                </th>
-                                <th style="width: 160px;">Nilai Pengetahuan</th>
-                                <th style="width: 160px;">Nilai Keterampilan</th>
-                                <th>Rata-rata</th>
-                                <th>Predikat</th>
-                                <th style="text-align: right; width: 140px;">Status</th>
+                                <th style="width: 50px;">No</th>
+                                <th style="width: 100px;">NIS</th>
+                                <th style="width: 200px;">Nama Siswa</th>
+
+                                @if($gradeType == 'harian')
+                                    @for($i = 1; $i <= 12; $i++)
+                                        <th style="width: 80px; text-align: center;">
+                                            <div style="margin-bottom: 4px;">Minggu {{ $i }}</div>
+                                            <label class="column-toggle">
+                                                <input type="checkbox" 
+                                                       class="column-toggle-checkbox" 
+                                                       data-column="minggu_{{ $i }}"
+                                                       {{ in_array('minggu_' . $i, $disabledColumns) ? '' : 'checked' }}
+                                                       onchange="toggleColumn('minggu_{{ $i }}', this.checked)">
+                                                <span>Aktif</span>
+                                            </label>
+                                        </th>
+                                    @endfor
+                                @elseif($gradeType == 'keterampilan')
+                                    <th style="width: 120px; text-align: center;">Nilai Keterampilan</th>
+                                @elseif($gradeType == 'ulangan')
+                                    @for($i = 1; $i <= 8; $i++)
+                                        <th style="width: 90px; text-align: center;">Ulangan {{ $i }}</th>
+                                    @endfor
+                                @elseif($gradeType == 'ujian')
+                                    <th style="width: 100px; text-align: center;">Awal Ganjil</th>
+                                    <th style="width: 100px; text-align: center;">Akhir Ganjil</th>
+                                    <th style="width: 100px; text-align: center;">Awal Genap</th>
+                                    <th style="width: 100px; text-align: center;">Akhir Genap</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($siswaList as $index => $userSiswa)
                                 @php
                                     $nilai = $nilaiList->get($userSiswa->id_user);
-                                    $pengetahuan = $nilai ? $nilai->nilai_pengetahuan : null;
-                                    $keterampilan = $nilai ? $nilai->nilai_keterampilan : null;
-                                    
-                                    $hasGrades = !is_null($pengetahuan) || !is_null($keterampilan);
-                                    $rerata = $hasGrades ? round((($pengetahuan ?? 0) + ($keterampilan ?? 0)) / 2, 1) : '-';
-                                    
-                                    // Match grade range rules standard
-                                    $predikat = '-';
-                                    if($hasGrades) {
-                                        if($rerata >= 85) $predikat = 'A';
-                                        elseif($rerata >= 75) $predikat = 'B';
-                                        elseif($rerata >= 65) $predikat = 'C';
-                                        else $predikat = 'D';
-                                    }
                                 @endphp
                                 <tr>
                                     <td>{{ $siswaList->firstItem() + $index }}</td>
                                     <td><code>{{ $userSiswa->student->nis ?? '-' }}</code></td>
                                     <td><strong>{{ $userSiswa->name }}</strong></td>
-                                    <td>
-                                        <input type="number" name="nilai[{{ $userSiswa->id_user }}][pengetahuan]" 
-                                               class="input-nilai" min="0" max="100" placeholder="0-100" 
-                                               value="{{ $pengetahuan }}">
-                                    </td>
-                                    <td>
-                                        <input type="number" name="nilai[{{ $userSiswa->id_user }}][keterampilan]" 
-                                               class="input-nilai" min="0" max="100" placeholder="0-100" 
-                                               value="{{ $keterampilan }}">
-                                    </td>
-                                    <td><strong>{{ $rerata }}</strong></td>
-                                    <td><span style="font-weight: 600;">{{ $predikat }}</span></td>
-                                    <td style="text-align: right;">
-                                        @if($hasGrades)
-                                            <span class="status-badge saved">✓ Tersimpan</span>
-                                        @else
-                                            <span class="status-badge pending">Belum Diisi</span>
-                                        @endif
-                                    </td>
+
+                                    @if($gradeType == 'harian')
+                                        @for($i = 1; $i <= 12; $i++)
+                                            @php
+                                                $minggu = 'minggu_' . $i;
+                                                $nilaiHarian = $nilai?->nilaiHarian;
+                                                $isDisabled = in_array($minggu, $disabledColumns);
+                                            @endphp
+                                            <td style="text-align: center;" data-column="{{ $minggu }}">
+                                                <input type="number" 
+                                                       name="nilai[{{ $userSiswa->id_user }}][{{ $minggu }}]" 
+                                                       class="input-nilai" 
+                                                       min="0" 
+                                                       max="100" 
+                                                       placeholder="-" 
+                                                       value="{{ $isDisabled ? '' : ($nilaiHarian?->$minggu ?? '') }}"
+                                                       {{ $isDisabled ? 'disabled' : '' }}>
+                                            </td>
+                                        @endfor
+                                    @elseif($gradeType == 'keterampilan')
+                                        @php
+                                            $nilaiKeterampilan = $nilai?->nilaiKeterampilan;
+                                        @endphp
+                                        <td style="text-align: center;">
+                                            <input type="number" 
+                                                   name="nilai[{{ $userSiswa->id_user }}][nilai]" 
+                                                   class="input-nilai" 
+                                                   min="0" 
+                                                   max="100" 
+                                                   placeholder="0-100" 
+                                                   value="{{ $nilaiKeterampilan?->nilai ?? '' }}">
+                                        </td>
+                                    @elseif($gradeType == 'ulangan')
+                                        @for($i = 1; $i <= 8; $i++)
+                                            @php
+                                                $ulangan = 'ulangan_' . $i;
+                                                $nilaiUlangan = $nilai?->nilaiUlangan;
+                                            @endphp
+                                            <td style="text-align: center;">
+                                                <input type="number" 
+                                                       name="nilai[{{ $userSiswa->id_user }}][{{ $ulangan }}]" 
+                                                       class="input-nilai" 
+                                                       min="0" 
+                                                       max="100" 
+                                                       placeholder="-" 
+                                                       value="{{ $nilaiUlangan?->$ulangan ?? '' }}">
+                                            </td>
+                                        @endfor
+                                    @elseif($gradeType == 'ujian')
+                                        @php
+                                            $nilaiUjian = $nilai?->nilaiUjian;
+                                        @endphp
+                                        <td style="text-align: center;">
+                                            <input type="number" 
+                                                   name="nilai[{{ $userSiswa->id_user }}][awal_ganjil]" 
+                                                   class="input-nilai" 
+                                                   min="0" 
+                                                   max="100" 
+                                                   placeholder="-" 
+                                                   value="{{ $nilaiUjian?->awal_ganjil ?? '' }}">
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <input type="number" 
+                                                   name="nilai[{{ $userSiswa->id_user }}][akhir_ganjil]" 
+                                                   class="input-nilai" 
+                                                   min="0" 
+                                                   max="100" 
+                                                   placeholder="-" 
+                                                   value="{{ $nilaiUjian?->akhir_ganjil ?? '' }}">
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <input type="number" 
+                                                   name="nilai[{{ $userSiswa->id_user }}][awal_genap]" 
+                                                   class="input-nilai" 
+                                                   min="0" 
+                                                   max="100" 
+                                                   placeholder="-" 
+                                                   value="{{ $nilaiUjian?->awal_genap ?? '' }}">
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <input type="number" 
+                                                   name="nilai[{{ $userSiswa->id_user }}][akhir_genap]" 
+                                                   class="input-nilai" 
+                                                   min="0" 
+                                                   max="100" 
+                                                   placeholder="-" 
+                                                   value="{{ $nilaiUjian?->akhir_genap ?? '' }}">
+                                        </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8">
+                                    <td colspan="20">
                                         <div class="empty-state">
                                             <div style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;">👥</div>
                                             <p>Tidak ada data siswa ditemukan yang sesuai dengan kriteria pencarian Anda.</p>
@@ -426,8 +521,16 @@
                 </div>
 
                 @if($siswaList->count() > 0)
-                    <div style="padding: 20px 24px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
-                        <button type="submit" class="btn-action btn-submit-all">Simpan Semua Nilai</button>
+                    <div style="padding: 20px 24px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                        <div class="info-badge">
+                            📝 Semester: {{ $semester }} | Jenis: 
+                            @if($gradeType == 'harian') Nilai Harian (12 Minggu)
+                            @elseif($gradeType == 'keterampilan') Nilai Keterampilan
+                            @elseif($gradeType == 'ulangan') Nilai Ulangan
+                            @elseif($gradeType == 'ujian') Nilai Ujian
+                            @endif
+                        </div>
+                        <button type="submit" class="btn-action btn-primary">Simpan Semua Nilai</button>
                     </div>
                 @endif
             </form>
@@ -439,5 +542,35 @@
             @endif
         </div>
     </div>
+
+    <script>
+        function toggleColumn(column, enabled) {
+            fetch('{{ route("guru.toggleColumn") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    id_class: '{{ $id_class }}',
+                    column: column,
+                    enabled: enabled
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Disable/enable all inputs in this column
+                    document.querySelectorAll(`td[data-column="${column}"] input`).forEach(input => {
+                        input.disabled = !enabled;
+                        if (!enabled) {
+                            input.value = '';
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>

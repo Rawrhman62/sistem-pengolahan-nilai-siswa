@@ -408,6 +408,12 @@
             color: #4338CA;
         }
 
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
         .badge-success {
             background-color: var(--green-light);
             color: var(--green-text);
@@ -696,9 +702,16 @@
                         <h3 style="font-size: 16px; color: var(--text-dark); font-weight: 600;">Daftar Pengguna</h3>
                         
                         <form method="GET" action="{{ route('admin.manage') }}" class="search-form">
+                            <select name="role_filter" class="search-input" style="width: 180px; cursor: pointer;" onchange="this.form.submit()">
+                                <option value="all" {{ request('role_filter', 'all') == 'all' ? 'selected' : '' }}>Semua Role</option>
+                                <option value="administrator" {{ request('role_filter') == 'administrator' ? 'selected' : '' }}>Administrator</option>
+                                <option value="lectureTeacher" {{ request('role_filter') == 'lectureTeacher' ? 'selected' : '' }}>Guru Mapel</option>
+                                <option value="homeroomTeacher" {{ request('role_filter') == 'homeroomTeacher' ? 'selected' : '' }}>Wali Kelas</option>
+                                <option value="student" {{ request('role_filter') == 'student' ? 'selected' : '' }}>Siswa</option>
+                            </select>
                             <input type="text" id="search" name="search" class="search-input" value="{{ request('search') }}" placeholder="Cari nama, ID, atau email...">
                             <button type="submit" class="btn-search">Cari</button>
-                            @if(request('search'))
+                            @if(request('search') || (request('role_filter') && request('role_filter') != 'all'))
                                 <a href="{{ route('admin.manage') }}" class="btn-clear">Reset</a>
                             @endif
                         </form>
@@ -760,7 +773,28 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge badge-role">{{ ucfirst($user->getCurrentRole()) }}</span>
+                                            @php
+                                                $roles = $user->getRoles();
+                                                $roleLabels = [
+                                                    'administrator' => 'Admin',
+                                                    'lectureTeacher' => 'Guru Mapel',
+                                                    'homeroomTeacher' => 'Wali Kelas',
+                                                    'student' => 'Siswa'
+                                                ];
+                                            @endphp
+                                            <div class="badge-container">
+                                                @if(count($roles) > 0)
+                                                    @foreach($roles as $role)
+                                                        <span class="badge badge-role">
+                                                            {{ $roleLabels[$role] ?? ucfirst($role) }}
+                                                        </span>
+                                                    @endforeach
+                                                @else
+                                                    <span class="badge" style="background-color: var(--gray-light); color: var(--gray-text);">
+                                                        Tidak Ada Role
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td>
                                             @if($user->password_set)

@@ -321,17 +321,39 @@ class AdminController extends Controller
      */
     public function manage(UserSearchRequest $request)
     {
-        $query = User::query();
+        $query = User::with(['admin', 'student', 'teacher', 'lecturer', 'homerooms']);
+
+        // Role filter
+        $roleFilter = $request->input('role_filter');
+        if ($roleFilter && $roleFilter !== 'all') {
+            $query->where(function($q) use ($roleFilter) {
+                switch ($roleFilter) {
+                    case 'administrator':
+                        $q->whereHas('admin');
+                        break;
+                    case 'student':
+                        $q->whereHas('student');
+                        break;
+                    case 'lectureTeacher':
+                        $q->whereHas('lecturer');
+                        break;
+                    case 'homeroomTeacher':
+                        $q->whereHas('homerooms');
+                        break;
+                    case 'teacher':
+                        $q->whereHas('teacher');
+                        break;
+                }
+            });
+        }
 
         // Search functionality
         if ($request->filled('search')) {
             $search = $request->validated()['search'];
             $query->where(function ($q) use ($search) {
                 $q->where('id_user', 'like', "%{$search}%")
-                  ->orWhere('id_user', 'like', "%{$search}%")
                   ->orWhere('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('role', 'like', "%{$search}%");
+                  ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -355,6 +377,7 @@ class AdminController extends Controller
             'search' => $request->input('search'),
             'sort' => $sortColumn,
             'direction' => $sortDirection,
+            'role_filter' => $roleFilter,
         ]);
 
         return view('admin.manage', compact('users'));
@@ -365,7 +388,51 @@ class AdminController extends Controller
      */
     public function tahunAjaran()
     {
-        return view('admin.tahun-ajaran');
+        // Auto-create next year if needed
+        \App\Models\TahunAjaranDate::autoCreateNextYear();
+        
+        $tahunAjaranList = \App\Models\TahunAjaranDate::orderBy('tanggal_mulai', 'desc')->get();
+        $currentTahunAjaran = \App\Models\TahunAjaranDate::getCurrentTahunAjaran();
+        $currentSemester = \App\Models\TahunAjaranDate::getCurrentSemester();
+        
+        return view('admin.tahun-ajaran', compact('tahunAjaranList', 'currentTahunAjaran', 'currentSemester'));
+    }
+
+    /**
+     * Update tahun ajaran end date
+     */
+    public function updateTahunAjaran(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:tb_tanggal_tahun_ajaran,id',
+            'tanggal_selesai' => 'required|date|after:tanggal_mulai'
+        ]);
+
+        $tahunAjaran = \App\Models\TahunAjaranDate::findOrFail($request->id);
+        $tahunAjaran->tanggal_selesai = $request->tanggal_selesai;
+        $tahunAjaran->save();
+
+        return redirect()->back()->with('success', 'Tanggal selesai tahun ajaran berhasil diperbarui!');
+    }
+
+    /**
+     * Create new tahun ajaran
+     */
+    public function storeTahunAjaran(Request $request)
+    {
+        $request->validate([
+            'tahun_ajaran' => 'required|string|unique:tb_tanggal_tahun_ajaran,tahun_ajaran',
+            'tanggal_mulai' => 'required|date',
+            'tanggal_selesai' => 'required|date|after:tanggal_mulai'
+        ]);
+
+        \App\Models\TahunAjaranDate::create([
+            'tahun_ajaran' => $request->tahun_ajaran,
+            'tanggal_mulai' => $request->tanggal_mulai,
+            'tanggal_selesai' => $request->tanggal_selesai,
+        ]);
+
+        return redirect()->back()->with('success', 'Tahun ajaran baru berhasil ditambahkan!');
     }
 
     /**

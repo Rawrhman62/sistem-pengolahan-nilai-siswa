@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Nilai;
+use App\Models\NilaiHarian;
+use App\Models\NilaiKeterampilan;
+use App\Models\NilaiUlangan;
+use App\Models\NilaiUjian;
 use App\Models\User;
 use App\Models\ClassRoom;
 use App\Models\TeachedSubject;
@@ -125,14 +129,19 @@ class GuruController extends Controller
     {
         $user = Auth::user();
         $kelas = ClassRoom::where('id_class', $id_class)->firstOrFail();
-        $kelasNama = $kelas->name; 
+        $kelasNama = $kelas->name;
 
+        // Get current semester automatically
+        $defaultSemester = \App\Models\TahunAjaranDate::getCurrentSemesterFormatted();
+        $semester = $request->input('semester', $defaultSemester);
+        $gradeType = $request->input('grade_type', 'harian'); // harian, keterampilan, ulangan, ujian
+        
         $search = $request->input('search');
-        $filterStatus = $request->input('filter_status', 'all');
-        $sort = $request->input('sort', 'name'); 
+        $sort = $request->input('sort', 'name');
         $direction = $request->input('direction', 'asc');
 
-        $query = User::whereHas('student', function($q) use ($id_class) {
+        // Get students in this class
+        $query = User::with('student')->whereHas('student', function($q) use ($id_class) {
             $q->where('id_class', $id_class);
         });
 
@@ -148,33 +157,32 @@ class GuruController extends Controller
         if ($sort === 'nis') {
             $query->join('tb_students', 'tb_users.id_user', '=', 'tb_students.id_user')
                   ->orderBy('tb_students.nis', $direction)
-                  ->select('tb_users.*'); 
+                  ->select('tb_users.*');
         } else {
             $query->orderBy('tb_users.name', $direction);
         }
 
         $siswaList = $query->paginate(40);
 
-        $nilaiList = Nilai::whereIn('id_user', $siswaList->pluck('id_user'))
-            ->where('semester', '2/24')
+        // Get nilai records with all relationships
+        $nilaiList = Nilai::with(['nilaiHarian', 'nilaiKeterampilan', 'nilaiUlangan', 'nilaiUjian'])
+            ->whereIn('id_user', $siswaList->pluck('id_user'))
+            ->where('semester', $semester)
             ->get()
             ->keyBy('id_user');
 
-        if ($filterStatus === 'sudah') {
-            $filteredItems = $siswaList->getCollection()->filter(function($siswa) use ($nilaiList) {
-                $nilai = $nilaiList->get($siswa->id_user);
-                return $nilai && (!is_null($nilai->nilai_pengetahuan) || !is_null($nilai->nilai_keterampilan));
-            });
-            $siswaList->setCollection($filteredItems);
-        } elseif ($filterStatus === 'belum') {
-            $filteredItems = $siswaList->getCollection()->filter(function($siswa) use ($nilaiList) {
-                $nilai = $nilaiList->get($siswa->id_user);
-                return !$nilai || (is_null($nilai->nilai_pengetahuan) && is_null($nilai->nilai_keterampilan));
-            });
-            $siswaList->setCollection($filteredItems);
-        }
+        // Get disabled columns for nilai harian (stored in session or default)
+        $disabledColumns = session('disabled_columns_' . $id_class, []);
 
-        return view('guru.kelas', compact('kelasNama', 'id_class', 'siswaList', 'nilaiList'));
+        return view('guru.kelas', compact(
+            'kelasNama',
+            'id_class',
+            'siswaList',
+            'nilaiList',
+            'semester',
+            'gradeType',
+            'disabledColumns'
+        ));
     }
 
     /**
@@ -184,17 +192,20 @@ class GuruController extends Controller
     {
         $request->validate([
             'nilai' => 'required|array',
-            'nilai.*.pengetahuan' => 'nullable|integer|min:0|max:100',
-            'nilai.*.keterampilan' => 'nullable|integer|min:0|max:100',
-            'id_class' => 'required|string'
+            'id_class' => 'required|string',
+            'semester' => 'required|string',
+            'grade_type' => 'required|string|in:harian,keterampilan,ulangan,ujian'
         ]);
 
-        $idSubjects = 'MAPEL001'; 
-        $semester = '2/24';
+        $idSubjects = 'MAPEL001';
+        $semester = $request->input('semester');
+        $gradeType = $request->input('grade_type');
 
         foreach ($request->input('nilai') as $idUser => $scores) {
+            // Get or create main nilai record
             $nilai = Nilai::where('id_user', $idUser)
                 ->where('semester', $semester)
+                ->where('id_subjects', $idSubjects)
                 ->first();
 
             if (!$nilai) {
@@ -205,11 +216,96 @@ class GuruController extends Controller
                 $nilai->semester = $semester;
             }
 
-            $nilai->nilai_pengetahuan = $scores['pengetahuan'];
-            $nilai->nilai_keterampilan = $scores['keterampilan'];
+            // Handle different grade types
+            switch ($gradeType) {
+                case 'harian':
+                    $nilaiHarian = NilaiHarian::find($nilai->id_nilai_harian) ?? new NilaiHarian();
+                    if (!$nilaiHarian->exists) {
+                        $nilaiHarian->id_nilai_harian = 'NH_' . uniqid();
+                    }
+                    
+                    for ($i = 1; $i <= 12; $i++) {
+                        $minggu = 'minggu_' . $i;
+                        if (isset($scores[$minggu])) {
+                            $nilaiHarian->$minggu = $scores[$minggu] === '' ? null : $scores[$minggu];
+                        }
+                    }
+                    $nilaiHarian->save();
+                    $nilai->id_nilai_harian = $nilaiHarian->id_nilai_harian;
+                    break;
+
+                case 'keterampilan':
+                    $nilaiKeterampilan = NilaiKeterampilan::find($nilai->id_nilai_keterampilan) ?? new NilaiKeterampilan();
+                    if (!$nilaiKeterampilan->exists) {
+                        $nilaiKeterampilan->id_nilai_keterampilan = 'NK_' . uniqid();
+                    }
+                    $nilaiKeterampilan->nilai = $scores['nilai'] ?? null;
+                    $nilaiKeterampilan->save();
+                    $nilai->id_nilai_keterampilan = $nilaiKeterampilan->id_nilai_keterampilan;
+                    break;
+
+                case 'ulangan':
+                    $nilaiUlangan = NilaiUlangan::find($nilai->id_nilai_ulangan) ?? new NilaiUlangan();
+                    if (!$nilaiUlangan->exists) {
+                        $nilaiUlangan->id_nilai_ulangan = 'NU_' . uniqid();
+                    }
+                    
+                    for ($i = 1; $i <= 8; $i++) {
+                        $ulangan = 'ulangan_' . $i;
+                        if (isset($scores[$ulangan])) {
+                            $nilaiUlangan->$ulangan = $scores[$ulangan] === '' ? null : $scores[$ulangan];
+                        }
+                    }
+                    $nilaiUlangan->save();
+                    $nilai->id_nilai_ulangan = $nilaiUlangan->id_nilai_ulangan;
+                    break;
+
+                case 'ujian':
+                    $nilaiUjian = NilaiUjian::find($nilai->id_nilai_ujian) ?? new NilaiUjian();
+                    if (!$nilaiUjian->exists) {
+                        $nilaiUjian->id_nilai_ujian = 'NUJ_' . uniqid();
+                    }
+                    $nilaiUjian->awal_ganjil = $scores['awal_ganjil'] ?? null;
+                    $nilaiUjian->akhir_ganjil = $scores['akhir_ganjil'] ?? null;
+                    $nilaiUjian->awal_genap = $scores['awal_genap'] ?? null;
+                    $nilaiUjian->akhir_genap = $scores['akhir_genap'] ?? null;
+                    $nilaiUjian->year = date('Y');
+                    $nilaiUjian->save();
+                    $nilai->id_nilai_ujian = $nilaiUjian->id_nilai_ujian;
+                    break;
+            }
+
             $nilai->save();
         }
 
         return redirect()->back()->with('success', 'Semua data nilai berhasil disimpan ke database!');
+    }
+
+    /**
+     * Toggle column visibility for nilai harian
+     */
+    public function toggleColumn(Request $request)
+    {
+        $request->validate([
+            'id_class' => 'required|string',
+            'column' => 'required|string',
+            'enabled' => 'required|boolean'
+        ]);
+
+        $idClass = $request->input('id_class');
+        $column = $request->input('column');
+        $enabled = $request->input('enabled');
+
+        $disabledColumns = session('disabled_columns_' . $idClass, []);
+
+        if (!$enabled && !in_array($column, $disabledColumns)) {
+            $disabledColumns[] = $column;
+        } elseif ($enabled) {
+            $disabledColumns = array_diff($disabledColumns, [$column]);
+        }
+
+        session(['disabled_columns_' . $idClass => $disabledColumns]);
+
+        return response()->json(['success' => true]);
     }
 }
