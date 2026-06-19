@@ -349,7 +349,7 @@
                 <div class="card-body">
                     <p></p>
                     <div class="action-list">
-                        <a href="/admin" class="action-link"><span>📊</span> Pergi ke Dashboard Admin</a>
+                        <a href="/admin" class="action-link"><span>📁</span> Pergi ke Panel Admin</a>
                         <a href="/admin/register" class="action-link"><span>+</span> Tambah Pengguna Baru</a>
                         <a href="/admin/manage" class="action-link"><span>👥</span> Kelola Pengguna</a>
                     </div>

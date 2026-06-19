@@ -233,7 +233,7 @@
             <button type="submit" class="btn-submit">Register User</button>
         </form>
         
-        <a href="{{ route('admin.index') }}" class="back-link">&larr; Back to Admin Dashboard</a>
+        <a href="{{ route('admin.sekolah') }}" class="back-link">&larr; Back to Admin Panel</a>
     </div>
 </body>
 </html>
