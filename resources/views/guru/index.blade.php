@@ -38,276 +38,441 @@
             padding: 30px;
         }
 
-        .header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-hover));
-            color: white;
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
+        /* Navbar Header */
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: var(--white);
+            padding: 16px 32px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
         }
 
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
         }
 
-        .header p {
-            opacity: 0.9;
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
             font-size: 14px;
         }
 
-        .logout-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
+        .user-role {
+            font-size: 12px;
+            color: var(--text-gray);
         }
 
+        .btn-logout {
+            padding: 8px 16px;
+            background-color: #EF4444;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Hero banner summary section */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-hover));
+            color: white;
+            padding: 36px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-banner h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+
+        /* Metric Summary Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .stat-card {
-            background: white;
-            padding: 25px;
+            background-color: var(--white);
+            padding: 24px;
             border-radius: 12px;
             box-shadow: var(--card-shadow);
-            border-left: 4px solid var(--blue);
-        }
-
-        .stat-card.green {
-            border-left-color: var(--green);
-        }
-
-        .stat-card.orange {
-            border-left-color: var(--orange);
-        }
-
-        .stat-label {
-            font-size: 13px;
-            color: var(--text-gray);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
-        }
-
-        .card h2 {
-            font-size: 20px;
-            color: var(--primary-blue);
-            margin-bottom: 20px;
-        }
-
-        .class-list {
-            display: grid;
-            gap: 15px;
-        }
-
-        .class-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background: var(--bg-light);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            transition: all 0.2s;
+            border-left: 5px solid var(--primary-blue);
         }
 
-        .class-item:hover {
-            border-color: var(--primary-blue);
-            box-shadow: 0 2px 8px rgba(10, 46, 92, 0.1);
-        }
+        .stat-card.card-siswa { border-left-color: var(--blue); }
+        .stat-card.card-done { border-left-color: var(--green); }
+        .stat-card.card-pending { border-left-color: var(--orange); }
 
-        .class-info h3 {
-            font-size: 18px;
-            color: var(--text-dark);
-            margin-bottom: 5px;
-        }
-
-        .class-info p {
-            font-size: 14px;
+        .stat-info .stat-label {
+            font-size: 13px;
             color: var(--text-gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 6px;
         }
 
-        .class-meta {
+        .stat-info .stat-count {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .stat-icon {
+            font-size: 36px;
+            opacity: 0.3;
+        }
+
+        /* Search Filter Controls Bar style */
+        .controls-card {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;
+        }
+
+        .search-form {
             display: flex;
-            gap: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
             align-items: center;
         }
 
-        .meta-item {
+        .search-group {
+            flex: 1;
+            min-width: 260px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--white);
+            outline: none;
+            min-width: 160px;
+            cursor: pointer;
+        }
+
+        .btn-search {
+            padding: 12px 24px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-search:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        .btn-reset {
+            padding: 12px 16px;
+            background-color: #E2E8F0;
+            color: var(--text-dark);
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            text-decoration: none;
             text-align: center;
         }
 
-        .meta-label {
-            font-size: 11px;
-            color: var(--text-gray);
-            text-transform: uppercase;
+        /* Table Data List Style */
+        .table-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
 
-        .meta-value {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary-blue);
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: #FAFBFB;
+            padding: 16px 24px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 18px 24px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #F8FAFC;
         }
 
         .btn-input {
-            background: var(--primary-blue);
+            padding: 8px 16px;
+            background-color: var(--primary-blue);
             color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 6px;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
+            display: inline-block;
             transition: background 0.2s;
         }
 
         .btn-input:hover {
-            background: var(--primary-blue-hover);
+            background-color: var(--primary-blue-hover);
         }
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: var(--primary-blue);
+        /* Pagination Links Styling */
+        .pagination-box {
+            padding: 20px 24px;
+            background-color: #FAFBFB;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pagination-info {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        .pagination-nav {
+            display: flex;
+            gap: 6px;
+        }
+
+        .page-link-btn {
+            padding: 8px 14px;
+            border: 1px solid var(--border-color);
+            background-color: var(--white);
+            color: var(--text-dark);
             text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
             font-weight: 500;
         }
 
-        .back-link:hover {
-            text-decoration: underline;
+        .page-link-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .page-link-btn.disabled {
+            color: #A0AEC0;
+            background-color: #EDF2F7;
+            cursor: not-allowed;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="{{ route('dashboard') }}" class="back-link">← Kembali ke Dashboard</a>
-        
-        <div class="header">
-            <div>
-                <h1>Guru Mapel</h1>
-                <p>Selamat datang, {{ auth()->user()->name }}</p>
+        <header class="navbar">
+            <a href="#" class="brand">E-RAPOR</a>
+            <div class="user-profile">
+                <div class="user-info">
+                    <div class="user-name">{{ Auth::user()->name }}</div>
+                    <div class="user-role">Guru Pengajar</div>
+                </div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn-logout">Keluar</button>
+                </form>
             </div>
-            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                @csrf
-                <button type="submit" class="logout-btn">Logout</button>
+        </header>
+
+        <div class="welcome-banner">
+            <h1>Selamat Datang Kembali, {{ Auth::user()->name }}!</h1>
+            <p>Sistem E-Rapor siap digunakan. Silakan kelola pencapaian nilai kompetensi rombongan belajar Anda di bawah ini.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <div class="stat-label">Total Kelas Diajar</div>
+                    <div class="stat-count">{{ $totalKelas }}</div>
+                </div>
+                <div class="stat-icon">🏫</div>
+            </div>
+            <div class="stat-card card-siswa">
+                <div class="stat-info">
+                    <div class="stat-label">Total Murid Diampu</div>
+                    <div class="stat-count">{{ $totalSiswa }}</div>
+                </div>
+                <div class="stat-icon">👥</div>
+            </div>
+            <div class="stat-card card-done">
+                <div class="stat-info">
+                    <div class="stat-label">Nilai Telah Diisi</div>
+                    <div class="stat-count">{{ $nilaiDiinput }}</div>
+                </div>
+                <div class="stat-icon">📝</div>
+            </div>
+            <div class="stat-card card-pending">
+                <div class="stat-info">
+                    <div class="stat-label">Nilai Belum Diisi</div>
+                    <div class="stat-count">{{ $nilaiBelumDiinput }}</div>
+                </div>
+                <div class="stat-icon">⏳</div>
+            </div>
+        </div>
+
+        <div class="controls-card">
+            <form method="GET" action="{{ route('dashboard') }}" class="search-form">
+                <div class="search-group">
+                    <input type="text" name="search" class="search-input" placeholder="Cari nama kelas atau mata pelajaran..." value="{{ request('search') }}">
+                </div>
+                
+                <select name="sort" class="filter-select">
+                    <option value="nama" {{ request('sort') == 'nama' ? 'selected' : '' }}>Urutkan: Nama Kelas</option>
+                    <option value="mapel" {{ request('sort') == 'mapel' ? 'selected' : '' }}>Urutkan: Mata Pelajaran</option>
+                    <option value="jumlah_siswa" {{ request('sort') == 'jumlah_siswa' ? 'selected' : '' }}>Urutkan: Jumlah Siswa</option>
+                </select>
+
+                <select name="direction" class="filter-select">
+                    <option value="asc" {{ request('direction') == 'asc' ? 'selected' : '' }}>Meningkat (A-Z)</option>
+                    <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>Menurun (Z-A)</option>
+                </select>
+
+                <button type="submit" class="btn-search">Filter Data</button>
+                @if(request('search') || request('sort') != 'nama' || request('direction') != 'asc')
+                    <a href="{{ route('dashboard') }}" class="btn-reset">Reset</a>
+                @endif
             </form>
         </div>
 
-        @if(session('success'))
-            <div style="background: #D1FAE5; color: #065F46; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                {{ session('success') }}
+        <div class="table-card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">No</th>
+                            <th>Nama Rombongan Belajar</th>
+                            <th>Mata Pelajaran Diampu</th>
+                            <th style="width: 200px;">Jumlah Siswa</th>
+                            <th style="width: 180px; text-align: center;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php 
+                            $startNumber = ($kelasList->currentPage() - 1) * $kelasList->perPage() + 1; 
+                        @endphp
+                        @forelse($kelasList as $index => $kelas)
+                            <tr>
+                                <td>{{ $startNumber + $index }}</td>
+                                <td><strong>Kelas {{ $kelas['nama'] }}</strong></td>
+                                <td>{{ $kelas['mapel'] }}</td>
+                                <td><span style="font-weight: 600;">{{ $kelas['jumlah_siswa'] }}</span> Murid</td>
+                                <td style="text-align: center;">
+                                    <a href="{{ route('guru.kelas', $kelas['id_class']) }}" class="btn-input">Input Nilai</a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                    <div style="font-size: 40px; margin-bottom: 10px;">📚</div>
+                                    <p>Tidak ada jadwal kelas mengajar yang sesuai dengan pencarian Anda.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-        @endif
 
-        <!-- Statistics -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Total Kelas</div>
-                <div class="stat-value">{{ $totalKelas > 0 ? $totalKelas : '3' }}</div>
-            </div>
-            <div class="stat-card green">
-                <div class="stat-label">Total Siswa</div>
-                <div class="stat-value">{{ $totalKelas > 0 ? $totalSiswa : '90' }}</div>
-            </div>
-            <div class="stat-card green">
-                <div class="stat-label">Nilai Diinput</div>
-                <div class="stat-value">{{ $totalKelas > 0 ? $nilaiDiinput : '45' }}</div>
-            </div>
-            <div class="stat-card orange">
-                <div class="stat-label">Belum Diinput</div>
-                <div class="stat-value">{{ $totalKelas > 0 ? $nilaiBelumDiinput : '45' }}</div>
-            </div>
-        </div>
+            @if($kelasList->hasPages())
+                <div class="pagination-box">
+                    <div class="pagination-info">
+                        Menampilkan {{ $kelasList->firstItem() ?? 0 }} sampai {{ $kelasList->lastItem() ?? 0 }} dari total {{ $kelasList->total() }} kelas
+                    </div>
+                    <div class="pagination-nav">
+                        {{-- Button Previous --}}
+                        @if($kelasList->onFirstPage())
+                            <span class="page-link-btn disabled">‹ Sebelum</span>
+                        @else
+                            <a href="{{ $kelasList->previousPageUrl() }}" class="page-link-btn">‹ Sebelum</a>
+                        @endif
 
-        <!-- Class List -->
-        <div class="card">
-            <h2>Daftar Kelas yang Diampu</h2>
-            
-            <div class="class-list">
-                @forelse($kelasList as $kelas)
-                <div class="class-item">
-                    <div class="class-info">
-                        <h3>Kelas {{ $kelas['nama'] }}</h3>
-                        <p>Mata Pelajaran: {{ $kelas['mapel'] }}</p>
-                    </div>
-                    
-                    <div class="class-meta">
-                        <div class="meta-item">
-                            <div class="meta-label">Siswa</div>
-                            <div class="meta-value">{{ $kelas['jumlah_siswa'] }}</div>
-                        </div>
-                        <a href="{{ route('guru.kelas', $kelas['nama']) }}" class="btn-input">Input Nilai</a>
+                        {{-- Page Numbers --}}
+                        @foreach($kelasList->getUrlRange(1, $kelasList->lastPage()) as $page => $url)
+                            <a href="{{ $url }}" class="page-link-btn {{ $page == $kelasList->currentPage() ? 'active' : '' }}">{{ $page }}</a>
+                        @endforeach
+
+                        {{-- Button Next --}}
+                        @if($kelasList->hasMorePages())
+                            <a href="{{ $kelasList->nextPageUrl() }}" class="page-link-btn">Berikut ›</a>
+                        @else
+                            <span class="page-link-btn disabled">Berikut ›</span>
+                        @endif
                     </div>
                 </div>
-                @empty
-                <!-- Dummy Class 1 -->
-                <div class="class-item">
-                    <div class="class-info">
-                        <h3>Kelas X-A</h3>
-                        <p>Mata Pelajaran: Matematika</p>
-                    </div>
-                    <div class="class-meta">
-                        <div class="meta-item">
-                            <div class="meta-label">Siswa</div>
-                            <div class="meta-value">32</div>
-                        </div>
-                        <a href="{{ route('guru.kelas', 'X-A') }}" class="btn-input">Input Nilai</a>
-                    </div>
-                </div>
-                <!-- Dummy Class 2 -->
-                <div class="class-item">
-                    <div class="class-info">
-                        <h3>Kelas X-B</h3>
-                        <p>Mata Pelajaran: Matematika</p>
-                    </div>
-                    <div class="class-meta">
-                        <div class="meta-item">
-                            <div class="meta-label">Siswa</div>
-                            <div class="meta-value">30</div>
-                        </div>
-                        <a href="{{ route('guru.kelas', 'X-B') }}" class="btn-input">Input Nilai</a>
-                    </div>
-                </div>
-                <!-- Dummy Class 3 -->
-                <div class="class-item">
-                    <div class="class-info">
-                        <h3>Kelas XI-A</h3>
-                        <p>Mata Pelajaran: Matematika</p>
-                    </div>
-                    <div class="class-meta">
-                        <div class="meta-item">
-                            <div class="meta-label">Siswa</div>
-                            <div class="meta-value">28</div>
-                        </div>
-                        <a href="{{ route('guru.kelas', 'XI-A') }}" class="btn-input">Input Nilai</a>
-                    </div>
-                </div>
-                @endforelse
-            </div>
+            @endif
         </div>
     </div>
 </body>

@@ -41,7 +41,7 @@ Route::middleware(['auth', 'role:student'])->group(function () {
 // Guru (Teacher) routes - protected by lectureTeacher role
 Route::middleware(['auth', 'role:lectureTeacher'])->group(function () {
     Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
-    Route::get('/guru/kelas/{kelasNama}', [GuruController::class, 'kelas'])->name('guru.kelas');
+    Route::get('/guru/kelas/{id_class}', [GuruController::class, 'kelas'])->name('guru.kelas');
     Route::post('/guru/simpan-nilai', [GuruController::class, 'simpanNilai'])->name('guru.simpanNilai');
 });
 
