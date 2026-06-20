@@ -721,7 +721,7 @@
                         
                         <form method="GET" action="{{ route('admin.manage') }}" class="search-form">
                             <select name="role_filter" class="search-input" style="width: 180px; cursor: pointer;" onchange="this.form.submit()">
-                                <option value="all" {{ request('role_filter', 'all') == 'all' ? 'selected' : '' }}>Semua Role</option>
+                                <option value="all" {{ request('role_filter', 'all') == 'all' ? 'selected' : '' }}>Pilih Tipe User</option>
                                 <option value="administrator" {{ request('role_filter') == 'administrator' ? 'selected' : '' }}>Administrator</option>
                                 <option value="lectureTeacher" {{ request('role_filter') == 'lectureTeacher' ? 'selected' : '' }}>Guru Mapel</option>
                                 <option value="homeroomTeacher" {{ request('role_filter') == 'homeroomTeacher' ? 'selected' : '' }}>Wali Kelas</option>
@@ -747,7 +747,7 @@
                                     />
                                     <x-sortable-header 
                                         column="user_name" 
-                                        label="Username" 
+                                        label="UID" {{-- Ignorethis --}}
                                         :current-sort="request('sort')" 
                                         :current-direction="request('direction', 'asc')" 
                                     />
@@ -759,7 +759,7 @@
                                     />
                                     <x-sortable-header 
                                         column="role" 
-                                        label="Peran (Role)" 
+                                        label="Sebagai" 
                                         :current-sort="request('sort')" 
                                         :current-direction="request('direction', 'asc')" 
                                     />
