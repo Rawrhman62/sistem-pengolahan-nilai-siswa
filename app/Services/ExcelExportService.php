@@ -176,8 +176,20 @@ class ExcelExportService
      */
     public function exportSiswa(Collection $data): BinaryFileResponse
     {
+        // Transform data to match template
+        $transformedData = $data->map(function ($student) {
+            return [
+                'nis' => $student->nis,
+                'name' => $student->user->name ?? '',
+                'nisn' => $student->nisn ?? '',
+                'entry_year' => $student->entry_year ?? '',
+                'class_name' => $student->classRoom->name ?? '',
+                'gender' => $student->user->gender === 'M' ? 'L' : ($student->user->gender === 'F' ? 'P' : ''),
+            ];
+        });
+
         $filename = 'Siswa_' . date('Y-m-d') . '.xlsx';
-        return $this->export($data, 'siswa', $filename);
+        return $this->export($transformedData, 'siswa', $filename);
     }
 
     /**
@@ -188,8 +200,20 @@ class ExcelExportService
      */
     public function exportGuru(Collection $data): BinaryFileResponse
     {
+        // Transform data to match template
+        $transformedData = $data->map(function ($teacher) {
+            return [
+                'nomor_induk' => $teacher->nomor_induk,
+                'name' => $teacher->user->name ?? '',
+                'type' => $teacher->type ?? '',
+                'date_of_employment' => $teacher->date_of_employment ?? '',
+                'teacher_status' => $teacher->teacher_status ?? 'employed',
+                'gender' => $teacher->user->gender === 'M' ? 'L' : ($teacher->user->gender === 'F' ? 'P' : ''),
+            ];
+        });
+
         $filename = 'Guru_' . date('Y-m-d') . '.xlsx';
-        return $this->export($data, 'guru', $filename);
+        return $this->export($transformedData, 'guru', $filename);
     }
 
     /**
@@ -200,8 +224,19 @@ class ExcelExportService
      */
     public function exportMapel(Collection $data): BinaryFileResponse
     {
+        // Transform data to match template
+        $transformedData = $data->map(function ($subject) {
+            return [
+                'code' => $subject->code ?? '',
+                'name' => $subject->name,
+                'grade' => $subject->grade ?? '',
+                'curriculum' => $subject->curriculum ?? '',
+                'group' => $subject->group ?? '',
+            ];
+        });
+
         $filename = 'Mapel_' . date('Y-m-d') . '.xlsx';
-        return $this->export($data, 'mapel', $filename);
+        return $this->export($transformedData, 'mapel', $filename);
     }
 
     /**
@@ -212,7 +247,15 @@ class ExcelExportService
      */
     public function exportKelas(Collection $data): BinaryFileResponse
     {
+        // Transform data to match template
+        $transformedData = $data->map(function ($class) {
+            return [
+                'name' => $class->name,
+                'grade' => $class->grade ?? '',
+            ];
+        });
+
         $filename = 'Kelas_' . date('Y-m-d') . '.xlsx';
-        return $this->export($data, 'kelas', $filename);
+        return $this->export($transformedData, 'kelas', $filename);
     }
 }

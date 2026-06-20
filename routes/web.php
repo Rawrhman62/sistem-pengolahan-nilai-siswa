@@ -60,7 +60,6 @@ Route::get('/user/{userId}', [UserController::class, 'profile'])->name('user.pro
 // Admin routes (protected by admin middleware)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('/admin/sekolah', [AdminController::class, 'sekolah'])->name('admin.sekolah');
     Route::get('/admin/siswa', [AdminController::class, 'siswa'])->name('admin.siswa');
     Route::get('/admin/guru', [AdminController::class, 'guru'])->name('admin.guru');
     Route::get('/admin/mapel', [AdminController::class, 'mapel'])->name('admin.mapel');
@@ -95,6 +94,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/mapel/template', [AdminController::class, 'downloadMapelTemplate'])->name('admin.mapel.template');
     Route::get('/admin/kelas/template', [AdminController::class, 'downloadKelasTemplate'])->name('admin.kelas.template');
     
+    // Inline edit (Ajax) routes for Excel-like grid
+    Route::patch('/admin/siswa/{id}', [AdminController::class, 'updateSiswa'])->name('admin.siswa.update');
+    Route::delete('/admin/siswa/{id}', [AdminController::class, 'deleteSiswa'])->name('admin.siswa.delete');
+    Route::patch('/admin/guru/{id}', [AdminController::class, 'updateGuru'])->name('admin.guru.update');
+    Route::delete('/admin/guru/{id}', [AdminController::class, 'deleteGuru'])->name('admin.guru.delete');
+    Route::patch('/admin/mapel/{id}', [AdminController::class, 'updateMapel'])->name('admin.mapel.update');
+    Route::delete('/admin/mapel/{id}', [AdminController::class, 'deleteMapel'])->name('admin.mapel.delete');
+    Route::patch('/admin/kelas/{id}', [AdminController::class, 'updateKelas'])->name('admin.kelas.update');
+    Route::delete('/admin/kelas/{id}', [AdminController::class, 'deleteKelas'])->name('admin.kelas.delete');
+
     // Excel Configuration Routes
     Route::get('/admin/excelconfig', [AdminController::class, 'excelConfig'])->name('admin.excelconfig');
     Route::post('/admin/excelconfig', [AdminController::class, 'updateExcelConfig'])->name('admin.excelconfig.update');

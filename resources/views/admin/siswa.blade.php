@@ -3,898 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Kelola Data Siswa - E-RAPOR</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-blue: #0A2E5C;
-            --primary-blue-hover: #15407D;
-            --sidebar-bg: #0A2E5C;
-            --sidebar-hover: #1A3E6D;
-            --sidebar-active: #E68A00;
-            --bg-light: #F4F7F6;
-            --text-dark: #333333;
-            --text-gray: #666666;
-            --text-light: #A0B2C6;
-            --white: #FFFFFF;
-            --border-color: #E2E8F0;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --green: #118A7E;
-            --orange: #E67E22;
-            --blue: #1976D2;
-            --btn-gray: #E2E8F0;
-            --btn-blue: #3B82F6;
-            --btn-green: #10B981;
-            --btn-purple: #6366F1;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .app-container {
-            display: flex;
-            height: 100vh;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            width: 260px;
-            background-color: var(--sidebar-bg);
-            color: var(--white);
-            display: flex;
-            flex-direction: column;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-brand {
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sidebar-brand .logo-icon {
-            width: 32px;
-            height: 32px;
-            background-color: var(--white);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--sidebar-bg);
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .brand-text h3 {
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .brand-text p {
-            font-size: 11px;
-            color: var(--text-light);
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 20px 0;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        .menu-header {
-            padding: 10px 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-light);
-            letter-spacing: 1px;
-            margin-top: 10px;
-        }
-
-        .menu-item {
-            margin: 4px 12px;
-        }
-
-        .menu-item a, .menu-item button {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            width: 100%;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-        }
-
-        .menu-item a:hover, .menu-item button:hover {
-            background-color: var(--sidebar-hover);
-        }
-
-        .menu-item.active a {
-            background-color: rgba(255,255,255,0.1);
-            border-left: 4px solid var(--sidebar-active);
-            border-radius: 0 8px 8px 0;
-            margin-left: -12px;
-            padding-left: 24px;
-        }
-
-        .menu-item i {
-            width: 20px;
-            margin-right: 12px;
-            text-align: center;
-            font-size: 16px;
-            opacity: 0.8;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* Topbar */
-        .topbar {
-            height: 70px;
-            background-color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            z-index: 10;
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .hamburger {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--text-gray);
-            cursor: pointer;
-        }
-
-        .topbar-left h2 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .academic-year {
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .academic-year span {
-            font-size: 11px;
-            color: var(--text-gray);
-        }
-
-        .academic-year strong {
-            font-size: 14px;
-            color: var(--primary-blue);
-        }
-
-        .notification {
-            position: relative;
-            cursor: pointer;
-            color: var(--text-gray);
-        }
-
-        .notification::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 8px;
-            height: 8px;
-            background-color: #E53935;
-            border-radius: 50%;
-            border: 2px solid var(--white);
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            border-left: 1px solid var(--border-color);
-            padding-left: 20px;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-            text-align: right;
-        }
-
-        .user-info strong {
-            font-size: 14px;
-            color: var(--text-dark);
-        }
-
-        .user-info span {
-            font-size: 11px;
-            color: var(--text-gray);
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background-color: var(--primary-blue);
-            color: var(--white);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        /* Content Area */
-        .content-wrapper {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            background-color: var(--white);
-        }
-        
-        /* Master Data Header */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 20px;
-        }
-        
-        .page-title h1 {
-            font-size: 24px;
-            color: var(--primary-blue);
-            margin-bottom: 8px;
-        }
-        
-        .page-title p {
-            color: var(--text-gray);
-            font-size: 14px;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            color: var(--white);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            white-space: nowrap;
-        }
-        
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            opacity: 0.95;
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn-gray { 
-            background-color: var(--btn-gray); 
-            color: var(--text-dark); 
-        }
-        .btn-gray:hover {
-            background-color: #cbd5e1;
-        }
-        
-        .btn-blue { 
-            background-color: var(--btn-blue); 
-        }
-        .btn-blue:hover {
-            background-color: #2563eb;
-        }
-        
-        .btn-green { 
-            background-color: var(--btn-green); 
-        }
-        .btn-green:hover {
-            background-color: #059669;
-        }
-        
-        .btn-purple { 
-            background-color: var(--btn-purple); 
-        }
-        .btn-purple:hover {
-            background-color: #4f46e5;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 24px;
-            gap: 30px;
-        }
-        
-        .tab-item {
-            padding: 12px 0;
-            font-size: 14px;
-            color: var(--text-gray);
-            font-weight: 500;
-            cursor: pointer;
-            position: relative;
-            text-decoration: none;
-        }
-        
-        .tab-item:hover {
-            color: var(--btn-purple);
-        }
-        
-        .tab-item.active {
-            color: var(--btn-purple);
-        }
-        
-        .tab-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: var(--btn-purple);
-        }
-
-        /* Table Card Styles */
-        .table-card {
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            background-color: var(--white);
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table th, .data-table td {
-            padding: 16px 24px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .data-table th {
-            font-size: 13px;
-            color: var(--text-gray);
-            font-weight: 600;
-            background-color: #F8FAFC;
-        }
-
-        .data-table td {
-            font-size: 14px;
-            color: var(--text-dark);
-            font-weight: 500;
-        }
-
-        .data-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .action-cell {
-            display: flex;
-            gap: 16px;
-        }
-
-        .action-btn {
-            background: #F1F5F9;
-            border: none;
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .btn-edit:hover {
-            background-color: #DBEAFE;
-            color: #1D4ED8;
-        }
-
-        .btn-delete:hover {
-            background-color: #FEE2E2;
-            color: #B91C1C;
-        }
-
-        .btn-edit {
-            color: var(--btn-blue);
-        }
-
-        .btn-delete {
-            color: #E53935;
-        }
-
-        /* Icons */
-        .icon {
-            font-style: normal;
-        }
-        
-        /* Alert Messages */
-        .alert {
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            line-height: 1.5;
-        }
-
-        .alert-success {
-            background-color: #d1fae5;
-            color: #065f46;
-            border: 1px solid #34d399;
-        }
-
-        .alert-error {
-            background-color: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #f87171;
-        }
-        
-        .alert-icon {
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-        
-        .alert-content {
-            flex: 1;
-        }
-
-        .pagination-container {
-            padding: 20px 24px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        /* Hide the simple mobile pagination */
-        .pagination-container nav > div:first-child {
-            display: none !important;
-        }
-
-        /* Show the detailed pagination */
-        .pagination-container nav > div:last-child {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .pagination-container p {
-            font-size: 14px;
-            color: var(--text-gray);
-            margin: 0;
-        }
-        
-        .pagination-container p .font-medium {
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        /* The page links wrapper */
-        .pagination-container .relative.z-0.inline-flex {
-            display: flex;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            background: white;
-            align-items: stretch;
-        }
-
-        /* Target all clickable items and states */
-        .pagination-container .relative.z-0.inline-flex a,
-        .pagination-container .relative.z-0.inline-flex span[aria-disabled="true"] > span,
-        .pagination-container .relative.z-0.inline-flex span[aria-current="page"] > span,
-        .pagination-container .relative.z-0.inline-flex span[aria-disabled="true"][aria-label] {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 38px;
-            height: 38px;
-            padding: 0 12px;
-            background-color: white;
-            color: var(--text-gray);
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            border-right: 1px solid var(--border-color);
-            transition: all 0.2s;
-            margin: 0;
-        }
-
-        /* Remove right border on the last element */
-        .pagination-container .relative.z-0.inline-flex > :last-child,
-        .pagination-container .relative.z-0.inline-flex > :last-child > span {
-            border-right: none;
-        }
-
-        .pagination-container .relative.z-0.inline-flex a:hover {
-            background-color: #F8FAFC;
-            color: var(--primary-blue);
-        }
-
-        /* Active page */
-        .pagination-container .relative.z-0.inline-flex span[aria-current="page"] > span {
-            background-color: var(--btn-purple);
-            color: var(--white);
-            font-weight: 600;
-        }
-
-        /* Disabled state (prev/next arrows) */
-        .pagination-container .relative.z-0.inline-flex span[aria-disabled="true"] > span {
-            color: var(--text-light);
-            background-color: #F8FAFC;
-            cursor: not-allowed;
-        }
-
-        .pagination-container svg {
-            width: 18px;
-            height: 18px;
-        }
-    </style>
+    @include('admin._master-data-styles')
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-brand">
-                <div class="logo-icon">E</div>
-                <div class="brand-text">
-                    <h3>E-RAPOR</h3>
-                    <p>Deep Learning 2026</p>
+<div class="app-container">
+    @include('admin._sidebar', ['active' => 'data'])
+
+    <main class="main-content">
+        @include('admin._topbar')
+
+        <div class="content-wrapper">
+            @include('admin._alerts')
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1>Master Data</h1>
+                    <p>Kelola data referensi sekolah secara menyeluruh.</p>
+                </div>
+                <div class="action-buttons">
+                    <x-excel-buttons export-route="admin.siswa.export" import-route="admin.siswa.import" template-route="admin.siswa.template" />
                 </div>
             </div>
-            
-            <ul class="sidebar-menu">
-                <li class="menu-header">MASTER DATA</li>
-                <li class="menu-item active">
-                    <a href="{{ route('admin.sekolah') }}">
-                        <i class="icon">📁</i> Kelola Data
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ route('admin.manage') }}">
-                        <i class="icon">👥</i> Manajemen User
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ route('admin.tahun-ajaran') }}">
-                        <i class="icon">📅</i> Kelola Tahun Ajaran
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ route('admin.excelconfig') }}">
-                        <i class="icon">📊</i> Konfigurasi Excel
-                    </a>
-                </li>
-            </ul>
 
-            <div style="padding: 20px;">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500; transition: background 0.2s;">
-                        <i class="icon">↪</i> Keluar
-                    </button>
+            <!-- Tabs -->
+            <div class="tabs">
+                <a href="{{ route('admin.siswa') }}" class="tab-item active">Siswa</a>
+                <a href="{{ route('admin.guru') }}" class="tab-item">Guru</a>
+                <a href="{{ route('admin.mapel') }}" class="tab-item">Mapel</a>
+                <a href="{{ route('admin.kelas') }}" class="tab-item">Kelas</a>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="filter-bar">
+                <form method="GET" action="{{ route('admin.siswa') }}" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                    <input type="text" name="search" placeholder="Cari nama atau NIS..." value="{{ request('search') }}" class="search-input">
+                    <button type="submit" class="btn btn-search">🔍 Cari</button>
+
+                    @if(isset($kelasList) && $kelasList->count() > 0)
+                    <select name="id_class" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Semua Kelas</option>
+                        @foreach($kelasList as $id => $name)
+                            <option value="{{ $id }}" {{ request('id_class') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                        @endforeach
+                    </select>
+                    @endif
+
+                    @if(isset($entryYearList) && $entryYearList->count() > 0)
+                    <select name="entry_year" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Semua Tahun Masuk</option>
+                        @foreach($entryYearList as $yr)
+                            <option value="{{ $yr }}" {{ request('entry_year') == $yr ? 'selected' : '' }}>{{ $yr }}</option>
+                        @endforeach
+                    </select>
+                    @endif
+
+                    @if(request()->hasAny(['search','id_class','entry_year']))
+                    <a href="{{ route('admin.siswa') }}" class="btn btn-reset">Reset</a>
+                    @endif
                 </form>
+                @if(request()->hasAny(['search','id_class','entry_year']))
+                <p class="filter-info">Menampilkan {{ $siswa->total() }} hasil</p>
+                @endif
             </div>
-        </aside>
-        
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Topbar -->
-            <header class="topbar">
-                <div class="topbar-left">
-                    <button class="hamburger">☰</button>
-                    <h2>E-Rapor Digital</h2>
-                </div>
-                <div class="topbar-right">
-                    <div class="academic-year">
-                        <span>Tahun Pelajaran</span>
-                        <strong>2025/2026 (Genap)</strong>
-                    </div>
-                    <div class="user-profile">
-                        <div class="user-info">
-                            <strong>{{ auth()->user()->name ?? 'Admin Sekolah' }}</strong>
-                            <span>ADMINISTRATOR</span>
-                        </div>
-                        <div class="avatar">
-                            {{ substr(auth()->user()->name ?? 'AS', 0, 2) }}
-                        </div>
-                    </div>
-                </div>
-            </header>
-            
-            <!-- Content Wrapper -->
-            <div class="content-wrapper">
-                
-                <!-- Flash Messages -->
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        <span class="alert-icon">✓</span>
-                        <div class="alert-content">{{ session('success') }}</div>
-                    </div>
-                @endif
-                
-                @if($errors->has('import'))
-                    <div class="alert alert-error">
-                        <span class="alert-icon">⚠</span>
-                        <div class="alert-content">
-                            <strong>Import Failed</strong>
-                            <div class="error-details">{{ $errors->first('import') }}</div>
-                        </div>
-                    </div>
-                @endif
-                
-                @if($errors->has('file'))
-                    <div class="alert alert-error">
-                        <span class="alert-icon">⚠</span>
-                        <div class="alert-content">
-                            <strong>File Upload Error</strong>
-                            <div class="error-details">{{ $errors->first('file') }}</div>
-                        </div>
-                    </div>
-                @endif
-                
-                <!-- Page Header -->
-                <div class="page-header">
-                    <div class="page-title">
-                        <h1>Master Data</h1>
-                        <p>Kelola data referensi sekolah secara menyeluruh.</p>
-                    </div>
-                    <div class="action-buttons" style="display: flex; align-items: center; gap: 12px;">
-                        <x-excel-buttons 
-                            export-route="admin.siswa.export" 
-                            import-route="admin.siswa.import" 
-                            template-route="admin.siswa.template" 
-                        />
-                        <button class="btn btn-purple">
-                            <span style="font-size: 18px; line-height: 1;">+</span>
-                            <span>Tambah Siswa</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Tabs -->
-                <div class="tabs">
-                    <a href="{{ route('admin.sekolah') }}" class="tab-item">Sekolah</a>
-                    <a href="{{ route('admin.siswa') }}" class="tab-item active">Siswa</a>
-                    <a href="{{ route('admin.guru') }}" class="tab-item">Guru</a>
-                    <a href="{{ route('admin.mapel') }}" class="tab-item">Mapel</a>
-                    <a href="{{ route('admin.kelas') }}" class="tab-item">Kelas</a>
-                </div>
-                
-                <!-- Search and Filter Section -->
-                <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-                    <form method="GET" action="{{ route('admin.siswa') }}" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                        <!-- Search Box -->
-                        <div style="display: flex; gap: 10px; flex: 1; min-width: 300px;">
-                            <input type="text" 
-                                   name="search" 
-                                   placeholder="Cari nama atau NIS..." 
-                                   value="{{ request('search') }}"
-                                   style="flex: 1; padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; outline: none;">
-                            <button type="submit" style="background: #0A2E5C; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                                <span>🔍</span> Cari
-                            </button>
-                        </div>
-                        
-                        <!-- Filter: Kelas -->
-                        @if(isset($kelasList) && $kelasList->count() > 0)
-                        <select name="kelas" style="padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer; min-width: 150px;" onchange="this.form.submit()">
-                            <option value="">Semua Kelas</option>
-                            @foreach($kelasList as $k)
-                                <option value="{{ $k }}" {{ request('kelas') == $k ? 'selected' : '' }}>{{ $k }}</option>
-                            @endforeach
-                        </select>
-                        @endif
-                        
-                        <!-- Filter: Tahun Ajaran -->
-                        @if(isset($tahunAjaranList) && $tahunAjaranList->count() > 0)
-                        <select name="tahun_ajaran" style="padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer; min-width: 150px;" onchange="this.form.submit()">
-                            <option value="">Semua Tahun Ajaran</option>
-                            @foreach($tahunAjaranList as $ta)
-                                <option value="{{ $ta }}" {{ request('tahun_ajaran') == $ta ? 'selected' : '' }}>{{ $ta }}</option>
-                            @endforeach
-                        </select>
-                        @endif
-                        
-                        <!-- Reset Button -->
-                        @if(request('search') || request('kelas') || request('tahun_ajaran'))
-                        <a href="{{ route('admin.siswa') }}" style="padding: 10px 20px; background: #F3F4F6; color: #6B7280; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
-                            Reset
-                        </a>
-                        @endif
-                    </form>
-                    
-                    <!-- Results Info -->
-                    @if(request('search') || request('kelas') || request('tahun_ajaran'))
-                    <div style="margin-top: 15px; color: #6B7280; font-size: 14px;">
-                        Menampilkan {{ $siswa->total() }} hasil
-                        @if(request('search'))
-                            untuk pencarian "<strong>{{ request('search') }}</strong>"
-                        @endif
-                        @if(request('kelas'))
-                            di kelas "<strong>{{ request('kelas') }}</strong>"
-                        @endif
-                        @if(request('tahun_ajaran'))
-                            tahun ajaran "<strong>{{ request('tahun_ajaran') }}</strong>"
-                        @endif
-                    </div>
-                    @endif
-                </div>
-                
-                <!-- Table Area -->
-                <div class="table-card">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <x-sortable-header 
-                                    column="nama" 
-                                    label="Nama Siswa" 
-                                    :current-sort="request('sort')" 
-                                    :current-direction="request('direction', 'asc')" 
-                                />
-                                <x-sortable-header 
-                                    column="nis" 
-                                    label="NIS" 
-                                    :current-sort="request('sort')" 
-                                    :current-direction="request('direction', 'asc')" 
-                                />
-                                <x-sortable-header 
-                                    column="kelas" 
-                                    label="Kelas" 
-                                    :current-sort="request('sort')" 
-                                    :current-direction="request('direction', 'asc')" 
-                                />
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($siswa as $index => $s)
-                            <tr>
-                                <td>{{ $siswa->firstItem() + $index }}</td>
-                                <td>{{ $s->nama }}</td>
-                                <td>{{ $s->nis }}</td>
-                                <td>{{ $s->kelas }}</td>
-                                <td>
-                                    <div class="action-cell">
-                                        <button class="action-btn btn-edit"><i class="icon">✏️</i></button>
-                                        <button class="action-btn btn-delete"><i class="icon">🗑️</i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-gray);">
-                                    Tidak ada data siswa
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                    @if($siswa->hasPages())
-                        <div class="pagination-container">
-                            {{ $siswa->links() }}
-                        </div>
-                    @endif
-                </div>
-                
-            </div>
-        </main>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Edit functionality
-            const editButtons = document.querySelectorAll('.btn-edit');
-            
-            editButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const row = this.closest('tr');
-                    const isEditing = row.classList.contains('editing');
-                    
-                    if (isEditing) {
-                        // Save the data
-                        const inputs = row.querySelectorAll('input');
-                        inputs.forEach(input => {
-                            const td = input.closest('td');
-                            td.innerHTML = input.value;
-                        });
-                        row.classList.remove('editing');
-                        this.innerHTML = '<i class="icon">✏️</i>';
-                        this.style.color = 'var(--btn-blue)';
-                    } else {
-                        // Switch to edit mode
-                        const cells = row.querySelectorAll('td');
-                        // We skip the first (No) and last (Aksi) columns
-                        for (let i = 1; i < cells.length - 1; i++) {
-                            const currentText = cells[i].innerText.trim();
-                            cells[i].innerHTML = `<input type="text" value="${currentText}" style="width: 100%; padding: 6px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: 14px;">`;
-                        }
-                        row.classList.add('editing');
-                        this.innerHTML = '<i class="icon">💾</i>';
-                        this.style.color = 'var(--green)';
-                    }
-                });
-            });
 
-            // Delete functionality
-            const deleteButtons = document.querySelectorAll('.btn-delete');
-            deleteButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (confirm('Apakah Anda yakin ingin menghapus data siswa ini?')) {
-                        const row = this.closest('tr');
-                        row.remove();
-                    }
-                });
-            });
-        });
-    </script>
+            <!-- Excel-like Grid -->
+            <div class="excel-grid-wrapper">
+                <div class="excel-hint">💡 Klik sel untuk mengedit langsung. Tekan Enter atau klik di luar untuk menyimpan.</div>
+                <table class="excel-grid" id="siswaGrid">
+                    <thead>
+                        <tr>
+                            <th class="row-num">#</th>
+                            <th>Nama Siswa</th>
+                            <th>NIS</th>
+                            <th>NISN</th>
+                            <th>Kelas</th>
+                            <th>Tahun Masuk</th>
+                            <th>Jenis Kelamin</th>
+                            <th class="col-action">Hapus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($siswa as $index => $s)
+                        <tr data-id="{{ $s->id_user }}" data-url="{{ route('admin.siswa.update', $s->id_user) }}">
+                            <td class="row-num">{{ $siswa->firstItem() + $index }}</td>
+                            <td class="editable" data-field="name">{{ $s->user->name ?? '' }}</td>
+                            <td class="editable" data-field="nis">{{ $s->nis }}</td>
+                            <td class="editable" data-field="nisn">{{ $s->nisn ?? '' }}</td>
+                            <td class="editable" data-field="class_name">{{ $s->classRoom->name ?? '' }}</td>
+                            <td class="editable" data-field="entry_year">{{ $s->entry_year ?? '' }}</td>
+                            <td class="editable" data-field="gender" data-type="select" data-options="M:Laki-laki,F:Perempuan">{{ $s->user->gender === 'M' ? 'Laki-laki' : ($s->user->gender === 'F' ? 'Perempuan' : '') }}</td>
+                            <td class="col-action">
+                                <button class="btn-delete-row" data-url="{{ route('admin.siswa.delete', $s->id_user) }}" title="Hapus">🗑</button>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr><td colspan="8" class="empty-row">Tidak ada data siswa</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            @if($siswa->hasPages())
+            <div class="pagination-container">{{ $siswa->links() }}</div>
+            @endif
+        </div>
+    </main>
+</div>
+@include('admin._excel-grid-script')
 </body>
 </html>

@@ -613,7 +613,7 @@
             <ul class="sidebar-menu">
                 <li class="menu-header">MASTER DATA</li>
                 <li class="menu-item">
-                    <a href="{{ route('admin.sekolah') }}">
+                    <a href="{{ route('admin.siswa') }}">
                         <i class="icon">📁</i> Kelola Data
                     </a>
                 </li>

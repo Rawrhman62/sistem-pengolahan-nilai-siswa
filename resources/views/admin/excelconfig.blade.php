@@ -177,7 +177,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <a href="{{ route('admin.sekolah') }}" class="back-link">← Kembali ke Kelola Data</a>
+            <a href="{{ route('admin.siswa') }}" class="back-link">← Kembali</a>
             <h1>Konfigurasi Template Excel</h1>
             <p>Kelola konfigurasi template Excel untuk import dan export data</p>
         </div>

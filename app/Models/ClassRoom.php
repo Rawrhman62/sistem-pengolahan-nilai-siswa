@@ -16,4 +16,14 @@ class ClassRoom extends Model
         'grade',
         'name',
     ];
+
+    public function homeroom()
+    {
+        return $this->hasOne(Homeroom::class, 'id_class', 'id_class');
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'id_class', 'id_class');
+    }
 }

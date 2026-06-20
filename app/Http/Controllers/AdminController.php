@@ -28,15 +28,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return redirect()->route('admin.sekolah');
-    }
-
-    /**
-     * Display the kelola data sekolah view.
-     */
-    public function sekolah()
-    {
-        return view('admin.sekolah');
+        return redirect()->route('admin.siswa');
     }
 
     /**
@@ -197,7 +189,7 @@ class AdminController extends Controller
      */
     public function kelas(Request $request)
     {
-        $query = ClassRoom::query();
+        $query = ClassRoom::with('homeroom.user'); // Eager load homeroom and wali kelas
 
         // Search functionality
         if ($request->filled('search')) {
@@ -828,23 +820,73 @@ class AdminController extends Controller
             }
 
             // Save imported data to database
-            foreach ($result->data as $siswaData) {
-                $user = User::create([
-                    'name' => $siswaData['nama'],
-                    'id_user' => $siswaData['nis'],
-                    'email' => 'student' . $siswaData['nis'] . '@school.id',
-                    'phone_number' => null,
-                    'password' => null,
-                ]);
+            $successCount = 0;
+            $errorMessages = [];
 
-                \App\Models\Student::create([
-                    'id_user' => $user->id_user,
-                    'nis' => $siswaData['nis'],
-                ]);
+            foreach ($result->data as $index => $siswaData) {
+                try {
+                    \DB::beginTransaction();
+
+                    // Check if NIS already exists
+                    $existingStudent = Student::where('nis', $siswaData['nis'])->first();
+                    
+                    if ($existingStudent) {
+                        $errorMessages[] = "Row " . ($index + 2) . ": Siswa dengan NIS {$siswaData['nis']} sudah ada";
+                        continue;
+                    }
+
+                    // Auto-generate unique id_user
+                    $lastUser = User::orderBy('id_user', 'desc')->first();
+                    $nextId = $lastUser ? ((int)$lastUser->id_user) + 1 : 1001;
+
+                    // Create user account
+                    $user = User::create([
+                        'id_user' => $nextId,
+                        'name' => $siswaData['name'],
+                        'phone_number' => null,
+                        'gender' => match(strtoupper($siswaData['gender'] ?? '')) {
+                            'L', 'M' => 'M',
+                            'P', 'F' => 'F',
+                            default   => 'M',
+                        },
+                        'password' => null,
+                    ]);
+
+                    // Find or skip class assignment
+                    $idClass = null;
+                    if (!empty($siswaData['class_name'])) {
+                        $class = ClassRoom::where('name', $siswaData['class_name'])->first();
+                        $idClass = $class ? $class->id_class : null;
+                    }
+
+                    // Create student record
+                    Student::create([
+                        'id_user' => $user->id_user,
+                        'nis' => $siswaData['nis'],
+                        'nisn' => $siswaData['nisn'] ?? null,
+                        'entry_year' => $siswaData['entry_year'] ?? now()->year,
+                        'id_class' => $idClass,
+                    ]);
+
+                    \DB::commit();
+                    $successCount++;
+
+                } catch (\Exception $e) {
+                    \DB::rollBack();
+                    $errorMessages[] = "Row " . ($index + 2) . ": " . $e->getMessage();
+                }
             }
 
-            return redirect()->back()
-                ->with('success', "Successfully imported {$result->successCount} siswa record(s).");
+            if ($successCount > 0) {
+                $message = "Successfully imported {$successCount} siswa record(s).";
+                if (!empty($errorMessages)) {
+                    $message .= "\n\nErrors:\n" . implode("\n", $errorMessages);
+                }
+                return redirect()->back()->with('success', $message);
+            } else {
+                return redirect()->back()
+                    ->withErrors(['import' => "Import failed.\n" . implode("\n", $errorMessages)]);
+            }
 
         } catch (\InvalidArgumentException $e) {
             return redirect()->back()
@@ -883,24 +925,69 @@ class AdminController extends Controller
             }
 
             // Save imported data to database
-            foreach ($result->data as $guruData) {
-                $user = User::create([
-                    'name' => $guruData['nama'],
-                    'id_user' => $guruData['nip'],
-                    'email' => 'teacher' . str_replace(' ', '', $guruData['nip']) . '@school.id',
-                    'phone_number' => null,
-                    'password' => null,
-                ]);
+            $successCount = 0;
+            $errorMessages = [];
 
-                \App\Models\Lecturer::create(['id_user' => $user->id_user]);
-                Teacher::create([
-                    'id_user' => $user->id_user,
-                    'nomor_induk' => $guruData['nip'],
-                ]);
+            foreach ($result->data as $index => $guruData) {
+                try {
+                    \DB::beginTransaction();
+
+                    // Check if teacher with this nomor_induk already exists
+                    $existingTeacher = Teacher::where('nomor_induk', $guruData['nomor_induk'])->first();
+                    
+                    if ($existingTeacher) {
+                        $errorMessages[] = "Row " . ($index + 2) . ": Guru dengan nomor induk {$guruData['nomor_induk']} sudah ada";
+                        continue;
+                    }
+
+                    // Auto-generate unique id_user
+                    $lastUser = User::orderBy('id_user', 'desc')->first();
+                    $nextId = $lastUser ? ((int)$lastUser->id_user) + 1 : 1001;
+
+                    // Create user account
+                    $user = User::create([
+                        'id_user' => $nextId,
+                        'name' => $guruData['name'],
+                        'phone_number' => null,
+                        'gender' => match(strtoupper($guruData['gender'] ?? '')) {
+                            'L', 'M' => 'M',
+                            'P', 'F' => 'F',
+                            default   => 'M',
+                        },
+                        'password' => null,
+                    ]);
+
+                    // Create teacher record
+                    Teacher::create([
+                        'id_user' => $user->id_user,
+                        'nomor_induk' => $guruData['nomor_induk'],
+                        'type' => $guruData['type'] ?? 'honorer',
+                        'date_of_employment' => $guruData['date_of_employment'] ?? now()->year,
+                        'teacher_status' => $guruData['teacher_status'] ?? 'employed',
+                    ]);
+
+                    // Create lecturer role by default
+                    \App\Models\Lecturer::create(['id_user' => $user->id_user]);
+
+                    \DB::commit();
+                    $successCount++;
+
+                } catch (\Exception $e) {
+                    \DB::rollBack();
+                    $errorMessages[] = "Row " . ($index + 2) . ": " . $e->getMessage();
+                }
             }
 
-            return redirect()->back()
-                ->with('success', "Successfully imported {$result->successCount} guru record(s).");
+            if ($successCount > 0) {
+                $message = "Successfully imported {$successCount} guru record(s).";
+                if (!empty($errorMessages)) {
+                    $message .= "\n\nErrors:\n" . implode("\n", $errorMessages);
+                }
+                return redirect()->back()->with('success', $message);
+            } else {
+                return redirect()->back()
+                    ->withErrors(['import' => "Import failed.\n" . implode("\n", $errorMessages)]);
+            }
 
         } catch (\InvalidArgumentException $e) {
             return redirect()->back()
@@ -939,16 +1026,36 @@ class AdminController extends Controller
             }
 
             // Save imported data to database
-            foreach ($result->data as $mapelData) {
-                Subject::create([
-                    'kode' => $mapelData['kode'],
-                    'nama' => $mapelData['nama'],
-                    'kelompok' => $mapelData['kelompok'],
-                ]);
+            $successCount = 0;
+            $errorMessages = [];
+
+            foreach ($result->data as $index => $mapelData) {
+                try {
+                    Subject::create([
+                        'code' => $mapelData['code'] ?? null,
+                        'name' => $mapelData['name'],
+                        'grade' => $mapelData['grade'] ?? null,
+                        'curriculum' => $mapelData['curriculum'] ?? null,
+                        'group' => $mapelData['group'] ?? null,
+                    ]);
+
+                    $successCount++;
+
+                } catch (\Exception $e) {
+                    $errorMessages[] = "Row " . ($index + 2) . ": " . $e->getMessage();
+                }
             }
 
-            return redirect()->back()
-                ->with('success', "Successfully imported {$result->successCount} mapel record(s).");
+            if ($successCount > 0) {
+                $message = "Successfully imported {$successCount} mapel record(s).";
+                if (!empty($errorMessages)) {
+                    $message .= "\n\nErrors:\n" . implode("\n", $errorMessages);
+                }
+                return redirect()->back()->with('success', $message);
+            } else {
+                return redirect()->back()
+                    ->withErrors(['import' => "Import failed.\n" . implode("\n", $errorMessages)]);
+            }
 
         } catch (\InvalidArgumentException $e) {
             return redirect()->back()
@@ -987,16 +1094,33 @@ class AdminController extends Controller
             }
 
             // Save imported data to database
-            foreach ($result->data as $kelasData) {
-                ClassRoom::create([
-                    'name' => $kelasData['name'],
-                    'grade' => $kelasData['grade'],
-                    'id_class' => $kelasData['id_class'] ?? null,
-                ]);
+            $successCount = 0;
+            $errorMessages = [];
+
+            foreach ($result->data as $index => $kelasData) {
+                try {
+                    ClassRoom::create([
+                        'name' => $kelasData['name'],
+                        'grade' => $kelasData['grade'] ?? null,
+                    ]);
+
+                    $successCount++;
+
+                } catch (\Exception $e) {
+                    $errorMessages[] = "Row " . ($index + 2) . ": " . $e->getMessage();
+                }
             }
 
-            return redirect()->back()
-                ->with('success', "Successfully imported {$result->successCount} kelas record(s).");
+            if ($successCount > 0) {
+                $message = "Successfully imported {$successCount} kelas record(s).";
+                if (!empty($errorMessages)) {
+                    $message .= "\n\nErrors:\n" . implode("\n", $errorMessages);
+                }
+                return redirect()->back()->with('success', $message);
+            } else {
+                return redirect()->back()
+                    ->withErrors(['import' => "Import failed.\n" . implode("\n", $errorMessages)]);
+            }
 
         } catch (\InvalidArgumentException $e) {
             return redirect()->back()
@@ -1062,6 +1186,149 @@ class AdminController extends Controller
         $emptyData = collect();
         
         return $this->excelExportService->exportKelas($emptyData);
+    }
+
+    /**
+     * Inline update for siswa (Ajax)
+     */
+    public function updateSiswa(Request $request, $id)
+    {
+        $student = Student::with('user')->where('id_user', $id)->firstOrFail();
+        $validated = $request->validate([
+            'nis'        => 'sometimes|string|max:20|unique:tb_students,nis,' . $student->id_user . ',id_user',
+            'nisn'       => 'nullable|string|max:20',
+            'entry_year' => 'nullable|integer|min:2000|max:2100',
+            'class_name' => 'nullable|string|max:50',
+            'name'       => 'sometimes|string|max:255',
+            'gender'     => 'nullable|in:M,F',
+        ]);
+
+        if (isset($validated['name']) || isset($validated['gender'])) {
+            $student->user->update(array_filter([
+                'name'   => $validated['name'] ?? null,
+                'gender' => $validated['gender'] ?? null,
+            ], fn($v) => $v !== null));
+        }
+
+        $idClass = $student->id_class;
+        if (array_key_exists('class_name', $validated)) {
+            $class = ClassRoom::where('name', $validated['class_name'])->first();
+            $idClass = $class ? $class->id_class : null;
+        }
+
+        $student->update(array_filter([
+            'nis'        => $validated['nis'] ?? null,
+            'nisn'       => array_key_exists('nisn', $validated) ? $validated['nisn'] : $student->nisn,
+            'entry_year' => $validated['entry_year'] ?? null,
+            'id_class'   => $idClass,
+        ], fn($v) => $v !== null));
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Delete siswa (Ajax)
+     */
+    public function deleteSiswa($id)
+    {
+        $student = Student::where('id_user', $id)->firstOrFail();
+        $userId = $student->id_user;
+        $student->delete();
+        User::where('id_user', $userId)->delete();
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Inline update for guru (Ajax)
+     */
+    public function updateGuru(Request $request, $id)
+    {
+        $teacher = Teacher::with('user')->where('id_user', $id)->firstOrFail();
+        $validated = $request->validate([
+            'nomor_induk'        => 'sometimes|string|max:50|unique:tb_teachers,nomor_induk,' . $teacher->id_user . ',id_user',
+            'name'               => 'sometimes|string|max:255',
+            'gender'             => 'nullable|in:M,F',
+            'type'               => 'nullable|in:pns,honorer',
+            'date_of_employment' => 'nullable|integer|min:1950|max:2100',
+            'teacher_status'     => 'nullable|in:employed,resigned',
+        ]);
+
+        if (isset($validated['name']) || isset($validated['gender'])) {
+            $teacher->user->update(array_filter([
+                'name'   => $validated['name'] ?? null,
+                'gender' => $validated['gender'] ?? null,
+            ], fn($v) => $v !== null));
+        }
+
+        $teacher->update(array_filter([
+            'nomor_induk'        => $validated['nomor_induk'] ?? null,
+            'type'               => $validated['type'] ?? null,
+            'date_of_employment' => $validated['date_of_employment'] ?? null,
+            'teacher_status'     => $validated['teacher_status'] ?? null,
+        ], fn($v) => $v !== null));
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Delete guru (Ajax)
+     */
+    public function deleteGuru($id)
+    {
+        $teacher = Teacher::where('id_user', $id)->firstOrFail();
+        $userId = $teacher->id_user;
+        $teacher->delete();
+        User::where('id_user', $userId)->delete();
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Inline update for mapel (Ajax)
+     */
+    public function updateMapel(Request $request, $id)
+    {
+        $subject = Subject::findOrFail($id);
+        $validated = $request->validate([
+            'code'       => 'nullable|string|max:20',
+            'name'       => 'sometimes|string|max:255',
+            'grade'      => 'nullable|integer|min:1|max:12',
+            'curriculum' => 'nullable|string|max:100',
+            'group'      => 'nullable|string|max:100',
+        ]);
+        $subject->update($validated);
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Delete mapel (Ajax)
+     */
+    public function deleteMapel($id)
+    {
+        Subject::findOrFail($id)->delete();
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Inline update for kelas (Ajax)
+     */
+    public function updateKelas(Request $request, $id)
+    {
+        $kelas = ClassRoom::findOrFail($id);
+        $validated = $request->validate([
+            'name'  => 'sometimes|string|max:50',
+            'grade' => 'nullable|integer|min:1|max:12',
+        ]);
+        $kelas->update($validated);
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Delete kelas (Ajax)
+     */
+    public function deleteKelas($id)
+    {
+        ClassRoom::findOrFail($id)->delete();
+        return response()->json(['success' => true]);
     }
 
     /**
