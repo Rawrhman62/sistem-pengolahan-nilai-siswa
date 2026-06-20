@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigInteger('id_user')->primary();
             $table->string('name');
             $table->enum('gender', ['M', 'F'])->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->string('phone_number')->nullable();
             $table->string('password')->nullable();
             $table->string('profile_picture')->nullable()->default('/public/images/');
