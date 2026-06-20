@@ -253,6 +253,10 @@ class AdminController extends Controller
     {
         $validated = $request->validated();
 
+        // Auto-generate unique id_user
+        $lastUser = User::orderBy('id_user', 'desc')->first();
+        $nextId = $lastUser ? ((int)$lastUser->id_user) + 1 : 1001;
+
         // Handle dual teacher role
         $role = $validated['role'];
         if ($request->has('dual_teacher') && $request->dual_teacher) {
@@ -261,26 +265,34 @@ class AdminController extends Controller
 
         $user = User::create([
             'name' => $validated['name'],
-            'id_user' => $validated['user_id'],
-            'email' => $validated['email'],
+            'id_user' => $nextId,
+            'email' => $validated['email'] ?? null,
             'phone_number' => $validated['phone_number'] ?? null,
-            'gender' => $validated['gender'] ?? null,
+            'gender' => $validated['gender'],
             'password' => null,
         ]);
 
         // Create role records
         if (str_contains($role, 'administrator')) {
             \App\Models\Admin::create(['id_user' => $user->id_user]);
+            // Administrators are also teachers
+            \App\Models\Teacher::create([
+                'id_user' => $user->id_user,
+                'nomor_induk' => $validated['nomor_induk'],
+                'date_of_employment' => now()->year,
+                'teacher_status' => 'employed',
+                'type' => $validated['type']
+            ]);
         }
         if (str_contains($role, 'lectureTeacher')) {
             // Create teacher record if not exists
             if (!$user->teacher()->exists()) {
                 \App\Models\Teacher::create([
                     'id_user' => $user->id_user,
-                    'nomor_induk' => $validated['nomor_induk'] ?? $user->id_user,
+                    'nomor_induk' => $validated['nomor_induk'],
                     'date_of_employment' => now()->year,
                     'teacher_status' => 'employed',
-                    'type' => 'honorer'
+                    'type' => $validated['type']
                 ]);
             }
             \App\Models\Lecturer::create(['id_user' => $user->id_user]);
@@ -290,30 +302,61 @@ class AdminController extends Controller
             if (!$user->teacher()->exists()) {
                 \App\Models\Teacher::create([
                     'id_user' => $user->id_user,
-                    'nomor_induk' => $validated['nomor_induk'] ?? $user->id_user,
+                    'nomor_induk' => $validated['nomor_induk'],
                     'date_of_employment' => now()->year,
                     'teacher_status' => 'employed',
-                    'type' => 'honorer'
+                    'type' => $validated['type']
                 ]);
             }
             \App\Models\Homeroom::create([
                 'id_user' => $user->id_user,
-                'id_class' => $validated['id_class'] ?? null,
-                'school_year' => now()->year . '/' . (now()->year + 1)
+                'id_class' => null,
             ]);
         }
         if (str_contains($role, 'student')) {
+            // Auto-generate NIS if not provided
+            $nis = $validated['nis'] ?? null;
+            if (empty($nis)) {
+                // Get current year (last 2 digits)
+                $currentYear = now()->format('y');
+                
+                // Find the highest NIS for this year
+                $lastStudent = \App\Models\Student::where('nis', 'like', $currentYear . '%')
+                    ->orderBy('nis', 'desc')
+                    ->first();
+                
+                if ($lastStudent) {
+                    // Extract the sequential number and increment
+                    $lastSequence = (int)substr($lastStudent->nis, 2);
+                    $newSequence = $lastSequence + 1;
+                } else {
+                    // First student for this year
+                    $newSequence = 1;
+                }
+                
+                // Format: YYXXXX (e.g., 240001)
+                $nis = $currentYear . str_pad($newSequence, 4, '0', STR_PAD_LEFT);
+            }
+            
             \App\Models\Student::create([
                 'id_user' => $user->id_user,
-                'nis' => $validated['nis'] ?? $user->id_user,
+                'nis' => $nis,
                 'nisn' => $validated['nisn'] ?? null,
                 'entry_year' => now()->year,
-                'id_class' => $validated['id_class'] ?? null,
+                'id_class' => null,
             ]);
         }
 
+        // Determine login credential
+        $loginCredential = '';
+        if (str_contains($role, 'administrator') || str_contains($role, 'lectureTeacher') || str_contains($role, 'homeroomTeacher')) {
+            $loginCredential = 'nomor induk: ' . $validated['nomor_induk'];
+        } elseif (str_contains($role, 'student')) {
+            $loginCredential = 'NIS: ' . $nis;
+        }
+
         return redirect()->route('admin.register')
-            ->with('success', 'User registered successfully. They can login with their credentials and will be prompted to set a password.');
+            ->with('success', 'Pengguna berhasil didaftarkan. Mereka dapat login menggunakan ' . $loginCredential . '.');
     }
 
     /**
@@ -381,6 +424,167 @@ class AdminController extends Controller
         ]);
 
         return view('admin.manage', compact('users'));
+    }
+
+    /**
+     * Show the user edit form.
+     */
+    public function editUser($id_user)
+    {
+        $user = User::with(['admin', 'student', 'teacher', 'lecturer', 'homerooms'])
+            ->where('id_user', $id_user)
+            ->firstOrFail();
+
+        $classList = ClassRoom::orderBy('grade')->orderBy('name')->get();
+
+        return view('admin.edit-user', compact('user', 'classList'));
+    }
+
+    /**
+     * Update user information.
+     */
+    public function updateUser(Request $request, $id_user)
+    {
+        $user = User::where('id_user', $id_user)->firstOrFail();
+
+        // Basic validation
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'gender' => 'required|in:M,F',
+            'email' => 'nullable|email|max:255|unique:tb_users,email,' . $user->id_user . ',id_user',
+            'phone_number' => 'nullable|string|max:20',
+            'profile_picture' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
+            'remove_profile_picture' => 'nullable|boolean',
+            
+            // Password fields
+            'new_password' => 'nullable|string|min:8|confirmed',
+            'reset_password' => 'nullable|boolean',
+            
+            // Student fields
+            'nis' => 'nullable|string|max:50|unique:tb_students,nis,' . $user->id_user . ',id_user',
+            'nisn' => 'nullable|string|max:50',
+            'entry_year' => 'nullable|integer|min:2000|max:2100',
+            'id_class' => 'nullable|exists:tb_classes,id_class',
+            
+            // Teacher fields
+            'nomor_induk' => 'nullable|string|max:50|unique:tb_teachers,nomor_induk,' . $user->id_user . ',id_user',
+            'type' => 'nullable|in:pns,honorer',
+            'date_of_employment' => 'nullable|integer|min:1950|max:2100',
+            'teacher_status' => 'nullable|in:employed,resigned',
+            
+            // Teacher role fields
+            'is_lecturer' => 'nullable|boolean',
+            'is_homeroom' => 'nullable|boolean',
+            
+            // Homeroom fields
+            'homeroom_class' => 'nullable|exists:tb_classes,id_class',
+        ]);
+
+        // Handle profile picture upload
+        $profilePicturePath = $user->profile_picture;
+        
+        if ($request->has('remove_profile_picture') && $request->remove_profile_picture) {
+            // Delete old profile picture if it exists
+            if ($user->profile_picture && $user->profile_picture !== '/public/images/') {
+                // Convert database path to actual file path
+                $relativePath = str_replace('/public/', '', $user->profile_picture);
+                $oldPath = public_path($relativePath);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
+            $profilePicturePath = '/public/images/';
+        } elseif ($request->hasFile('profile_picture')) {
+            // Delete old profile picture with different extensions if exists
+            $extensions = ['jpg', 'jpeg', 'png', 'gif'];
+            foreach ($extensions as $ext) {
+                $oldPath = public_path('images/profiles/' . $user->id_user . '.' . $ext);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
+            
+            // Store new profile picture with format: user_id.extension
+            $file = $request->file('profile_picture');
+            $extension = $file->getClientOriginalExtension();
+            $filename = $user->id_user . '.' . $extension;
+            $file->move(public_path('images/profiles'), $filename);
+            $profilePicturePath = '/public/images/profiles/' . $filename;
+        }
+
+        // Update basic user information
+        $updateData = [
+            'name' => $validated['name'],
+            'gender' => $validated['gender'],
+            'email' => $validated['email'] ?? null,
+            'phone_number' => $validated['phone_number'] ?? null,
+            'profile_picture' => $profilePicturePath,
+        ];
+
+        // Handle password changes
+        if ($request->has('reset_password') && $request->reset_password) {
+            // Reset password to NULL
+            $updateData['password'] = null;
+        } elseif ($request->filled('new_password')) {
+            // Set new password
+            $updateData['password'] = \Hash::make($validated['new_password']);
+        }
+
+        $user->update($updateData);
+
+        // Update student information
+        if ($user->isStudent()) {
+            $user->student->update([
+                'nis' => $validated['nis'],
+                'nisn' => $validated['nisn'] ?? null,
+                'entry_year' => $validated['entry_year'] ?? null,
+                'id_class' => $validated['id_class'] ?? null,
+            ]);
+        }
+
+        // Update teacher information and roles
+        if ($user->isTeacher()) {
+            $user->teacher->update([
+                'nomor_induk' => $validated['nomor_induk'],
+                'type' => $validated['type'],
+                'date_of_employment' => $validated['date_of_employment'] ?? null,
+                'teacher_status' => $validated['teacher_status'],
+            ]);
+
+            // Handle Lecturer role
+            $isLecturer = $request->has('is_lecturer') && $request->is_lecturer;
+            if ($isLecturer && !$user->isLecturer()) {
+                // Add lecturer role
+                \App\Models\Lecturer::create(['id_user' => $user->id_user]);
+            } elseif (!$isLecturer && $user->isLecturer()) {
+                // Remove lecturer role
+                \App\Models\Lecturer::where('id_user', $user->id_user)->delete();
+            }
+
+            // Handle Homeroom role
+            $isHomeroom = $request->has('is_homeroom') && $request->is_homeroom;
+            if ($isHomeroom && !$user->isHomeroomTeacher()) {
+                // Add homeroom role
+                \App\Models\Homeroom::create([
+                    'id_user' => $user->id_user,
+                    'id_class' => $validated['homeroom_class'] ?? null,
+                ]);
+            } elseif (!$isHomeroom && $user->isHomeroomTeacher()) {
+                // Remove homeroom role
+                \App\Models\Homeroom::where('id_user', $user->id_user)->delete();
+            } elseif ($isHomeroom && $user->isHomeroomTeacher()) {
+                // Update existing homeroom class
+                $homeroom = $user->homerooms->first();
+                if ($homeroom) {
+                    $homeroom->update([
+                        'id_class' => $validated['homeroom_class'] ?? null,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('admin.user.edit', $user->id_user)
+            ->with('success', 'Data pengguna berhasil diperbarui.');
     }
 
     /**

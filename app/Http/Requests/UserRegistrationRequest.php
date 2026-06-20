@@ -26,35 +26,22 @@ class UserRegistrationRequest extends FormRequest
                 'string',
                 'max:255',
                 'min:2',
-                'regex:/^[a-zA-Z\s]+$/',
-            ],
-            'user_name' => [
-                'required',
-                'string',
-                'max:255',
-                'min:3',
-                'regex:/^[a-zA-Z0-9_-]+$/',
-                'unique:users,user_name',
-            ],
-            'user_id' => [
-                'required',
-                'string',
-                'max:255',
-                'min:3',
-                'regex:/^[a-zA-Z0-9_-]+$/',
-                'unique:users,user_id',
             ],
             'email' => [
-                'required',
+                'nullable',
                 'email:rfc,dns',
                 'max:255',
-                'unique:users,email',
+                'unique:tb_users,email',
             ],
             'phone_number' => [
                 'nullable',
                 'string',
                 'max:20',
                 'regex:/^[\+]?[0-9\s\-\(\)]+$/',
+            ],
+            'gender' => [
+                'required',
+                'in:M,F',
             ],
             'role' => [
                 'required',
@@ -63,6 +50,29 @@ class UserRegistrationRequest extends FormRequest
             'dual_teacher' => [
                 'nullable',
                 'boolean',
+            ],
+            'nomor_induk' => [
+                'required_if:role,administrator,lectureTeacher,homeroomTeacher',
+                'nullable',
+                'string',
+                'max:50',
+                'unique:tb_teachers,nomor_induk',
+            ],
+            'type' => [
+                'required_if:role,administrator,lectureTeacher,homeroomTeacher',
+                'nullable',
+                'in:pns,honorer',
+            ],
+            'nis' => [
+                'nullable',
+                'string',
+                'max:50',
+                'unique:tb_students,nis',
+            ],
+            'nisn' => [
+                'nullable',
+                'string',
+                'max:50',
             ],
         ];
     }
@@ -73,39 +83,34 @@ class UserRegistrationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Full name is required.',
-            'name.string' => 'Full name must be valid text.',
-            'name.max' => 'Full name cannot exceed 255 characters.',
-            'name.min' => 'Full name must be at least 2 characters.',
-            'name.regex' => 'Full name can only contain letters and spaces.',
+            'name.required' => 'Nama lengkap wajib diisi.',
+            'name.string' => 'Nama lengkap harus berupa teks.',
+            'name.max' => 'Nama lengkap tidak boleh lebih dari 255 karakter.',
+            'name.min' => 'Nama lengkap minimal 2 karakter.',
             
-            'user_name.required' => 'Username is required.',
-            'user_name.string' => 'Username must be valid text.',
-            'user_name.max' => 'Username cannot exceed 255 characters.',
-            'user_name.min' => 'Username must be at least 3 characters.',
-            'user_name.regex' => 'Username can only contain letters, numbers, hyphens, and underscores.',
-            'user_name.unique' => 'This username is already taken.',
+            'email.email' => 'Harap masukkan alamat email yang valid.',
+            'email.max' => 'Alamat email tidak boleh lebih dari 255 karakter.',
+            'email.unique' => 'Alamat email ini sudah terdaftar.',
             
-            'user_id.required' => 'User ID is required.',
-            'user_id.string' => 'User ID must be valid text.',
-            'user_id.max' => 'User ID cannot exceed 255 characters.',
-            'user_id.min' => 'User ID must be at least 3 characters.',
-            'user_id.regex' => 'User ID can only contain letters, numbers, hyphens, and underscores.',
-            'user_id.unique' => 'This User ID is already taken.',
+            'phone_number.string' => 'Nomor telepon harus berupa teks.',
+            'phone_number.max' => 'Nomor telepon tidak boleh lebih dari 20 karakter.',
+            'phone_number.regex' => 'Format nomor telepon tidak valid.',
             
-            'email.required' => 'Email address is required.',
-            'email.email' => 'Please enter a valid email address.',
-            'email.max' => 'Email address cannot exceed 255 characters.',
-            'email.unique' => 'This email address is already registered.',
+            'gender.required' => 'Jenis kelamin wajib dipilih.',
+            'gender.in' => 'Jenis kelamin harus M (Laki-laki) atau F (Perempuan).',
             
-            'phone_number.string' => 'Phone number must be valid text.',
-            'phone_number.max' => 'Phone number cannot exceed 20 characters.',
-            'phone_number.regex' => 'Please enter a valid phone number format.',
+            'role.required' => 'Peran pengguna wajib dipilih.',
+            'role.in' => 'Harap pilih peran pengguna yang valid.',
             
-            'role.required' => 'User role is required.',
-            'role.in' => 'Please select a valid user role.',
+            'dual_teacher.boolean' => 'Opsi dual teacher harus true atau false.',
             
-            'dual_teacher.boolean' => 'Dual teacher option must be true or false.',
+            'nomor_induk.required_if' => 'Nomor induk guru wajib diisi untuk peran guru/admin.',
+            'nomor_induk.unique' => 'Nomor induk guru sudah terdaftar.',
+            
+            'type.required_if' => 'Status kepegawaian wajib dipilih untuk peran guru/admin.',
+            'type.in' => 'Status kepegawaian harus PNS atau Honorer.',
+            
+            'nis.unique' => 'NIS sudah terdaftar.',
         ];
     }
 

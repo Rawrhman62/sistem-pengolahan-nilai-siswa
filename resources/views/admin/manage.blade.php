@@ -287,6 +287,24 @@
             background-color: var(--btn-purple-hover);
         }
 
+        .btn-edit {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: transparent;
+            color: #3B82F6;
+            border: 1px solid #3B82F6;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-edit:hover {
+            background-color: #3B82F6;
+            color: white;
+        }
+
         /* Card Container */
         .card {
             background-color: var(--white);
@@ -752,6 +770,7 @@
                                         :current-sort="request('sort')" 
                                         :current-direction="request('direction', 'asc')" 
                                     />
+                                    <th style="text-align: center; padding: 12px;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -804,10 +823,15 @@
                                             @endif
                                         </td>
                                         <td>{{ $user->created_at ? $user->created_at->format('d M Y, H:i') : 'N/A' }}</td>
+                                        <td style="text-align: center;">
+                                            <a href="{{ route('admin.user.edit', $user->id_user) }}" class="btn-edit">
+                                                ✏️ Edit
+                                            </a>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6">
+                                        <td colspan="7">
                                             <div class="empty-state">
                                                 <div style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;">👥</div>
                                                 <p>Tidak ada pengguna yang ditemukan.</p>

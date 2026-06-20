@@ -645,7 +645,7 @@
 
                 <!-- Info Box -->
                 <div class="info-box">
-                    <h3>ℹ️ Sistem Otomatis</h3>
+                    <h3>ℹ️ Pemberitahuan</h3>
                     <p>Tahun ajaran aktif ditentukan secara otomatis berdasarkan tanggal hari ini. Sistem akan beralih ke tahun ajaran berikutnya setelah tanggal selesai terlewati. Anda dapat mengatur tanggal selesai untuk setiap tahun ajaran.</p>
                 </div>
                 

@@ -29,7 +29,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/switch-role', [LoginController::class, 'switchRole'])->name('switch.role');
     
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
-    Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::get('/settings/password', [SettingsController::class, 'showPasswordForm'])->name('settings.password');
+    Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password.update');
 });
 
 // Siswa (Student) routes - protected by student role
@@ -66,6 +68,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/register', [AdminController::class, 'showRegisterForm'])->name('admin.register');
     Route::post('/admin/register', [AdminController::class, 'register']);
     Route::get('/admin/manage', [AdminController::class, 'manage'])->name('admin.manage');
+    Route::get('/admin/manage/user/{id_user}', [AdminController::class, 'editUser'])->name('admin.user.edit');
+    Route::put('/admin/manage/user/{id_user}', [AdminController::class, 'updateUser'])->name('admin.user.update');
     Route::get('/admin/tahun-ajaran', [AdminController::class, 'tahunAjaran'])->name('admin.tahun-ajaran');
     Route::post('/admin/tahun-ajaran', [AdminController::class, 'storeTahunAjaran'])->name('admin.tahun-ajaran.store');
     Route::post('/admin/tahun-ajaran/update', [AdminController::class, 'updateTahunAjaran'])->name('admin.tahun-ajaran.update');

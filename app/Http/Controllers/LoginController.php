@@ -94,7 +94,7 @@ class LoginController extends Controller
             $request->session()->put('selected_role', $selectedRole);
             $request->session()->put('id_user', $user->id_user);
             
-            return redirect()->intended('/settings');
+            return redirect()->intended('/settings/password');
         }
 
         // Standard authentication for users with passwords

@@ -404,9 +404,10 @@
                     <div class="card-title">Pengaturan Akun</div>
                 </div>
                 <div class="card-body">
-                    <p> </p>
+                    <p>Kelola informasi profil dan keamanan akun Anda</p>
                     <div class="action-list">
-                        <a href="/settings" class="action-link"><span>🔒</span> Ganti Password</a>
+                        <a href="/settings" class="action-link"><span>👤</span> Edit Profil</a>
+                        <a href="/settings/password" class="action-link"><span>🔒</span> Ganti Password</a>
                     </div>
                 </div>
             </div>

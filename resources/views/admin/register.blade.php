@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register New User</title>
+    <title>Tambah Pengguna Baru - E-RAPOR</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -163,8 +163,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Register New User</h1>
-            <p>Silakan isi form di bawah ini untuk menambahkan pengguna baru.</p>
+            <h1>Tambah Pengguna Baru</h1>
+            <p>Isi formulir di bawah untuk mendaftarkan pengguna baru.</p>
         </div>
         
         @if(session('success'))
@@ -188,52 +188,119 @@
             @csrf
             
             <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" required>
+                <label for="name">Nama Lengkap <span style="color: red;">*</span></label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" required placeholder="Contoh: Ahmad Rafi Said">
             </div>
             
             <div class="form-group">
-                <label for="id_user">Username</label>
-                <input type="text" id="user_name" name="id_user" class="form-control" value="{{ old('id_user') }}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="id_user">User ID</label>
-                <input type="text" id="user_id" name="id_user" class="form-control" value="{{ old('id_user') }}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="phone_number">Phone Number</label>
-                <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ old('phone_number') }}">
-            </div>
-            
-            <div class="form-group">
-                <label for="role">Role</label>
-                <select id="role" name="role" class="form-control" required>
-                    <option value="">Select Role</option>
-                    <option value="administrator" {{ old('role') == 'administrator' ? 'selected' : '' }}>Administrator</option>
-                    <option value="lectureTeacher" {{ old('role') == 'lectureTeacher' ? 'selected' : '' }}>Lecture Teacher</option>
-                    <option value="homeroomTeacher" {{ old('role') == 'homeroomTeacher' ? 'selected' : '' }}>Homeroom Teacher</option>
-                    <option value="student" {{ old('role') == 'student' ? 'selected' : '' }}>Student</option>
+                <label for="gender">Jenis Kelamin <span style="color: red;">*</span></label>
+                <select id="gender" name="gender" class="form-control" required>
+                    <option value="">Pilih Jenis Kelamin</option>
+                    <option value="M" {{ old('gender') == 'M' ? 'selected' : '' }}>Laki-laki</option>
+                    <option value="F" {{ old('gender') == 'F' ? 'selected' : '' }}>Perempuan</option>
                 </select>
             </div>
             
             <div class="form-group">
+                <label for="phone_number">Nomor Telepon <span style="color: red;">*</span></label>
+                <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ old('phone_number') }}" placeholder="Wajib">
+                <small style="color: #6b7280; font-size: 12px;">Masukkan Nomor telepon Orang tua jika mengisi data siswa.</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Contoh: user@example.com (opsional)">
+                <small style="color: #6b7280; font-size: 12px;">Email bersifat opsional.</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="role">Peran <span style="color: red;">*</span></label>
+                <select id="role" name="role" class="form-control" required>
+                    <option value="">Pilih Peran</option>
+                    <option value="administrator" {{ old('role') == 'administrator' ? 'selected' : '' }}>Administrator</option>
+                    <option value="lectureTeacher" {{ old('role') == 'lectureTeacher' ? 'selected' : '' }}>Guru Mata Pelajaran</option>
+                    <option value="homeroomTeacher" {{ old('role') == 'homeroomTeacher' ? 'selected' : '' }}>Wali Kelas</option>
+                    <option value="student" {{ old('role') == 'student' ? 'selected' : '' }}>Siswa</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="teacher-fields" style="display: none;">
+                <label for="nomor_induk">Nomor Induk Guru <span style="color: red;">*</span></label>
+                <input type="text" id="nomor_induk" name="nomor_induk" class="form-control" value="{{ old('nomor_induk') }}" placeholder="Contoh: 198501012010011001">
+                <small style="color: #6b7280; font-size: 12px;">Nomor induk digunakan untuk login.</small>
+                
+                <label for="type" style="margin-top: 15px;">Status Kepegawaian <span style="color: red;">*</span></label>
+                <select id="type" name="type" class="form-control">
+                    <option value="">Pilih Status</option>
+                    <option value="pns" {{ old('type') == 'pns' ? 'selected' : '' }}>PNS</option>
+                    <option value="honorer" {{ old('type') == 'honorer' ? 'selected' : '' }}>Honorer</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="student-fields" style="display: none;">
+                <label for="nis">NIS</label>
+                <input type="text" id="nis" name="nis" class="form-control" value="{{ old('nis') }}" placeholder="Kosongkan untuk generate otomatis (contoh: 240001)">
+                <small style="color: #6b7280; font-size: 12px;">NIS digunakan untuk login. Biarkan kosong untuk generate otomatis berdasarkan tahun masuk.</small>
+                
+                <label for="nisn" style="margin-top: 15px;">NISN <span style="color: red;">*</span></label>
+                <input type="text" id="nisn" name="nisn" class="form-control" value="{{ old('nisn') }}" placeholder="Wajib">
+                <small style="color: #6b7280; font-size: 12px;"></small>
+            </div>
+            
+            <div class="form-group">
                 <label class="checkbox-label">
-                    <input type="checkbox" name="dual_teacher" value="1" {{ old('dual_teacher') ? 'checked' : '' }}>
-                    <span>Both Lecture and Homeroom Teacher</span>
+                    <input type="checkbox" name="dual_teacher" id="dual_teacher" value="1" {{ old('dual_teacher') ? 'checked' : '' }}>
+                    <span>Guru Mapel sekaligus Wali Kelas</span>
                 </label>
             </div>
             
-            <button type="submit" class="btn-submit">Register User</button>
+            <button type="submit" class="btn-submit">Daftarkan Pengguna</button>
         </form>
         
-        <a href="{{ route('admin.sekolah') }}" class="back-link">&larr; Back to Admin Panel</a>
+        <a href="{{ route('admin.manage') }}" class="back-link">&larr; Kembali ke Manajemen User</a>
+
+        <script>
+            // Show/hide conditional fields based on role
+            document.getElementById('role').addEventListener('change', function() {
+                const role = this.value;
+                const teacherFields = document.getElementById('teacher-fields');
+                const studentFields = document.getElementById('student-fields');
+                const dualTeacherCheckbox = document.getElementById('dual_teacher').parentElement.parentElement;
+                const nomorIndukInput = document.getElementById('nomor_induk');
+                const typeInput = document.getElementById('type');
+                const nisInput = document.getElementById('nis');
+                const nisnInput = document.getElementById('nisn');
+                
+                // Hide all conditional fields and remove required
+                teacherFields.style.display = 'none';
+                studentFields.style.display = 'none';
+                dualTeacherCheckbox.style.display = 'none';
+                nomorIndukInput.removeAttribute('required');
+                typeInput.removeAttribute('required');
+                nisInput.removeAttribute('required');
+                nisnInput.removeAttribute('required');
+                
+                // Show relevant fields and add required
+                if (role === 'lectureTeacher' || role === 'homeroomTeacher') {
+                    teacherFields.style.display = 'block';
+                    nomorIndukInput.setAttribute('required', 'required');
+                    typeInput.setAttribute('required', 'required');
+                    dualTeacherCheckbox.style.display = 'block';
+                } else if (role === 'student') {
+                    studentFields.style.display = 'block';
+                    // NIS and NISN are optional (NIS can be auto-generated)
+                } else if (role === 'administrator') {
+                    teacherFields.style.display = 'block';
+                    nomorIndukInput.setAttribute('required', 'required');
+                    typeInput.setAttribute('required', 'required');
+                }
+            });
+            
+            // Trigger on page load if there's an old value
+            if (document.getElementById('role').value) {
+                document.getElementById('role').dispatchEvent(new Event('change'));
+            }
+        </script>
     </div>
 </body>
 </html>
