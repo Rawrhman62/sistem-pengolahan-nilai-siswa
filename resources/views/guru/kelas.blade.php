@@ -195,9 +195,9 @@
 
         .data-table th {
             font-weight: 600;
-            color: var(--text-gray);
+            color: var(--white);
             font-size: 12px;
-            background-color: #fafbfc;
+            background-color: var(--primary-blue);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             position: sticky;
@@ -248,12 +248,13 @@
             align-items: center;
             gap: 4px;
             font-size: 11px;
-            color: var(--text-gray);
+            color: rgba(255, 255, 255, 0.85);
             cursor: pointer;
         }
 
         .column-toggle input[type="checkbox"] {
             cursor: pointer;
+            accent-color: var(--primary-blue);
         }
 
         .alert {
