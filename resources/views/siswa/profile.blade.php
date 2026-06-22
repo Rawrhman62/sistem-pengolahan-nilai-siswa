@@ -252,12 +252,12 @@
 
         .profile-grid {
             display: grid;
-            grid-template-columns: 200px 1fr;
+            grid-template-columns: 150px 1fr;
             gap: 40px;
         }
 
         .profile-photo {
-            width: 200px;
+            width: 150px;
             height: 200px;
             background: var(--bg-light);
             border: 2px solid var(--border-color);
@@ -267,6 +267,7 @@
             justify-content: center;
             color: var(--text-gray);
             font-size: 14px;
+            overflow: hidden;
         }
 
         .profile-details {
@@ -357,9 +358,21 @@
                             <strong>{{ $user->name }}</strong>
                             <span>NIS: {{ $user->student->nis ?? 'N/A' }}</span>
                         </div>
-                        <div class="avatar">
-                            {{ substr($user->name, 0, 2) }}
-                        </div>
+                        @php
+                            $topbarPic = $user->profile_picture;
+                            if ($topbarPic && str_starts_with($topbarPic, '/public/')) {
+                                $topbarPic = substr($topbarPic, 7);
+                            }
+                        @endphp
+                        @if($topbarPic && $topbarPic !== 'images/')
+                            <img src="{{ asset($topbarPic) }}"
+                                 alt="{{ $user->name }}"
+                                 style="width:40px; height:40px; border-radius:50%; object-fit:cover;"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="avatar" style="display:none;">{{ substr($user->name, 0, 2) }}</div>
+                        @else
+                            <div class="avatar">{{ substr($user->name, 0, 2) }}</div>
+                        @endif
                     </div>
                 </div>
             </header>
@@ -373,14 +386,32 @@
                 
                 <div class="card">
                     <div class="profile-grid">
+                        @php
+                            $pic = $user->profile_picture;
+                            if ($pic && str_starts_with($pic, '/public/')) {
+                                $pic = substr($pic, 7); // strip leading /public
+                            }
+                            $pic = $pic ?: 'images/default-avatar.png';
+                        @endphp
                         <div class="profile-photo">
-                            FOTO
+                            <img src="{{ asset($pic) }}"
+                                 alt="Foto {{ $user->name }}"
+                                 style="width:100%; height:100%; object-fit:cover; border-radius:10px;"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:var(--text-gray); font-size:13px; border-radius:10px;">
+                                Foto tidak tersedia
+                            </div>
                         </div>
                         
                         <div class="profile-details">
                             <div class="detail-item">
                                 <span class="detail-label">Nama Lengkap</span>
                                 <span class="detail-value">{{ $user->name }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label">NISN (Nomor Induk Siswa Nasional)</span>
+                                <span class="detail-value">{{ $user->student->nisn ?? '-' }}</span>
                             </div>
                             
                             <div class="detail-item">

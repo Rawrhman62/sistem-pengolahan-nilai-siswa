@@ -63,7 +63,7 @@ class SiswaController extends Controller
      */
     public function profile()
     {
-        $user = Auth::user();
+        $user = Auth::user()->load('student');
         return view('siswa.profile', compact('user'));
     }
 }
