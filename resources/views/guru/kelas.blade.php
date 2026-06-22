@@ -224,6 +224,14 @@
             text-align: center;
             outline: none;
             transition: border-color 0.2s;
+            -moz-appearance: textfield; /* Firefox */
+        }
+
+        /* Chrome, Safari, Edge, Opera */
+        .input-nilai::-webkit-outer-spin-button,
+        .input-nilai::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .input-nilai:focus {
