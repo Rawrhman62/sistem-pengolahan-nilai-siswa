@@ -14,7 +14,7 @@
         --blue: #3B82F6;
         --green: #10B981;
         --red: #EF4444;
-        --excel-header: #217346;
+        --excel-header: #0A2E5C;
         --excel-header-text: #fff;
         --excel-selected: #cce5ff;
         --excel-editing: #fff8d6;
@@ -105,7 +105,7 @@
     .excel-grid td { padding: 0; border-bottom: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0; height: 34px; vertical-align: middle; white-space: nowrap; }
 
     .excel-grid td.row-num { background: #f5f5f5; color: #888; text-align: center; font-size: 11px; padding: 0 8px; width: 40px; border-right: 2px solid #c0c0c0; cursor: default; }
-    .excel-grid th.row-num { width: 40px; background: #1a5c38; }
+    .excel-grid th.row-num { width: 40px; background: #072040; }
 
     .excel-grid td.editable { cursor: cell; padding: 0 8px; }
     .excel-grid td.editable:hover { background: #f0f7ff; }

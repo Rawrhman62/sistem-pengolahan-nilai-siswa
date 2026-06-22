@@ -76,7 +76,7 @@
                 <table class="excel-grid" id="siswaGrid">
                     <thead>
                         <tr>
-                            <th class="row-num">#</th>
+                            <th class="row-num">No</th>
                             <th>Nama Siswa</th>
                             <th>NIS</th>
                             <th>NISN</th>

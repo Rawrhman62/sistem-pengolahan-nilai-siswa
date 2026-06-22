@@ -408,9 +408,9 @@
 
         .data-table th {
             font-weight: 600;
-            color: var(--text-gray);
+            color: var(--white);
             font-size: 13px;
-            background-color: #fafbfc;
+            background-color: var(--primary-blue);
             text-transform: uppercase;
         }
 
