@@ -10,6 +10,8 @@ class NilaiHarian extends Model
     use HasFactory;
 
     protected $table = 'tb_nilai_harian';
+    protected $primaryKey = 'id_nilai_harian';
+    public $incrementing = true;
 
     protected $fillable = [
         'id_nilai_harian',

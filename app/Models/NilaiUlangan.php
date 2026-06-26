@@ -10,6 +10,9 @@ class NilaiUlangan extends Model
     use HasFactory;
 
     protected $table = 'tb_nilai_ulangan';
+    protected $primaryKey = 'id_nilai_ulangan';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'id_nilai_ulangan',

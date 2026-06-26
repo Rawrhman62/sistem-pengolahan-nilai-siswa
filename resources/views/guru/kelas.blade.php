@@ -8,75 +8,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-blue: #0A2E5C;
-            --primary-blue-hover: #15407D;
+            --primary: #0A2E5C;
+            --primary-hover: #15407D;
             --bg-light: #F4F7F6;
-            --text-dark: #333333;
-            --text-gray: #666666;
-            --white: #FFFFFF;
-            --border-color: #E2E8F0;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --text-dark: #333;
+            --text-gray: #666;
+            --white: #fff;
+            --border: #E2E8F0;
+            --excel-header: #217346;
+            --excel-header-text: #fff;
+            --excel-hover: #f0f7ff;
             --green: #10B981;
             --green-light: #D1FAE5;
-            --green-text: #065F46;
-            --orange: #F59E0B;
-            --red: #EF4444;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-        body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-        }
+        body { background: var(--bg-light); color: var(--text-dark); }
 
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 30px;
-        }
+        .container { max-width: 1600px; margin: 0 auto; padding: 30px; }
 
         .back-link {
             display: inline-block;
             margin-bottom: 20px;
-            color: var(--primary-blue);
+            color: var(--primary);
             text-decoration: none;
             font-weight: 500;
         }
 
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        .back-link:hover { text-decoration: underline; }
 
         .header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-hover));
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
             color: white;
             padding: 30px;
             border-radius: 12px;
             margin-bottom: 30px;
         }
 
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
+        .header h1 { font-size: 28px; margin-bottom: 5px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .header p {
-            opacity: 0.9;
-            font-size: 14px;
+        .alert-success {
+            background: var(--green-light);
+            color: #065f46;
+            border: 1px solid #34d399;
         }
 
         .toolbar-card {
             background: var(--white);
             border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 24px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
         }
 
         .toolbar-grid {
@@ -84,55 +79,39 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 16px;
         }
 
-        .search-box {
-            position: relative;
-            flex: 1;
-            min-width: 300px;
-            max-width: 400px;
-        }
+        .search-box { flex: 1; min-width: 300px; max-width: 400px; }
 
         .search-input {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            font-size: 13px;
             outline: none;
-            transition: border-color 0.2s;
         }
 
-        .search-input:focus {
-            border-color: var(--primary-blue);
-        }
+        .search-input:focus { border-color: var(--primary); }
 
-        .controls-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .controls-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
         .select-control {
-            padding: 10px 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            font-size: 13px;
             background: var(--white);
             cursor: pointer;
-            outline: none;
         }
 
-        .select-control:focus {
-            border-color: var(--primary-blue);
-        }
+        .select-control:focus { border-color: var(--primary); }
 
         .btn-action {
-            padding: 10px 20px;
+            padding: 9px 18px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             border: none;
@@ -141,85 +120,81 @@
             display: inline-block;
         }
 
-        .btn-primary {
-            background-color: var(--primary-blue);
-            color: white;
-        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #6B7280; color: white; }
+        .btn-secondary:hover { background: #4B5563; }
+        .btn-reset { background: #F3F4F6; border: 1px solid var(--border); color: var(--text-gray); }
+        .btn-reset:hover { background: #E5E7EB; }
 
-        .btn-primary:hover {
-            background-color: var(--primary-blue-hover);
-        }
-
-        .btn-secondary {
-            background-color: #6B7280;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: #4B5563;
-        }
-
-        .btn-reset {
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-dark);
-        }
-
-        .btn-reset:hover {
-            background-color: #E2E8F0;
-        }
-
-        .table-card {
+        /* Excel Grid Styles */
+        .excel-grid-wrapper {
+            border: 1px solid #c0c0c0;
+            border-radius: 6px;
+            overflow: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
             background: var(--white);
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
         }
 
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        .data-table {
+        .excel-grid {
             width: 100%;
             border-collapse: collapse;
+            font-size: 13px;
             min-width: 1200px;
         }
 
-        .data-table th, .data-table td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
+        .excel-grid thead tr {
+            background: var(--excel-header);
+            color: var(--excel-header-text);
         }
 
-        .data-table th {
+        .excel-grid th {
+            padding: 10px 12px;
+            text-align: left;
             font-weight: 600;
             color: var(--white);
             font-size: 12px;
             background-color: var(--primary-blue);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            white-space: nowrap;
+            border-right: 1px solid rgba(255,255,255,.2);
+            user-select: none;
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
-        .data-table td {
-            font-size: 14px;
-            color: var(--text-dark);
+        .excel-grid th.col-center { text-align: center; }
+
+        .excel-grid td {
+            padding: 0 8px;
+            border-bottom: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+            height: 38px;
             vertical-align: middle;
         }
 
-        .data-table tbody tr:hover {
-            background-color: #f8fafc;
+        .excel-grid td.row-num {
+            background: #f5f5f5;
+            color: #888;
+            text-align: center;
+            font-size: 11px;
+            padding: 0 8px;
+            width: 50px;
+            border-right: 2px solid #c0c0c0;
         }
+
+        .excel-grid td.col-center { text-align: center; padding: 0; }
+
+        .excel-grid tr:hover td { background-color: var(--excel-hover); }
+        .excel-grid tr:hover td.row-num { background: #e8e8e8; }
 
         .input-nilai {
             width: 70px;
-            padding: 6px 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
             font-size: 13px;
             text-align: center;
             outline: none;
@@ -235,21 +210,34 @@
         }
 
         .input-nilai:focus {
-            border-color: var(--primary-blue);
+            border-color: var(--primary);
+            background: #fff8d6;
         }
 
         .input-nilai:disabled {
-            background-color: #F3F4F6;
+            background-color: #f3f4f6;
             cursor: not-allowed;
+            border-color: #e5e7eb;
         }
 
         .column-toggle {
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 4px;
             font-size: 11px;
             color: rgba(255, 255, 255, 0.85);
+            font-size: 10px;
+            color: rgba(255,255,255,.9);
+            margin-top: 4px;
+        }
+
+        .column-toggle label {
+            display: flex;
+            align-items: center;
+            gap: 3px;
             cursor: pointer;
+            font-size: 10px;
         }
 
         .column-toggle input[type="checkbox"] {
@@ -268,57 +256,45 @@
             background-color: var(--green-light);
             color: var(--green-text);
             border: 1px solid #34d399;
+            width: 12px;
+            height: 12px;
         }
 
         .empty-state {
-            padding: 40px;
+            padding: 60px 40px;
             text-align: center;
             color: var(--text-gray);
         }
 
-        .pagination-container {
-            padding: 20px 24px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .grade-type-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0;
-        }
-
-        .tab-button {
-            padding: 12px 24px;
-            background: transparent;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-gray);
-            transition: all 0.2s;
-            margin-bottom: -2px;
-        }
-
-        .tab-button:hover {
-            color: var(--primary-blue);
-        }
-
-        .tab-button.active {
-            color: var(--primary-blue);
-            border-bottom-color: var(--primary-blue);
+        .empty-state div {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
         }
 
         .info-badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 6px 12px;
             background: #EFF6FF;
             color: #1E40AF;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 500;
+        }
+
+        .table-footer {
+            padding: 18px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafbfc;
+        }
+
+        .pagination-container {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            background: #fafbfc;
         }
     </style>
 </head>
@@ -350,10 +326,10 @@
                     
                     <div class="controls-group">
                         <select name="semester" class="select-control" onchange="this.form.submit()">
-                            <option value="1/{{ substr(date('Y'), -2) }}" {{ $semester == '1/' . substr(date('Y'), -2) ? 'selected' : '' }}>Semester 1/{{ substr(date('Y'), -2) }}</option>
-                            <option value="2/{{ substr(date('Y'), -2) }}" {{ $semester == '2/' . substr(date('Y'), -2) ? 'selected' : '' }}>Semester 2/{{ substr(date('Y'), -2) }}</option>
-                            <option value="1/{{ substr(date('Y')+1, -2) }}" {{ $semester == '1/' . substr(date('Y')+1, -2) ? 'selected' : '' }}>Semester 1/{{ substr(date('Y')+1, -2) }}</option>
-                            <option value="2/{{ substr(date('Y')+1, -2) }}" {{ $semester == '2/' . substr(date('Y')+1, -2) ? 'selected' : '' }}>Semester 2/{{ substr(date('Y')+1, -2) }}</option>
+                            <option value="1/{{ substr(date('Y'), -2) }}" {{ $semester == '1/' . substr(date('Y'), -2) ? 'selected' : '' }}>Semester Awal Ganjil {{ date('Y') }}/{{ date('Y')+1 }}</option>
+                            <option value="2/{{ substr(date('Y'), -2) }}" {{ $semester == '2/' . substr(date('Y'), -2) ? 'selected' : '' }}>Semester Akhir Ganjil {{ date('Y') }}/{{ date('Y')+1 }}</option>
+                            <option value="3/{{ substr(date('Y'), -2) }}" {{ $semester == '3/' . substr(date('Y'), -2) ? 'selected' : '' }}>Semester Awal Genap {{ date('Y') }}/{{ date('Y')+1 }}</option>
+                            <option value="4/{{ substr(date('Y'), -2) }}" {{ $semester == '4/' . substr(date('Y'), -2) ? 'selected' : '' }}>Semester Akhir Genap {{ date('Y') }}/{{ date('Y')+1 }}</option>
                         </select>
 
                         <select name="grade_type" class="select-control" onchange="this.form.submit()">
@@ -372,27 +348,27 @@
             </div>
         </form>
 
-        <!-- Table Card -->
-        <div class="table-card">
+        <!-- Excel Grid Table -->
+        <div class="excel-grid-wrapper">
             <form method="POST" action="{{ route('guru.simpanNilai') }}" id="nilaiForm">
                 @csrf
                 <input type="hidden" name="id_class" value="{{ $id_class }}">
                 <input type="hidden" name="semester" value="{{ $semester }}">
                 <input type="hidden" name="grade_type" value="{{ $gradeType }}">
 
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 50px;">No</th>
-                                <th style="width: 100px;">NIS</th>
-                                <th style="width: 200px;">Nama Siswa</th>
+                <table class="excel-grid">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">#</th>
+                            <th style="width: 100px;">NIS</th>
+                            <th style="width: 200px;">Nama Siswa</th>
 
-                                @if($gradeType == 'harian')
-                                    @for($i = 1; $i <= 12; $i++)
-                                        <th style="width: 80px; text-align: center;">
-                                            <div style="margin-bottom: 4px;">Minggu {{ $i }}</div>
-                                            <label class="column-toggle">
+                            @if($gradeType == 'harian')
+                                @for($i = 1; $i <= 12; $i++)
+                                    <th class="col-center" style="width: 90px;">
+                                        <div>Minggu {{ $i }}</div>
+                                        <div class="column-toggle">
+                                            <label>
                                                 <input type="checkbox" 
                                                        class="column-toggle-checkbox" 
                                                        data-column="minggu_{{ $i }}"
@@ -400,137 +376,137 @@
                                                        onchange="toggleColumn('minggu_{{ $i }}', this.checked)">
                                                 <span>Aktif</span>
                                             </label>
-                                        </th>
+                                        </div>
+                                    </th>
+                                @endfor
+                            @elseif($gradeType == 'keterampilan')
+                                <th class="col-center" style="width: 120px;">Nilai Keterampilan</th>
+                            @elseif($gradeType == 'ulangan')
+                                @for($i = 1; $i <= 8; $i++)
+                                    <th class="col-center" style="width: 90px;">Ulangan {{ $i }}</th>
+                                @endfor
+                            @elseif($gradeType == 'ujian')
+                                <th class="col-center" style="width: 100px;">Awal Ganjil</th>
+                                <th class="col-center" style="width: 100px;">Akhir Ganjil</th>
+                                <th class="col-center" style="width: 100px;">Awal Genap</th>
+                                <th class="col-center" style="width: 100px;">Akhir Genap</th>
+                            @endif
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($siswaList as $index => $userSiswa)
+                            @php
+                                $nilai = $nilaiList->get($userSiswa->id_user);
+                            @endphp
+                            <tr>
+                                <td class="row-num">{{ $siswaList->firstItem() + $index }}</td>
+                                <td><code style="font-size: 12px;">{{ $userSiswa->student->nis ?? '-' }}</code></td>
+                                <td><strong>{{ $userSiswa->name }}</strong></td>
+
+                                @if($gradeType == 'harian')
+                                    @for($i = 1; $i <= 12; $i++)
+                                        @php
+                                            $minggu = 'minggu_' . $i;
+                                            $nilaiHarian = $nilai?->nilaiHarian;
+                                            $isDisabled = in_array($minggu, $disabledColumns);
+                                        @endphp
+                                        <td class="col-center" data-column="{{ $minggu }}">
+                                            <input type="number" 
+                                                   name="nilai[{{ $userSiswa->id_user }}][{{ $minggu }}]" 
+                                                   class="input-nilai" 
+                                                   min="0" 
+                                                   max="100" 
+                                                   placeholder="-" 
+                                                   value="{{ $isDisabled ? '' : ($nilaiHarian?->$minggu ?? '') }}"
+                                                   {{ $isDisabled ? 'disabled' : '' }}>
+                                        </td>
                                     @endfor
                                 @elseif($gradeType == 'keterampilan')
-                                    <th style="width: 120px; text-align: center;">Nilai Keterampilan</th>
+                                    @php
+                                        $nilaiKeterampilan = $nilai?->nilaiKeterampilan;
+                                    @endphp
+                                    <td class="col-center">
+                                        <input type="number" 
+                                               name="nilai[{{ $userSiswa->id_user }}][nilai]" 
+                                               class="input-nilai" 
+                                               min="0" 
+                                               max="100" 
+                                               placeholder="0-100" 
+                                               value="{{ $nilaiKeterampilan?->nilai ?? '' }}">
+                                    </td>
                                 @elseif($gradeType == 'ulangan')
                                     @for($i = 1; $i <= 8; $i++)
-                                        <th style="width: 90px; text-align: center;">Ulangan {{ $i }}</th>
+                                        @php
+                                            $ulangan = 'ulangan_' . $i;
+                                            $nilaiUlangan = $nilai?->nilaiUlangan;
+                                        @endphp
+                                        <td class="col-center">
+                                            <input type="number" 
+                                                   name="nilai[{{ $userSiswa->id_user }}][{{ $ulangan }}]" 
+                                                   class="input-nilai" 
+                                                   min="0" 
+                                                   max="100" 
+                                                   placeholder="-" 
+                                                   value="{{ $nilaiUlangan?->$ulangan ?? '' }}">
+                                        </td>
                                     @endfor
                                 @elseif($gradeType == 'ujian')
-                                    <th style="width: 100px; text-align: center;">Awal Ganjil</th>
-                                    <th style="width: 100px; text-align: center;">Akhir Ganjil</th>
-                                    <th style="width: 100px; text-align: center;">Awal Genap</th>
-                                    <th style="width: 100px; text-align: center;">Akhir Genap</th>
+                                    @php
+                                        $nilaiUjian = $nilai?->nilaiUjian;
+                                    @endphp
+                                    <td class="col-center">
+                                        <input type="number" 
+                                               name="nilai[{{ $userSiswa->id_user }}][awal_ganjil]" 
+                                               class="input-nilai" 
+                                               min="0" 
+                                               max="100" 
+                                               placeholder="-" 
+                                               value="{{ $nilaiUjian?->awal_ganjil ?? '' }}">
+                                    </td>
+                                    <td class="col-center">
+                                        <input type="number" 
+                                               name="nilai[{{ $userSiswa->id_user }}][akhir_ganjil]" 
+                                               class="input-nilai" 
+                                               min="0" 
+                                               max="100" 
+                                               placeholder="-" 
+                                               value="{{ $nilaiUjian?->akhir_ganjil ?? '' }}">
+                                    </td>
+                                    <td class="col-center">
+                                        <input type="number" 
+                                               name="nilai[{{ $userSiswa->id_user }}][awal_genap]" 
+                                               class="input-nilai" 
+                                               min="0" 
+                                               max="100" 
+                                               placeholder="-" 
+                                               value="{{ $nilaiUjian?->awal_genap ?? '' }}">
+                                    </td>
+                                    <td class="col-center">
+                                        <input type="number" 
+                                               name="nilai[{{ $userSiswa->id_user }}][akhir_genap]" 
+                                               class="input-nilai" 
+                                               min="0" 
+                                               max="100" 
+                                               placeholder="-" 
+                                               value="{{ $nilaiUjian?->akhir_genap ?? '' }}">
+                                    </td>
                                 @endif
                             </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($siswaList as $index => $userSiswa)
-                                @php
-                                    $nilai = $nilaiList->get($userSiswa->id_user);
-                                @endphp
-                                <tr>
-                                    <td>{{ $siswaList->firstItem() + $index }}</td>
-                                    <td><code>{{ $userSiswa->student->nis ?? '-' }}</code></td>
-                                    <td><strong>{{ $userSiswa->name }}</strong></td>
-
-                                    @if($gradeType == 'harian')
-                                        @for($i = 1; $i <= 12; $i++)
-                                            @php
-                                                $minggu = 'minggu_' . $i;
-                                                $nilaiHarian = $nilai?->nilaiHarian;
-                                                $isDisabled = in_array($minggu, $disabledColumns);
-                                            @endphp
-                                            <td style="text-align: center;" data-column="{{ $minggu }}">
-                                                <input type="number" 
-                                                       name="nilai[{{ $userSiswa->id_user }}][{{ $minggu }}]" 
-                                                       class="input-nilai" 
-                                                       min="0" 
-                                                       max="100" 
-                                                       placeholder="-" 
-                                                       value="{{ $isDisabled ? '' : ($nilaiHarian?->$minggu ?? '') }}"
-                                                       {{ $isDisabled ? 'disabled' : '' }}>
-                                            </td>
-                                        @endfor
-                                    @elseif($gradeType == 'keterampilan')
-                                        @php
-                                            $nilaiKeterampilan = $nilai?->nilaiKeterampilan;
-                                        @endphp
-                                        <td style="text-align: center;">
-                                            <input type="number" 
-                                                   name="nilai[{{ $userSiswa->id_user }}][nilai]" 
-                                                   class="input-nilai" 
-                                                   min="0" 
-                                                   max="100" 
-                                                   placeholder="0-100" 
-                                                   value="{{ $nilaiKeterampilan?->nilai ?? '' }}">
-                                        </td>
-                                    @elseif($gradeType == 'ulangan')
-                                        @for($i = 1; $i <= 8; $i++)
-                                            @php
-                                                $ulangan = 'ulangan_' . $i;
-                                                $nilaiUlangan = $nilai?->nilaiUlangan;
-                                            @endphp
-                                            <td style="text-align: center;">
-                                                <input type="number" 
-                                                       name="nilai[{{ $userSiswa->id_user }}][{{ $ulangan }}]" 
-                                                       class="input-nilai" 
-                                                       min="0" 
-                                                       max="100" 
-                                                       placeholder="-" 
-                                                       value="{{ $nilaiUlangan?->$ulangan ?? '' }}">
-                                            </td>
-                                        @endfor
-                                    @elseif($gradeType == 'ujian')
-                                        @php
-                                            $nilaiUjian = $nilai?->nilaiUjian;
-                                        @endphp
-                                        <td style="text-align: center;">
-                                            <input type="number" 
-                                                   name="nilai[{{ $userSiswa->id_user }}][awal_ganjil]" 
-                                                   class="input-nilai" 
-                                                   min="0" 
-                                                   max="100" 
-                                                   placeholder="-" 
-                                                   value="{{ $nilaiUjian?->awal_ganjil ?? '' }}">
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <input type="number" 
-                                                   name="nilai[{{ $userSiswa->id_user }}][akhir_ganjil]" 
-                                                   class="input-nilai" 
-                                                   min="0" 
-                                                   max="100" 
-                                                   placeholder="-" 
-                                                   value="{{ $nilaiUjian?->akhir_ganjil ?? '' }}">
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <input type="number" 
-                                                   name="nilai[{{ $userSiswa->id_user }}][awal_genap]" 
-                                                   class="input-nilai" 
-                                                   min="0" 
-                                                   max="100" 
-                                                   placeholder="-" 
-                                                   value="{{ $nilaiUjian?->awal_genap ?? '' }}">
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <input type="number" 
-                                                   name="nilai[{{ $userSiswa->id_user }}][akhir_genap]" 
-                                                   class="input-nilai" 
-                                                   min="0" 
-                                                   max="100" 
-                                                   placeholder="-" 
-                                                   value="{{ $nilaiUjian?->akhir_genap ?? '' }}">
-                                        </td>
-                                    @endif
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="20">
-                                        <div class="empty-state">
-                                            <div style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;">👥</div>
-                                            <p>Tidak ada data siswa ditemukan yang sesuai dengan kriteria pencarian Anda.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                        @empty
+                            <tr>
+                                <td colspan="20">
+                                    <div class="empty-state">
+                                        <div>👥</div>
+                                        <p>Tidak ada data siswa ditemukan yang sesuai dengan kriteria pencarian Anda.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
 
                 @if($siswaList->count() > 0)
-                    <div style="padding: 20px 24px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                    <div class="table-footer">
                         <div class="info-badge">
                             📝 Semester: {{ $semester }} | Jenis: 
                             @if($gradeType == 'harian') Nilai Harian (12 Minggu)
@@ -539,7 +515,7 @@
                             @elseif($gradeType == 'ujian') Nilai Ujian
                             @endif
                         </div>
-                        <button type="submit" class="btn-action btn-primary">Simpan Semua Nilai</button>
+                        <button type="submit" class="btn-action btn-primary">💾 Simpan Semua Nilai</button>
                     </div>
                 @endif
             </form>

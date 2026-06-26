@@ -219,9 +219,14 @@ class GuruController extends Controller
             // Handle different grade types
             switch ($gradeType) {
                 case 'harian':
-                    $nilaiHarian = NilaiHarian::find($nilai->id_nilai_harian) ?? new NilaiHarian();
-                    if (!$nilaiHarian->exists) {
-                        $nilaiHarian->id_nilai_harian = 'NH_' . uniqid();
+                    // Find existing by primary key, or create new
+                    $nilaiHarian = $nilai->id_nilai_harian 
+                        ? NilaiHarian::find($nilai->id_nilai_harian)
+                        : null;
+                    
+                    if (!$nilaiHarian) {
+                        $nilaiHarian = new NilaiHarian();
+                        // Don't manually set id_nilai_harian - let auto-increment handle it
                     }
                     
                     for ($i = 1; $i <= 12; $i++) {
@@ -235,8 +240,12 @@ class GuruController extends Controller
                     break;
 
                 case 'keterampilan':
-                    $nilaiKeterampilan = NilaiKeterampilan::find($nilai->id_nilai_keterampilan) ?? new NilaiKeterampilan();
-                    if (!$nilaiKeterampilan->exists) {
+                    $nilaiKeterampilan = $nilai->id_nilai_keterampilan
+                        ? NilaiKeterampilan::find($nilai->id_nilai_keterampilan)
+                        : null;
+                    
+                    if (!$nilaiKeterampilan) {
+                        $nilaiKeterampilan = new NilaiKeterampilan();
                         $nilaiKeterampilan->id_nilai_keterampilan = 'NK_' . uniqid();
                     }
                     $nilaiKeterampilan->nilai = $scores['nilai'] ?? null;
@@ -245,8 +254,12 @@ class GuruController extends Controller
                     break;
 
                 case 'ulangan':
-                    $nilaiUlangan = NilaiUlangan::find($nilai->id_nilai_ulangan) ?? new NilaiUlangan();
-                    if (!$nilaiUlangan->exists) {
+                    $nilaiUlangan = $nilai->id_nilai_ulangan
+                        ? NilaiUlangan::find($nilai->id_nilai_ulangan)
+                        : null;
+                    
+                    if (!$nilaiUlangan) {
+                        $nilaiUlangan = new NilaiUlangan();
                         $nilaiUlangan->id_nilai_ulangan = 'NU_' . uniqid();
                     }
                     
@@ -261,8 +274,12 @@ class GuruController extends Controller
                     break;
 
                 case 'ujian':
-                    $nilaiUjian = NilaiUjian::find($nilai->id_nilai_ujian) ?? new NilaiUjian();
-                    if (!$nilaiUjian->exists) {
+                    $nilaiUjian = $nilai->id_nilai_ujian
+                        ? NilaiUjian::find($nilai->id_nilai_ujian)
+                        : null;
+                    
+                    if (!$nilaiUjian) {
+                        $nilaiUjian = new NilaiUjian();
                         $nilaiUjian->id_nilai_ujian = 'NUJ_' . uniqid();
                     }
                     $nilaiUjian->awal_ganjil = $scores['awal_ganjil'] ?? null;
