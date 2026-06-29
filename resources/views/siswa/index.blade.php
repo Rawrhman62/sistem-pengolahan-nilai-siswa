@@ -374,6 +374,28 @@
             font-size: 16px;
             color: var(--primary-blue);
         }
+
+        .semester-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            background: var(--white);
+            color: var(--text-dark);
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .semester-select:hover {
+            background: var(--bg-light);
+        }
+
+        .semester-select:focus {
+            box-shadow: 0 0 0 3px rgba(10, 46, 92, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -463,7 +485,7 @@
                     </div>
                 </div>
                 
-                <!-- Stats Cards -->
+                <!-- Stats and Semester Selector -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label">Rata-rata Nilai</div>
@@ -471,16 +493,40 @@
                         <div class="stat-subtitle">dari 100</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Peringkat Kelas</div>
-                        <div class="stat-value">{{ $peringkatKelas }}</div>
-                        <div class="stat-subtitle">dari {{ $totalSiswa }} siswa</div>
+                        <div class="stat-label">Pilih Semester</div>
+                        <form method="GET" action="{{ route('siswa.index') }}" style="margin-top: 12px;">
+                            <select name="semester" class="semester-select" onchange="this.form.submit()">
+                                @php
+                                    $currentYear = date('Y');
+                                    $startYear = $currentYear - 2; // Show last 2 years + current
+                                @endphp
+                                @for($year = $currentYear; $year >= $startYear; $year--)
+                                    @php
+                                        $yearShort = substr($year, -2);
+                                        $nextYear = $year + 1;
+                                    @endphp
+                                    <option value="1/{{ $yearShort }}" {{ $semester == "1/{$yearShort}" ? 'selected' : '' }}>
+                                        Semester Awal Ganjil {{ $year }}/{{ $nextYear }}
+                                    </option>
+                                    <option value="2/{{ $yearShort }}" {{ $semester == "2/{$yearShort}" ? 'selected' : '' }}>
+                                        Semester Akhir Ganjil {{ $year }}/{{ $nextYear }}
+                                    </option>
+                                    <option value="3/{{ $yearShort }}" {{ $semester == "3/{$yearShort}" ? 'selected' : '' }}>
+                                        Semester Awal Genap {{ $year }}/{{ $nextYear }}
+                                    </option>
+                                    <option value="4/{{ $yearShort }}" {{ $semester == "4/{$yearShort}" ? 'selected' : '' }}>
+                                        Semester Akhir Genap {{ $year }}/{{ $nextYear }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </form>
                     </div>
                 </div>
                 
                 <!-- Grades Table -->
                 <div class="card">
                     <div class="card-header">
-                        <h3>Daftar Nilai Semester {{ $siswaInfo['semester'] }}</h3>
+                        <h3>Daftar Nilai Semester {{ $semester }}</h3>
                     </div>
                     <table>
                         <thead>
@@ -493,15 +539,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($nilai as $n)
+                            @forelse($nilai as $n)
                             <tr>
                                 <td><strong>{{ $n->mapel }}</strong></td>
-                                <td>{{ $n->nilai_pengetahuan }}</td>
-                                <td>{{ $n->nilai_keterampilan }}</td>
-                                <td><strong>{{ $n->nilai_akhir }}</strong></td>
+                                <td>{{ number_format($n->nilai_pengetahuan, 1) }}</td>
+                                <td>{{ number_format($n->nilai_keterampilan, 1) }}</td>
+                                <td><strong>{{ number_format($n->nilai_akhir, 1) }}</strong></td>
                                 <td><span class="predikat">{{ $n->predikat }}</span></td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                    <div style="font-size: 48px; opacity: 0.3; margin-bottom: 10px;">📝</div>
+                                    <p>Belum ada nilai untuk semester ini.</p>
+                                </td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
