@@ -63,7 +63,7 @@
                 <table class="excel-grid" id="mapelGrid">
                     <thead>
                         <tr>
-                            <th class="row-num">#</th>
+                            <th class="row-num">No</th>
                             <th>Kode</th>
                             <th>Nama Mata Pelajaran</th>
                             <th>Tingkat</th>

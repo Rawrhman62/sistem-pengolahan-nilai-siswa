@@ -247,11 +247,11 @@
         }
 
         th {
-            background-color: #FAFBFB;
+            background-color: var(--primary-blue);
             padding: 16px 24px;
             font-size: 13px;
             font-weight: 600;
-            color: var(--text-gray);
+            color: var(--white);
             text-transform: uppercase;
             border-bottom: 1px solid var(--border-color);
         }

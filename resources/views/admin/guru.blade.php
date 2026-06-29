@@ -53,7 +53,7 @@
                 <table class="excel-grid" id="guruGrid">
                     <thead>
                         <tr>
-                            <th class="row-num">#</th>
+                            <th class="row-num">No</th>
                             <th>Nomor Induk</th>
                             <th>Nama Guru</th>
                             <th>Jenis Kelamin</th>

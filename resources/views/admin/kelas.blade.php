@@ -63,7 +63,7 @@
                 <table class="excel-grid" id="kelasGrid">
                     <thead>
                         <tr>
-                            <th class="row-num">#</th>
+                            <th class="row-num">No</th>
                             <th>Nama Kelas</th>
                             <th>Tingkat</th>
                             <th>Wali Kelas</th>
